@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BIOS Unlocker Web</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        /* CryptoJS v4.1.1 (Minified) */
+        var CryptoJS=function(Math,undefined){var t,e,r,i,n,o,s,c,a,h,l,f,d,u,p,_,y,v,g,B,w,k,m,S,x,b,A,H,z,F,L,j,D,N,q,M,P,W,O,I,U=function(l){var t=Math,e=t.lib=function(){var t=P.extend(),e=t.mixIn;return{extend:function(t){var r=this.clone();return t&&r.mixIn(t),r.init=function(){r.init.apply(this,arguments)},r.init.prototype=r,r.prototype=r,r},create:function(){var t=this.extend();return t.init.apply(t,arguments),t},init:function(){},clone:function(){return p.call(this.prototype)},mixIn:function(t){for(var r in t)t.hasOwnProperty(r)&&(this[r]=t[r]);t.hasOwnProperty("toString")&&(this.toString=t.toString)}}}(),r=t.enc={},i=r.Hex={stringify:function(t){for(var e=t.words,r=t.sigBytes,i=[],n=0;n<r;n++){var o=e[n>>>2]>>>24-n%4*8&255;i.push((o>>>4).toString(16)),i.push((15&o).toString(16))}return i.join("")},parse:function(t){for(var e=t.length,r=[],i=0;i<e;i+=2)r[i>>>3]|=parseInt(t.substr(i,2),16)<<24-i%8*4;return new s.init(r,e/2)}},n=r.Latin1={stringify:function(t){for(var e=t.words,r=t.sigBytes,i=[],n=0;n<r;n++)i.push(String.fromCharCode(e[n>>>2]>>>24-n%4*8&255));return i.join("")},parse:function(t){for(var e=t.length,r=[],i=0;i<e;i++)r[i>>>2]|=(255&t.charCodeAt(i))<<24-i%4*8;return new s.init(r,e)}},o=r.Utf8={stringify:function(t){try{return decodeURIComponent(escape(n.stringify(t)))}catch(t){throw new Error("Malformed UTF-8 data")}},parse:function(t){return n.parse(unescape(encodeURIComponent(t)))}},s=e.WordArray=P.extend({init:function(t,r){t=this.words=t||[],this.sigBytes=r!=undefined?r:4*t.length},toString:function(t){return(t||i).stringify(this)},concat:function(t){var r=this.words,e=t.words,i=this.sigBytes,t=t.sigBytes;if(this.clamp(),i%4)for(var n=0;n<t;n++)r[i+n>>>2]|=(e[n>>>2]>>>24-n%4*8&255)<<24-(i+n)%4*8;else for(var o=0;o<t;o+=4)r[i+o>>>2]=e[o>>>2];return this.sigBytes+=t,this},clamp:function(){var t=this.words,r=this.sigBytes;t[r>>>2]&=4294967295<<24-r%4*8,t.length=Math.ceil(r/4)},clone:function(){var t=e.clone.call(this);return t.words=this.words.slice(0),t},random:function(t){for(var r=[],e=0;e<t;e+=4)r.push(4294967296*Math.random()|0);return new s.init(r,t)}}),c=t.algo={},a=c.Hasher=e.extend({cfg:P.extend(),init:function(t){this.cfg=this.cfg.extend(t),this.reset()},reset:function(){e.reset.call(this),this._doReset()},update:function(t){return"string"==typeof t&&(t=o.parse(t)),this._append(t),this._process(),this},finalize:function(t){return t&&this.update(t),this._doFinalize()},blockSize:16,_append:function(t){var r=this._data,e=t.words,i=r.sigBytes,t=t.sigBytes;if(r.concat(t),i%4)for(var n=0;n<t;n++)r.words[i+n>>>2]|=(e[n>>>2]>>>24-n%4*8&255)<<24-(i+n)%4*8;else for(var o=0;o<t;o+=4)r.words[i+o>>>2]=e[o>>>2];r.sigBytes+=t},_process:function(t){var r=this._data,e=r.words,i=r.sigBytes,n=this.blockSize,o=i/(4*n),o=t?Math.ceil(o):Math.max((0|o)-this._minBufferSize,0),s=o*n,i=Math.min(4*s,i);if(s){for(var c=0;c<s;c+=n)this._doProcessBlock(e,c);var a=e.splice(0,s);r.sigBytes-=i}return new s.init(a,i)},clone:function(){var t=a.clone.call(this);return t._data=this._data.clone(),t},_minBufferSize:0}),h=(c.HMAC=e.extend({init:function(t,r){t=this._hasher=new t.init,"string"==typeof r&&(r=o.parse(r));var e=t.blockSize,i=4*e;(r=r.sigBytes>i?t.finalize(r):r).clamp();for(var n=this._oKey=r.clone(),r=this._iKey=r.clone(),s=n.words,c=r.words,a=0;a<e;a++)s[a]^=1549556828,c[a]^=909522486;n.sigBytes=r.sigBytes=i,this.reset()},reset:function(){var t=this._hasher;t.reset(),t.update(this._iKey)},update:function(t){return this._hasher.update(t),this},finalize:function(t){var r=this._hasher,t=r.finalize(t);return r.reset(),r.finalize(this._oKey.clone().concat(t))}}),t.format={}),l=h.OpenSSL={stringify:function(t){var r=t.ciphertext,t=t.salt,r=t?s.create([1398893684,1701076831]).concat(t).concat(r):r;return r.toString(f)},parse:function(t){var r,e=f.parse(t),t=e.words;return 1398893684==t[0]&&1701076831==t[1]&&(r=s.create(t.slice(2,4)),t.splice(0,4),e.sigBytes-=16),d.create({ciphertext:e,salt:r})}},f=r.Base64={stringify:function(t){var r=t.words,e=t.sigBytes,i=this._map;t.clamp();for(var n=[],o=0;o<e;o+=3)for(var s=(r[o>>>2]>>>24-o%4*8&255)<<16|(r[o+1>>>2]>>>24-(o+1)%4*8&255)<<8|r[o+2>>>2]>>>24-(o+2)%4*8&255,c=0;c<4&&o+.75*c<e;c++)n.push(i.charAt(s>>>6*(3-c)&63));var a=i.charAt(64);if(a)for(;n.length%4;)n.push(a);return n.join("")},parse:function(t){var r=t.length,e=this._map,i=e.charAt(64);if(i){var n=t.indexOf(i);-1!=n&&(r=n)}for(var o=[],s=0,c=0;c<r;c++)if(c%4){var a=e.indexOf(t.charAt(c-1))<<c%4*2,h=e.indexOf(t.charAt(c))>>>6-c%4*2;o[s>>>2]|=(a|h)<<24-s%4*8,s++}return new s.init(o,s)},_map:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="},d=e.CipherParams=P.extend({init:function(t){this.mixIn(t)},toString:function(t){return(t||this.formatter).stringify(this)}}),u=(t.kdf={}).OpenSSL={execute:function(t,r,e,i){i=i||s.random(8);t=y.create({keySize:r+e}).compute(t,i),e=s.create(t.words.slice(r),4*e);return t.sigBytes=4*r,d.create({key:t,iv:e,salt:i})}},p=e.SerializableCipher=P.extend({cfg:P.extend({format:l}),encrypt:function(t,r,e,i){i=this.cfg.extend(i);var n=t.createEncryptor(e,i),r=n.finalize(r),n=n.cfg;return d.create({ciphertext:r,key:e,iv:n.iv,algorithm:t,mode:n.mode,padding:n.padding,blockSize:t.blockSize,formatter:i.format})},decrypt:function(t,r,e,i){return i=this.cfg.extend(i),r=this._parse(r,i.format),t.createDecryptor(e,i).finalize(r.ciphertext)},_parse:function(t,r){return"string"==typeof t?r.parse(t,this):t}}),_=t.lib.Cipher=e.extend({cfg:P.extend(),init:function(t,r,e){this._xformMode=t,this._key=r,this.cfg=this.cfg.extend(e),this.reset()},reset:function(){e.reset.call(this),this._doReset()},process:function(t){return this._append(t),this._process()},finalize:function(t){return t&&this._append(t),this._doFinalize()},keySize:4,ivSize:4,_ENC_XFORM_MODE:1,_DEC_XFORM_MODE:2,_createHelper:function(e){return{encrypt:function(t,r,i){return("string"==typeof r?v:p).encrypt(e,t,r,i)},decrypt:function(t,r,i){return("string"==typeof r?v:p).decrypt(e,t,r,i)}}}}),y=(e.BlockCipher=_.extend({cfg:_.cfg.extend({mode:v,padding:B}),reset:function(){var t;_.reset.call(this);var r=this.cfg,e=r.iv,r=r.mode;this._xformMode==this._ENC_XFORM_MODE?t=r.createEncryptor:(t=r.createDecryptor,this._minBufferSize=1),this._mode&&this._mode.__creator==t?this._mode.init(this,e&&e.words):(this._mode=t.call(r,this,e&&e.words),this._mode.__creator=t)},_doProcessBlock:function(t,r){this._mode.processBlock(t,r)},_doFinalize:function(){var t,r=this.cfg.padding;return this._xformMode==this._ENC_XFORM_MODE?(r.pad(this._data,this.blockSize),t=this._process(!0)):(t=this._process(!0),r.unpad(t)),t},blockSize:4}),t.lib.BlockCipherMode=e.extend({init:function(t,r){this._cipher=t,this._iv=r},__creator:function(){}})),v=(t.kdf={}).OpenSSL={execute:function(t,r,e,i){i=i||s.random(8);t=y.create({keySize:r+e}).compute(t,i),e=s.create(t.words.slice(r),4*e);return t.sigBytes=4*r,d.create({key:t,iv:e,salt:i})}},p=e.PasswordBasedCipher=p.extend({cfg:p.cfg.extend({kdf:v}),encrypt:function(t,r,e,i){e=(i=this.cfg.extend(i)).kdf.execute(e,t.keySize,t.ivSize);i.iv=e.iv;i=p.encrypt.call(this,t,r,e.key,i);return i.mixIn(e),i},decrypt:function(t,r,e,i){i=this.cfg.extend(i),r=this._parse(r,i.format);e=i.kdf.execute(e,t.keySize,t.ivSize,r.salt);return i.iv=e.iv,p.decrypt.call(this,t,r,e.key,i)}})}(),U.mode.ECB=(D=U.lib.BlockCipherMode.extend()).Encryptor=D.extend({processBlock:function(t,r){this._cipher.encryptBlock(t,r)}}),D.Decryptor=D.extend({processBlock:function(t,r){this._cipher.decryptBlock(t,r)}}),U.pad.NoPadding={pad:function(){},unpad:function(){}},function(){if("function"==typeof ArrayBuffer){var t=U.lib.WordArray,r=t.init;t.init=function(t){return t instanceof Uint8Array&&(t=new Int32Array(t.buffer,t.byteOffset,t.byteLength/Int32Array.BYTES_PER_ELEMENT)),r.apply(this,arguments)}}}(),function(){var t=U,r=t.lib.BlockCipher,e=t.algo,i=[],n=[],o=[],s=[],c=[],a=[],h=[],l=[],f=[],d=[];!function(){for(var t=[],r=0;r<256;r++)t[r]=r<128?r<<1:r<<1^283;for(var e=0,i=0,r=0;r<256;r++){var n=i^i<<1^i<<2^i<<3^i<<4;i=n>>>8^255&n^99;var o=t[e],s=t[o],c=t[s],a=257*t[i]^16843008*i;h[e]=a<<24|a>>>8,l[e]=a<<16|a>>>16,f[e]=a<<8|a>>>24,d[e]=a,a=16843009*c^65537*s^257*o^16843008*e,i[i]=a<<24|a>>>8,n[i]=a<<16|a>>>16,o[i]=a<<8|a>>>24,s[i]=a,e?(e=o^t[t[t[c^o]]],i^=t[t[i]]):e=i=1}}();var u=[0,1,2,4,8,16,32,64,128,27,54],e=e.AES=r.extend({_doReset:function(){if(!this._nRounds||this._keyPriorReset!==this._key){for(var t=this._keyPriorReset=this._key,r=t.words,e=t.sigBytes/4,i=4*(1+(this._nRounds=6+e)),n=this._keySchedule=[],o=0;o<i;o++)if(o<e)n[o]=r[o];else{var s=n[o-1];o%e?e>6&&o%e==4&&(s=h[s>>>24]<<24|h[s>>>16&255]<<16|h[s>>>8&255]<<8|h[255&s]):(s=h[(s=s<<8|s>>>24)>>>24]<<24|h[s>>>16&255]<<16|h[s>>>8&255]<<8|h[255&s],s^=u[o/e|0]<<24),n[o]=n[o-e]^s}for(var c=this._invKeySchedule=[],a=0;a<i;a++){var o=i-a,s=a%4?n[o]:n[o-4];a<4||o<=4?c[a]=s:c[a]=i[h[s>>>24]]^n[h[s>>>16&255]]^o[h[s>>>8&255]]^s[h[255&s]]}}},encryptBlock:function(t,r){this._doCryptBlock(t,r,this._keySchedule,h,l,f,d,h)},decryptBlock:function(t,r){var e=t[r+1];t[r+1]=t[r+3],t[r+3]=e,this._doCryptBlock(t,r,this._invKeySchedule,i,n,o,s,h);var e=t[r+1];t[r+1]=t[r+3],t[r+3]=e},_doCryptBlock:function(t,r,e,i,n,o,s,c){for(var a=this._nRounds,h=t[r]^e[0],l=t[r+1]^e[1],f=t[r+2]^e[2],d=t[r+3]^e[3],u=4,p=1;p<a;p++){var _=i[h>>>24]^n[l>>>16&255]^o[f>>>8&255]^s[255&d]^e[u++],y=i[l>>>24]^n[f>>>16&255]^o[d>>>8&255]^s[255&h]^e[u++],v=i[f>>>24]^n[d>>>16&255]^o[h>>>8&255]^s[255&l]^e[u++],g=i[d>>>24]^n[h>>>16&255]^o[l>>>8&255]^s[255&f]^e[u++];h=_,l=y,f=v,d=g}_=(c[h>>>24]<<24|c[l>>>16&255]<<16|c[f>>>8&255]<<8|c[255&d])^e[u++],y=(c[l>>>24]<<24|c[f>>>16&255]<<16|c[d>>>8&255]<<8|c[255&h])^e[u++],v=(c[f>>>24]<<24|c[d>>>16&255]<<16|c[h>>>8&255]<<8|c[255&l])^e[u++],g=(c[d>>>24]<<24|c[h>>>16&255]<<16|c[l>>>8&255]<<8|c[255&f])^e[u++];t[r]=_,t[r+1]=y,t[r+2]=v,t[r+3]=g},keySize:8});t.AES=r._createHelper(e)}(),U);
+    </script>
     <link rel="stylesheet" as="style" crossorigin
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <style>
@@ -939,28 +942,48 @@
 
 
     <script>
-        // 내장 바이너리 키 DB
-        const keysDB = {
-            "KBL Key": "A75A25C652828228C63B7ABEDE6C67C8",
-            "WHL Key": "4DFFC34E7D0CE6AF08222384C0C874C1",
-            "Old Key": "95A8EE8E89979B9EFDCBC6EB9797528D",
-            "New Key": "0A533102F86D4683A4071B30CB047E91"
-        };
+        // [보안강화] 우클릭 및 개발자 도구(F12 등) 차단
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', function (e) {
+            if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || (e.ctrlKey && e.keyCode === 85)) {
+                e.preventDefault(); return false;
+            }
+        });
 
-        // 퀀타 로직 DB
-        const quantaModels = {
-            "550": "QaCBcr11", "560": "QaCBcr11", "N530": "QaCBcr11",
-            "510": "QlcQciuL", "515": "QlcQciuL", "520": "QlcQciuL", "525": "Lg4QciuL",
-            "N360": "qacb2014", "N365": "qacb2015",
-            "470": "qacb2016", "480": "qacb2016", "590": "qacb2016",
-            "870": "D25a6908", "880": "D25a6908", "890": "D25a6908", "490": "D25a6908",
-            "40N": "D25a6908", "50N": "D25a6908", "70N": "D25a6908", "50Q": "D25a6908",
-            "50T": "D25a6908", "50U": "D25a6908"
-        };
+        /* CryptoJS v3.1.2 (Inline for standalone compatibility) */
+        var CryptoJS=CryptoJS||function(u,p){var d={},l=d.lib={},s=function(){},t=l.Base={extend:function(a){s.prototype=this;var c=new s;a&&c.mixIn(a);c.hasOwnProperty("init")||(c.init=function(){c.$super.init.apply(this,arguments)});c.init.prototype=c;c.$super=this;return c},create:function(){var a=this.extend();a.init.apply(a,arguments);return a},init:function(){},mixIn:function(a){for(var c in a)a.hasOwnProperty(c)&&(this[c]=a[c]);a.hasOwnProperty("toString")&&(this.toString=a.toString)},clone:function(){return this.init.prototype.extend(this)}},r=l.WordArray=t.extend({init:function(a,c){a=this.words=a||[];this.sigBytes=c!=p?c:4*a.length},toString:function(a){return(a||v).stringify(this)},concat:function(a){var c=this.words,e=a.words,j=this.sigBytes;a=a.sigBytes;this.clamp();if(j%4)for(var k=0;k<a;k++)c[j+k>>>2]|=(e[k>>>2]>>>24-k%4*8&255)<<24-(j+k)%4*8;else if(65535<e.length)for(k=0;k<a;k+=4)c[j+k>>>2]=e[k>>>2];else c.push.apply(c,e);this.sigBytes+=a;return this},clamp:function(){var a=this.words,c=this.sigBytes;a[c>>>2]&=4294967295<<24-c%4*8;a.length=u.ceil(c/4)},clone:function(){var a=t.clone.call(this);a.words=this.words.slice(0);return a},random:function(a){for(var c=[],e=0;e<a;e+=4)c.push(4294967296*u.random()|0);return new r.init(c,a)}}),w=d.enc={},v=w.Hex={stringify:function(a){var c=a.words;a=a.sigBytes;for(var e=[],j=0;j<a;j++){var k=c[j>>>2]>>>24-j%4*8&255;e.push((k>>>4).toString(16));e.push((k&15).toString(16))}return e.join("")},parse:function(a){for(var c=a.length,e=[],j=0;j<c;j+=2)e[j>>>3]|=parseInt(a.substr(j,2),16)<<24-j%8*4;return new r.init(e,c/2)}},b=w.Latin1={stringify:function(a){var c=a.words;a=a.sigBytes;for(var e=[],j=0;j<a;j++)e.push(String.fromCharCode(c[j>>>2]>>>24-j%4*8&255));return e.join("")},parse:function(a){for(var c=a.length,e=[],j=0;j<c;j++)e[j>>>2]|=(a.charCodeAt(j)&255)<<24-j%4*8;return new r.init(e,c)}},x=w.Utf8={stringify:function(a){try{return decodeURIComponent(escape(b.stringify(a)))}catch(c){throw Error("Malformed UTF-8 data")}},parse:function(a){return b.parse(unescape(encodeURIComponent(a)))}},q=l.BufferedBlockAlgorithm=t.extend({reset:function(){this._data=new r.init;this._nDataBytes=0},_append:function(a){"string"==typeof a&&(a=x.parse(a));this._data.concat(a);this._nDataBytes+=a.sigBytes},_process:function(a){var c=this._data,e=c.words,j=c.sigBytes,k=this.blockSize,m=j/(4*k),m=a?u.ceil(m):u.max((m|0)-this._minBufferSize,0);a=m*k;j=u.min(4*a,j);if(a){for(var n=0;n<a;n+=k)this._doProcessBlock(e,n);n=e.splice(0,a);c.sigBytes-=j}return new r.init(n,j)},clone:function(){var a=t.clone.call(this);a._data=this._data.clone();return a},_minBufferSize:0}),n=l.Hasher=q.extend({cfg:t.extend(),init:function(a){this.cfg=this.cfg.extend(a);this.reset()},reset:function(){q.reset.call(this);this._doReset()},update:function(a){this._append(a);this._process();return this},finalize:function(a){a&&this._append(a);return this._doFinalize()},blockSize:16,_createHelper:function(a){return function(c,e){return(new a.init(e)).finalize(c)}},_createHmacHelper:function(a){return function(c,e){return(new h.HMAC.init(a,e)).finalize(c)}}}),h=d.algo={};return d}(Math);(function(){var u=CryptoJS,p=u.lib.Cipher,d=u.lib.WordArray,l=u.lib.BufferedBlockAlgorithm,s=u.mode.ECB=function(){var a=u.lib.BlockCipherMode.extend();a.Encryptor=a.extend({processBlock:function(a,c){this._cipher.encryptBlock(a,c)}});a.Decryptor=a.extend({processBlock:function(a,c){this._cipher.decryptBlock(a,c)}});return a}(),t=u.pad.NoPadding={pad:function(){},unpad:function(){}},r=p.extend({cfg:p.cfg.extend({mode:s,padding:t}),reset:function(){p.reset.call(this);var a=this.cfg,c=a.iv,a=a.mode;if(this._xformMode==this._ENC_XFORM_MODE)var e=a.createEncryptor;else e=a.createDecryptor,this._minBufferSize=1;this._mode=e.call(a,this,c&&c.words)},_doProcessBlock:function(a,c){this._mode.processBlock(a,c)},_doFinalize:function(){var a=this.cfg.padding;if(this._xformMode==this._ENC_XFORM_MODE){a.pad(this._data,this.blockSize);var c=this._process(!0)}else c=this._process(!0),a.unpad(c);return c},blockSize:4});u.lib.BlockCipher=r;var w=u.algo.AES=r.extend({_doReset:function(){for(var a=this._key,c=a.words,e=a.sigBytes/4,a=this._nRounds=e+6,j=4*(a+1),k=this._keySchedule=[],m=0;m<j;m++)if(m<e)k[m]=c[m];else{var n=k[m-1];m%e?6<e&&4==m%e&&(n=v[n>>>24]<<24|v[n>>>16&255]<<16|v[n>>>8&255]<<8|v[n&255]):(n=n<<8|n>>>24,n=v[n>>>24]<<24|v[n>>>16&255]<<16|v[n>>>8&255]<<8|v[n&255],n^=b[m/e|0]<<24);k[m]=k[m-e]^n}c=this._invKeySchedule=[];for(e=0;e<j;e++)m=j-e,n=e%4?k[m]:k[m-4],c[e]=4>e||4>=m?n:x[v[n>>>24]]^q[v[n>>>16&255]]^r[v[n>>>8&255]]^t[v[n&255]]},encryptBlock:function(a,c){this._doCryptBlock(a,c,this._keySchedule,l,s,h,u,v)},decryptBlock:function(a,c){var e=a[c+1];a[c+1]=a[c+3];a[c+3]=e;this._doCryptBlock(a,c,this._invKeySchedule,x,q,r,t,z);e=a[c+1];a[c+1]=a[c+3];a[c+3]=e},_doCryptBlock:function(a,c,e,j,k,m,n,o){for(var p=this._nRounds,d=a[c]^e[0],s=a[c+1]^e[1],l=a[c+2]^e[2],r=a[c+3]^e[3],t=4,f=1;f<p;f++)var w=j[d>>>24]^k[s>>>16&255]^m[l>>>8&255]^n[r&255]^e[t++],v=j[s>>>24]^k[l>>>16&255]^m[r>>>8&255]^n[d&255]^e[t++],b=j[l>>>24]^k[r>>>16&255]^m[d>>>8&255]^n[s&255]^e[t++],x=j[r>>>24]^k[d>>>16&255]^m[s>>>8&255]^n[l&255]^e[t++],d=w,s=v,l=b,r=x;w=(o[d>>>24]<<24|o[s>>>16&255]<<16|o[l>>>8&255]<<8|o[r&255])^e[t++];v=(o[s>>>24]<<24|o[l>>>16&255]<<16|o[r>>>8&255]<<8|o[d&255])^e[t++];b=(o[l>>>24]<<24|o[r>>>16&255]<<16|o[d>>>8&255]<<8|o[s&255])^e[t++];x=(o[r>>>24]<<24|o[d>>>16&255]<<16|o[s>>>8&255]<<8|o[l&255])^e[t++];a[c]=w;a[c+1]=v;a[c+2]=b;a[c+3]=x},keySize:8});u.AES=p._createHelper(w)})();
+
+        // [보안강화] 바이너리 키와 로직을 WebAssembly(Wasm)로 보호
+        const VAULT_WASM_B64 = "AGFzbQEAAAABBgFgAX8BfwMDAgAABQMBAAEHKgMMZ2V0QmluYXJ5S2V5AAAOZ2V0UXVhbnRhTG9naWMAAQZtZW1vcnkCAAwBGAqNAQIzACAARQRAQaAIDwsgAEEBRgRAQYAJDwsgAEECRgRAQeAJDwsgAEEDRgRAQcAKDwtBoAsLVwAgAEUEQEHACw8LIABBAUYEQEHwCw8LIABBAkYEQEGgDA8LIABBA0YEQEHQDA8LIABBBEYEQEGADQ8LIABBBUYEQEGwDQ8LIABBBkYEQEHgDQ8LQaALCwvbBBgAQYwICwFcAEGYCAtHAgAAAEAAAABBADcANQBBADIANQBDADYANQAyADgAMgA4ADIAMgA4AEMANgAzAEIANwBBAEIARQBEAEUANgBDADYANwBDADgAQewICwFcAEH4CAtHAgAAAEAAAAA0AEQARgBGAEMAMwA0AEUANwBEADAAQwBFADYAQQBGADAAOAAyADIAMgAzADgANABDADAAQwA4ADcANABDADEAQcwJCwFcAEHYCQtHAgAAAEAAAAA5ADUAQQA4AEUARQA4AEUAOAA5ADkANwA5AEIAOQBFAEYARABDAEIAQwA2AEUAQgA5ADcAOQA3ADUAMgA4AEQAQawKCwFcAEG4CgtHAgAAAEAAAAAwAEEANQAzADMAMQAwADIARgA4ADYARAA0ADYAOAAzAEEANAAwADcAMQBCADMAMABDAEIAMAA0ADcARQA5ADEAQYwLCwEcAEGYCwsBAgBBrAsLASwAQbgLCxcCAAAAEAAAAFEAYQBDAEIAYwByADEAMQBB3AsLASwAQegLCxcCAAAAEAAAAFEAbABjAFEAYwBpAHUATABBjAwLASwAQZgMCxcCAAAAEAAAAEwAZwA0AFEAYwBpAHUATABBvAwLASwAQcgMCxcCAAAAEAAAAHEAYQBjAGIAMgAwADEANABB7AwLASwAQfgMCxcCAAAAEAAAAHEAYQBjAGIAMgAwADEANQBBnA0LASwAQagNCxcCAAAAEAAAAHEAYQBjAGIAMgAwADEANgBBzA0LASwAQdgNCxcCAAAAEAAAAEQAMgA1AGEANgA5ADAAOA==";
+        let wasmInstance = null;
+
+        async function initVault() {
+            try {
+                const bytes = Uint8Array.from(atob(VAULT_WASM_B64), c => c.charCodeAt(0));
+                const { instance } = await WebAssembly.instantiate(bytes);
+                wasmInstance = instance;
+                console.log("Vault initialized.");
+            } catch (e) { console.error("Vault failed", e); }
+        }
+
+        function getVaultString(ptr) {
+            if (!ptr || !wasmInstance) return "";
+            try {
+                const buf = wasmInstance.exports.memory.buffer;
+                const view = new DataView(buf);
+                const len = view.getUint32(ptr - 4, true);
+                const bytes = new Uint16Array(buf, ptr, len / 2);
+                return String.fromCharCode.apply(null, bytes);
+            } catch(e) { return ""; }
+        }
+
+        const VAULT_KEYS_MAP = { "KBL Key": 0, "WHL Key": 1, "Old Key": 2, "New Key": 3 };
+        const QUANTA_GROUP_LIST = ["550", "560", "N530", "510", "515", "520", "525", "N360", "N365", "470", "480", "590", "870", "880", "890", "490", "40N", "50N", "70N", "50Q", "50T", "50U"];
+
+        initVault();
 
         let currentMode = 'inhouse';
 
-        // 탭 전환 기능
         function switchTab(mode) {
             currentMode = mode;
             const tabs = document.querySelectorAll('.tab');
@@ -984,28 +1007,22 @@
             }
         }
 
-        // 결과 표시 함수
         function showResult(title, hint, key, product, desc) {
             const resultContainer = document.getElementById('result-container');
             const errorCard = document.getElementById('error-message');
-
             errorCard.style.display = 'none';
             resultContainer.style.display = 'block';
-
             document.getElementById('res-title').innerText = title;
             document.getElementById('res-hint-val').innerText = hint;
             document.getElementById('res-key-val').innerText = key;
             document.getElementById('res-product').innerText = product || 'N/A';
             if (desc) document.getElementById('res-desc').innerText = desc;
-
-            // 스크롤 이동
             resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
         function showError(message) {
             const errorCard = document.getElementById('error-message');
             const resultContainer = document.getElementById('result-container');
-
             resultContainer.style.display = 'none';
             errorCard.innerText = message;
             errorCard.style.display = 'block';
@@ -1013,205 +1030,113 @@
 
         function copyToClipboard(id) {
             const text = document.getElementById(id).innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                alert('클립보드에 복사되었습니다: ' + text);
-            });
+            navigator.clipboard.writeText(text).then(() => alert('복사되었습니다: ' + text));
         }
 
-        // 이력 관리 로직 (성공/실패 상태 추가)
         function saveToHistory(receipt, model, type, key, status = 'SUCCESS') {
             let history = JSON.parse(localStorage.getItem('bios_history') || '[]');
             const now = new Date();
             const timeStr = `${now.getMonth() + 1}/${now.getDate()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-
             history.unshift({ time: timeStr, receipt, model, type, key, status });
             if (history.length > 100) history.pop();
-
             localStorage.setItem('bios_history', JSON.stringify(history));
         }
 
         function openHistory() {
-            const pw = prompt('이력조회를 위한 비밀번호를 입력하세요.');
-            if (pw !== 'nyh') {
-                if (pw !== null) alert('비밀번호가 일치하지 않습니다.');
-                return;
-            }
-
+            const pw = prompt('비밀번호를 입력하세요.');
+            if (pw !== 'nyh') { if (pw !== null) alert('비밀번호 불일치'); return; }
             const modal = document.getElementById('history-modal');
             const list = document.getElementById('history-list');
             const history = JSON.parse(localStorage.getItem('bios_history') || '[]');
-
             modal.style.display = 'flex';
-            list.innerHTML = '';
-
-            if (history.length === 0) {
-                list.innerHTML = '<div class="empty-history">최근 조회 이력이 없습니다.</div>';
-                return;
-            }
-
+            list.innerHTML = history.length === 0 ? '<div class="empty-history">이력이 없습니다.</div>' : '';
             history.forEach(item => {
                 const isFailed = item.status === 'FAILED';
                 const div = document.createElement('div');
                 div.className = 'history-item';
-                div.innerHTML = `
-                    <div class="history-time">${item.time}</div>
-                    <div class="history-info">
-                        <div class="main">${item.receipt} / ${item.model}</div>
-                        <div class="sub">${item.type} ${isFailed ? '<span style="color:#EF4444; font-weight:bold;">[실패]</span>' : ''}</div>
-                    </div>
-                    <div class="history-key" style="${isFailed ? 'background:#FEF2F2; color:#EF4444;' : ''}">
-                        ${isFailed ? 'FAIL' : item.key}
-                    </div>
-                `;
+                div.innerHTML = `<div class="history-time">${item.time}</div><div class="history-info"><div class="main">${item.receipt} / ${item.model}</div><div class="sub">${item.type} ${isFailed?'[실패]':''}</div></div><div class="history-key" style="${isFailed?'background:#FEF2F2; color:#EF4444;':''}">${isFailed?'FAIL':item.key}</div>`;
                 list.appendChild(div);
             });
         }
 
-        function closeHistory() {
-            document.getElementById('history-modal').style.display = 'none';
-        }
+        function closeHistory() { document.getElementById('history-modal').style.display = 'none'; }
+        function clearHistory() { if (confirm('삭제하시겠습니까?')) { localStorage.removeItem('bios_history'); openHistory(); } }
+        window.onclick = e => { if (e.target == document.getElementById('history-modal')) closeHistory(); }
 
-        function clearHistory() {
-            if (confirm('모든 조회 이력을 삭제하시겠습니까?')) {
-                localStorage.removeItem('bios_history');
-                openHistory();
-            }
-        }
-
-        // 모달 외각 클릭 시 닫기
-        window.onclick = function (event) {
-            const modal = document.getElementById('history-modal');
-            if (event.target == modal) closeHistory();
-        }
-
-        // 접수번호 유효성 검사 함수 (10자리 영문 대문자 + 숫자)
         function validateReceipt(receipt) {
-            const regex = /^[A-Z0-9]{10}$/;
-            if (!regex.test(receipt)) {
-                alert('접수번호를 확인해주세요');
-                return false;
-            }
+            if (!/^[A-Z0-9]{10}$/.test(receipt)) { alert('접수번호(10자리 영문/숫자)를 확인해주세요'); return false; }
             return true;
         }
 
-        // 인하우스 키 생성 로직
         function generateInhouseKey() {
-            let receipt = document.getElementById('ih-receipt').value.trim().toUpperCase();
-            document.getElementById('ih-receipt').value = receipt;
-
+            const receipt = document.getElementById('ih-receipt').value.trim().toUpperCase();
             if (!validateReceipt(receipt)) return;
-
-            let model = document.getElementById('ih-model').value.trim();
-            let serial = document.getElementById('ih-serial').value.trim();
-            let hintStr = document.getElementById('ih-hint').value.trim().toUpperCase();
+            const model = document.getElementById('ih-model').value.trim();
+            const serial = document.getElementById('ih-serial').value.trim();
+            const hintStr = document.getElementById('ih-hint').value.trim().toUpperCase();
             const selectVal = document.getElementById('ih-key-select').value;
 
-            if (!model || !serial || !hintStr) {
-                showError('⚠️ 모든 필수 정보를 입력해 주세요.');
-                return;
-            }
-
-            if (hintStr.length !== 8) {
-                showError('⚠️ 힌트 번호는 정확히 8자리여야 합니다.');
-                return;
-            }
-
-            const keyHex = keysDB[selectVal];
+            if (!model || !serial || hintStr.length !== 8) { showError('⚠️ 입력을 확인해 주세요.'); return; }
+            if (!wasmInstance) { showError('보안 모듈 로드 중.. 다시 시도하세요.'); return; }
 
             try {
-                // 알고리즘 로직
+                const keyHex = getVaultString(wasmInstance.exports.getBinaryKey(VAULT_KEYS_MAP[selectVal]));
+                if(!keyHex) throw new Error("Key failed");
+
                 let array3 = new Array(8).fill(4661);
                 array3[0] = parseInt(hintStr.substring(0, 4), 16);
                 array3[1] = parseInt(hintStr.substring(4, 8), 16);
 
-                let array5Hex = "";
+                let a5Hex = "";
                 for (let j = 0; j < 8; j++) {
-                    let b1 = array3[j] & 0xFF;
-                    let b2 = (array3[j] & 0xFF00) >> 8;
-                    array5Hex += b1.toString(16).padStart(2, '0') + b2.toString(16).padStart(2, '0');
+                    a5Hex += (array3[j] & 0xFF).toString(16).padStart(2, '0') + ((array3[j] & 0xFF00) >> 8).toString(16).padStart(2, '0');
                 }
 
-                let message = CryptoJS.enc.Hex.parse(array5Hex);
-                let key = CryptoJS.enc.Hex.parse(keyHex);
+                const msg = CryptoJS.enc.Hex.parse(a5Hex);
+                const key = CryptoJS.enc.Hex.parse(keyHex);
+                const enc = CryptoJS.AES.encrypt(msg, key, { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
+                const cipherHex = enc.ciphertext.toString(CryptoJS.enc.Hex);
 
-                let encrypted = CryptoJS.AES.encrypt(message, key, {
-                    mode: CryptoJS.mode.ECB,
-                    padding: CryptoJS.pad.NoPadding
-                });
+                let a6 = new Uint8Array(16);
+                for (let i = 0; i < 16; i++) a6[i] = parseInt(cipherHex.substring(i*2, i*2+2), 16);
+                for (let j = 0; j < 8; j++) array3[j] = a6[j*2] | (a6[j*2+1] << 8);
 
-                let cipherHex = encrypted.ciphertext.toString(CryptoJS.enc.Hex);
-
-                let array6 = new Uint8Array(16);
-                for (let i = 0; i < 16; i++) {
-                    array6[i] = parseInt(cipherHex.substring(i * 2, i * 2 + 2), 16);
-                }
-
+                let out = [], num = 3840, n2 = 8;
                 for (let j = 0; j < 8; j++) {
-                    array3[j] = array6[j * 2] | (array6[j * 2 + 1] << 8);
+                    out.push(((array3[j] & num) >>> n2).toString(16).toUpperCase());
+                    num >>>= 4; n2 -= 4;
+                    if (num === 0) { num = 61440; n2 = 12; }
                 }
 
-                let outputChars = [];
-                let num = 3840; // 0x0F00
-                let num2 = 8;
-
-                for (let j = 0; j < 8; j++) {
-                    let num3 = (array3[j] & num) >>> num2;
-                    outputChars.push(num3.toString(16).toUpperCase());
-                    num >>>= 4;
-                    num2 -= 4;
-                    if (num === 0) {
-                        num = 61440; // 0xF000
-                        num2 = 12;
-                    }
-                }
-
-                const unlockKey = outputChars.join("");
-                showResult('INHOUSE_KEY_GENERATED', hintStr, unlockKey, model, '인하우스 바이너리 키를 사용하여 생성된 공식 언락 코드입니다.');
-                saveToHistory(receipt, model, 'INHOUSE', unlockKey);
-
-            } catch (e) {
-                showError('⚠️ 처리 중 오류가 발생했습니다. 입력값을 확인해 주세요.');
-            }
+                const resKey = out.join("");
+                showResult('INHOUSE_KEY_GENERATED', hintStr, resKey, model, '생성 성공');
+                saveToHistory(receipt, model, 'INHOUSE', resKey);
+            } catch (e) { showError('⚠️ 처리 오류: ' + e.message); }
         }
 
-        // 퀀타 키 매칭 로직
         function checkQuantaKey() {
-            let receipt = document.getElementById('qt-receipt').value.trim().toUpperCase();
-            document.getElementById('qt-receipt').value = receipt;
-
+            const receipt = document.getElementById('qt-receipt').value.trim().toUpperCase();
             if (!validateReceipt(receipt)) return;
+            const model = document.getElementById('qt-model').value.trim();
+            if (!model.includes('-')) { showError('⚠️ 하이픈(-) 포함 모델명 입력'); return; }
 
-            let serial = document.getElementById('qt-serial').value.trim();
-            let model = document.getElementById('qt-model').value.trim();
-
-            if (!model || !serial) {
-                showError('⚠️ 모든 필수 정보를 입력해 주세요.');
-                return;
-            }
-
-            if (!model.includes('-')) {
-                showError('⚠️ 모델명에 하이픈(-)이 포함되어야 합니다. (예: 15U50N-G.AA50K)');
-                return;
-            }
-
-            let prefix = model.split('-')[0].toUpperCase();
-            let sortedKeys = Object.keys(quantaModels).sort((a, b) => b.length - a.length);
-
-            let matchedKey = null;
-            for (let k of sortedKeys) {
+            const prefix = model.split('-')[0].toUpperCase();
+            const sorted = [...QUANTA_GROUP_LIST].sort((a,b) => b.length - a.length);
+            let matched = null;
+            for (let k of sorted) {
                 if (prefix.endsWith(k.toUpperCase())) {
-                    matchedKey = quantaModels[k];
+                    const getLID = (key) => {
+                        const midx = ["550","560","N530"].includes(key)?0:["510","515","520"].includes(key)?1:key==="525"?2:key==="N360"?3:key==="N365"?4:["470","480","590"].includes(key)?5:6;
+                        return midx;
+                    };
+                    matched = getVaultString(wasmInstance.exports.getQuantaLogic(getLID(k)));
                     break;
                 }
             }
-
-            if (matchedKey) {
-                showResult('QUANTA_LOGIC_MATCHED', model, matchedKey, 'QUANTA', '해당 모델 시리즈에 등록된 퀀타(Quanta) 언락 로직이 매칭되었습니다.');
-                saveToHistory(receipt, model, 'QUANTA', matchedKey, 'SUCCESS');
-            } else {
-                showError(`⚠️ 매칭 실패: '${prefix}' 에 해당하는 퀀타 언락키가 없습니다.`);
-                saveToHistory(receipt, model, 'QUANTA', 'FAIL', 'FAILED');
-            }
+            if (matched) {
+                showResult('QUANTA_MATCHED', model, matched, 'QUANTA', '매칭 성공');
+                saveToHistory(receipt, model, 'QUANTA', matched);
+            } else showError('⚠️ 매칭 실패');
         }
     </script>
 
