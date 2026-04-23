@@ -1,0 +1,1222 @@
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIOS Unlocker Web</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    <style>
+        :root {
+            --primary-color: #A50034;
+            /* LG 공식 Active Red */
+            --primary-soft: #F9E6EB;
+            /* LG 레드 기반의 아주 연한 핑크 배경 */
+            --primary-border: #F1C2D1;
+            /* 연한 핑크 테두리 */
+            --bg-color: #F4F4F4;
+            /* LG 서비스 UI 스타일의 뉴트럴 그레이 배경 */
+            --card-bg: #FFFFFF;
+            --text-heading: #202020;
+            /* 깊은 블랙-그레이 */
+            --text-body: #4D4D4D;
+            /* LG 표준 본문 회색 */
+            --text-hint: #999999;
+            --success-bg: #E7F3EF;
+            --success-color: #00815C;
+            /* LG 계열의 안정한 그린 */
+            --info-blue-bg: #F0F2F5;
+            --info-blue-bar: #ADB5BD;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+        }
+
+        body {
+            font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-body);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+        }
+
+        .header .close-btn {
+            position: absolute;
+            top: -20px;
+            right: 0;
+            width: 32px;
+            height: 32px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            color: var(--text-hint);
+        }
+
+        .logo-icon {
+            width: 64px;
+            height: 64px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            margin-bottom: 8px;
+        }
+
+        .logo-icon svg {
+            width: 32px;
+            height: 32px;
+            color: var(--primary-color);
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-heading);
+            margin: 0;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: var(--text-body);
+            margin: 0;
+        }
+
+        .header .accent-info {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-top: 4px;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            background: #EDF2F7;
+            padding: 4px;
+            border-radius: 12px;
+            display: flex;
+            gap: 4px;
+            width: fit-content;
+            margin: 0 auto;
+        }
+
+        .tab {
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #718096;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: #FFFFFF;
+            color: var(--primary-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .tab-icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Input Section */
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-wrapper input {
+            width: 100%;
+            padding: 18px 54px;
+            border-radius: 16px;
+            border: 2px solid transparent;
+            background: #FFFFFF;
+            box-shadow: var(--shadow);
+            font-size: 16px;
+            font-weight: 600;
+            outline: none;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+
+        .search-wrapper input:focus {
+            border-color: var(--primary-border);
+            background-color: #fff;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #C2CFE0;
+        }
+
+        .clear-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #C2CFE0;
+            cursor: pointer;
+        }
+
+        /* Meta Inputs Group */
+        .meta-inputs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .meta-box {
+            background: #fff;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid #E2E8F0;
+        }
+
+        .meta-box label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-hint);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .meta-box input,
+        .meta-box select {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-heading);
+            padding: 0;
+            background: transparent;
+        }
+
+        /* Action Button */
+        .action-button {
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 18px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.2s;
+            box-shadow: 0 4px 12px rgba(158, 16, 48, 0.2);
+        }
+
+        .action-button:hover {
+            opacity: 0.9;
+        }
+
+        .action-button:active {
+            transform: scale(0.98);
+        }
+
+        /* Result Card */
+        #result-container {
+            display: none;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            border: 1px solid #F1F5F9;
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .result-info-main {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .result-icon-box {
+            width: 44px;
+            height: 44px;
+            background: var(--primary-soft);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+        }
+
+        .result-title-group h2 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-heading);
+            letter-spacing: -0.5px;
+        }
+
+        .result-title-group p {
+            margin: 0;
+            font-size: 12px;
+            color: var(--text-hint);
+            margin-top: 2px;
+        }
+
+        .status-badge {
+            background: var(--success-bg);
+            color: var(--success-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--success-color);
+            border-radius: 50%;
+        }
+
+        /* Section Layout */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .info-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .section-label {
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-label::before {
+            content: '';
+            width: 5px;
+            height: 18px;
+            border-radius: 2px;
+        }
+
+        .label-red::before {
+            background: var(--primary-color);
+        }
+
+        .label-red {
+            color: var(--text-heading);
+        }
+
+        .label-blue::before {
+            background: var(--info-blue-bar);
+        }
+
+        .label-blue {
+            color: var(--text-heading);
+        }
+
+        .info-box-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .info-box {
+            background: #fff;
+            border: 1px solid var(--primary-border);
+            padding: 18px;
+            border-radius: 16px;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .info-box.wide {
+            grid-column: span 2;
+        }
+
+        .info-box.blue {
+            border: none;
+            background: var(--info-blue-bg);
+            padding: 24px;
+        }
+
+        .info-box .box-label {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--text-hint);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-box .box-value {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+
+        .info-box .box-value.blue {
+            color: var(--text-heading);
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #C2CFE0;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            color: var(--primary-color);
+        }
+
+        .desc-text {
+            font-size: 13.5px;
+            line-height: 1.7;
+            color: var(--text-body);
+            word-break: keep-all;
+        }
+
+        .footer {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #E2E8F0;
+            font-size: 12px;
+            color: #94A3B8;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* Error/Guide Box */
+        .error-card {
+            background: #FFF1F2;
+            border: 1px solid #FECDD3;
+            color: #BE123C;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            display: none;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 15px;
+            }
+
+            .container {
+                gap: 24px;
+            }
+
+            .header h1 {
+                font-size: 26px;
+            }
+
+            .header p {
+                font-size: 14px;
+            }
+
+            .logo-icon {
+                width: 56px;
+                height: 56px;
+            }
+
+            .logo-icon svg {
+                width: 28px;
+                height: 28px;
+            }
+
+            .tabs-container {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .tab {
+                flex: 1;
+                padding: 10px 12px;
+                font-size: 14px;
+                justify-content: center;
+            }
+
+            .search-wrapper input {
+                padding: 16px 48px;
+                font-size: 14px;
+            }
+
+            .meta-inputs {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .meta-box {
+                padding: 10px 14px;
+            }
+
+            .result-card {
+                padding: 20px;
+                border-radius: 20px;
+                gap: 20px;
+            }
+
+            .result-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .status-badge {
+                align-self: flex-start;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .info-box {
+                padding: 14px;
+            }
+
+            .box-value {
+                font-size: 15px;
+            }
+
+            #res-key-val {
+                font-size: 18px !important;
+            }
+        }
+
+        /* History Modal Styles */
+        .history-btn {
+            background: #fff;
+            color: #666;
+            border: 1px solid #E2E8F0;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            width: fit-content;
+            margin: 20px auto 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .history-btn:hover {
+            background: #F8FAFB;
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #fff;
+            width: 100%;
+            max-width: 700px;
+            max-height: 80vh;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid #F1F5F9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 18px;
+            color: var(--text-heading);
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .history-item {
+            padding: 16px;
+            border-bottom: 1px solid #F1F5F9;
+            display: grid;
+            grid-template-columns: 100px 1fr 120px;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-time {
+            font-size: 12px;
+            color: var(--text-hint);
+            font-weight: 600;
+        }
+
+        .history-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .history-info .main {
+            font-weight: 700;
+            color: var(--text-heading);
+            font-size: 14px;
+        }
+
+        .history-info .sub {
+            font-size: 12px;
+            color: var(--text-hint);
+        }
+
+        .history-key {
+            text-align: right;
+            font-family: monospace;
+            font-weight: 800;
+            color: var(--primary-color);
+            font-size: 15px;
+            background: var(--primary-soft);
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .empty-history {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-hint);
+            font-weight: 600;
+        }
+
+        .modal-close {
+            cursor: pointer;
+            color: var(--text-hint);
+        }
+
+        .modal-close:hover {
+            color: var(--primary-color);
+        }
+
+        #clear-history {
+            padding: 6px 12px;
+            font-size: 12px;
+            color: #EF4444;
+            background: #FEF2F2;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="close-btn" onclick="window.close()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M18 6L6 18M6 6l12 12"></path>
+                </svg>
+            </div>
+            <div class="logo-icon">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <h1>BIOS Unlocker</h1>
+            <p>바이너리 키와 힌트를 입력하여 언락 키를 생성하세요.</p>
+            <div class="accent-info">주의: 모든 조회 이력은 자동 으로 기록됩니다.</div>
+        </header>
+
+        <!-- Tabs Section -->
+        <nav class="tabs-container">
+            <div class="tab active" onclick="switchTab('inhouse')">
+                <svg class="tab-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                    </path>
+                </svg>
+                인하우스
+            </div>
+            <div class="tab" onclick="switchTab('quanta')">
+                <svg class="tab-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path
+                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                    </path>
+                </svg>
+                퀀타
+            </div>
+        </nav>
+
+        <!-- Input Section -->
+        <main class="input-section">
+            <div id="ih-inputs">
+                <div class="meta-inputs" style="margin-bottom: 16px;">
+                    <div class="meta-box">
+                        <label>접수번호</label>
+                        <input type="text" id="ih-receipt" placeholder="필수 입력">
+                    </div>
+                    <div class="meta-box">
+                        <label>모델명</label>
+                        <input type="text" id="ih-model" placeholder="필수 입력">
+                    </div>
+                    <div class="meta-box">
+                        <label>제조번호</label>
+                        <input type="text" id="ih-serial" placeholder="필수 입력">
+                    </div>
+                </div>
+
+                <div class="meta-box" style="margin-bottom: 16px;">
+                    <label>바이너리 키 선택</label>
+                    <select id="ih-key-select">
+                        <option value="KBL Key">KBL Key (1xZ960/970/980/95N~90T/TS/TP)</option>
+                        <option value="WHL Key">WHL Key (1xZ990/995/90N)</option>
+                        <option value="Old Key">Old Key (1xZ950/940/1xU360/15U340/24V360/550 등)</option>
+                        <option value="New Key">New Key (1xZ90U/95U)</option>
+                    </select>
+                </div>
+
+                <div class="search-wrapper">
+                    <div class="search-icon">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"
+                            viewBox="0 0 24 24">
+                            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <input type="text" id="ih-hint" maxlength="8" placeholder="8자리 힌트 번호를 입력하세요 (예: 1A2B3C4D)">
+                    <div class="clear-icon" onclick="document.getElementById('ih-hint').value=''">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </div>
+                </div>
+                <br>
+                <button class="action-button" style="width: 100%;" onclick="generateInhouseKey()">언락 키 생성하기</button>
+            </div>
+
+            <div id="qt-inputs" style="display: none;">
+                <div class="meta-inputs" style="margin-bottom: 16px;">
+                    <div class="meta-box">
+                        <label>접수번호</label>
+                        <input type="text" id="qt-receipt" placeholder="필수 입력">
+                    </div>
+                    <div class="meta-box">
+                        <label>제조번호</label>
+                        <input type="text" id="qt-serial" placeholder="필수 입력">
+                    </div>
+                </div>
+                <div class="search-wrapper">
+                    <div class="search-icon">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"
+                            viewBox="0 0 24 24">
+                            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <input type="text" id="qt-model" placeholder="모델명을 입력하세요 (예: 15U50N-G.AA50K)">
+                    <div class="clear-icon" onclick="document.getElementById('qt-model').value=''">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </div>
+                </div>
+                <br>
+                <button class="action-button" style="width: 100%;" onclick="checkQuantaKey()">퀀타 로직 확인하기</button>
+            </div>
+
+            <div id="error-message" class="error-card"></div>
+        </main>
+
+        <!-- Result Section (Card Style) -->
+        <section id="result-container">
+            <div class="result-card">
+                <div class="result-header">
+                    <div class="result-info-main">
+                        <div class="result-icon-box">
+                            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="result-title-group">
+                            <h2 id="res-title">UNLOCK_KEY_GENERATED</h2>
+                            <p>성공적으로 언락 코드가 생성되었습니다.</p>
+                        </div>
+                    </div>
+                    <div class="status-badge">
+                        <div class="status-dot"></div>
+                        생성 성공
+                    </div>
+                </div>
+
+                <div class="info-grid">
+                    <!-- Left: Diagnosis Info -->
+                    <div class="info-section">
+                        <div class="section-label label-red">DIAGNOSIS INFO</div>
+                        <div class="info-box-group">
+                            <div class="info-box">
+                                <div class="box-label">PRODUCT</div>
+                                <div class="box-value" id="res-product">LAPTOP</div>
+                            </div>
+                            <div class="info-box">
+                                <div class="box-label">HINT NUMBER</div>
+                                <div class="box-value" id="res-hint-val">-</div>
+                            </div>
+                            <div class="info-box wide">
+                                <div class="box-label">CODE NAME (UNLOCK KEY)</div>
+                                <div class="box-value" id="res-key-val" style="font-size: 20px;">-</div>
+                                <div class="copy-btn" onclick="copyToClipboard('res-key-val')">
+                                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path
+                                            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
+                                        </path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Description / Solution -->
+                    <div class="info-section">
+                        <div class="section-label label-blue">DESCRIPTION</div>
+                        <div class="info-box blue">
+                            <div class="desc-text" id="res-desc">
+                                입력된 바이너리 키와 힌트를 조합하여 알고리즘에 따라 생성된 유효한 언락 코드입니다. BIOS 화면의 Password 입력란에 해당 코드를 입력하세요.
+                            </div>
+                        </div>
+
+                        <div class="section-label label-blue" style="margin-top: 12px;">SOLUTION</div>
+                        <div class="info-box blue">
+                            <div class="desc-text">
+                                키가 작동하지 않을 경우 힌트 번호 대소문자 및 정확한 모델별 바이너리 키 선택 여부를 다시 확인해 주시기 바랍니다.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <button class="history-btn" onclick="openHistory()">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            이력조회
+        </button>
+
+        <footer class="footer">
+            &copy; 2026 BIOS Unlocker Tool . Created by jeon.gyunam
+        </footer>
+    </div>
+
+    <!-- History Modal -->
+    <div id="history-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <h3>조회 이력</h3>
+                    <button id="clear-history" onclick="clearHistory()">전체 삭제</button>
+                </div>
+                <div class="modal-close" onclick="closeHistory()">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        viewBox="0 0 24 24">
+                        <path d="M18 6L6 18M6 6l12 12"></path>
+                    </svg>
+                </div>
+            </div>
+            <div id="history-list" class="modal-body">
+                <!-- History Items Inject Here -->
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // 내장 바이너리 키 DB
+        const keysDB = {
+            "KBL Key": "A75A25C652828228C63B7ABEDE6C67C8",
+            "WHL Key": "4DFFC34E7D0CE6AF08222384C0C874C1",
+            "Old Key": "95A8EE8E89979B9EFDCBC6EB9797528D",
+            "New Key": "0A533102F86D4683A4071B30CB047E91"
+        };
+
+        // 퀀타 로직 DB
+        const quantaModels = {
+            "550": "QaCBcr11", "560": "QaCBcr11", "N530": "QaCBcr11",
+            "510": "QlcQciuL", "515": "QlcQciuL", "520": "QlcQciuL", "525": "Lg4QciuL",
+            "N360": "qacb2014", "N365": "qacb2015",
+            "470": "qacb2016", "480": "qacb2016", "590": "qacb2016",
+            "870": "D25a6908", "880": "D25a6908", "890": "D25a6908", "490": "D25a6908",
+            "40N": "D25a6908", "50N": "D25a6908", "70N": "D25a6908", "50Q": "D25a6908",
+            "50T": "D25a6908", "50U": "D25a6908"
+        };
+
+        let currentMode = 'inhouse';
+
+        // 탭 전환 기능
+        function switchTab(mode) {
+            currentMode = mode;
+            const tabs = document.querySelectorAll('.tab');
+            const ihInputs = document.getElementById('ih-inputs');
+            const qtInputs = document.getElementById('qt-inputs');
+            const resultContainer = document.getElementById('result-container');
+            const errorCard = document.getElementById('error-message');
+
+            tabs.forEach(t => t.classList.remove('active'));
+            resultContainer.style.display = 'none';
+            errorCard.style.display = 'none';
+
+            if (mode === 'inhouse') {
+                tabs[0].classList.add('active');
+                ihInputs.style.display = 'block';
+                qtInputs.style.display = 'none';
+            } else {
+                tabs[1].classList.add('active');
+                ihInputs.style.display = 'none';
+                qtInputs.style.display = 'block';
+            }
+        }
+
+        // 결과 표시 함수
+        function showResult(title, hint, key, product, desc) {
+            const resultContainer = document.getElementById('result-container');
+            const errorCard = document.getElementById('error-message');
+
+            errorCard.style.display = 'none';
+            resultContainer.style.display = 'block';
+
+            document.getElementById('res-title').innerText = title;
+            document.getElementById('res-hint-val').innerText = hint;
+            document.getElementById('res-key-val').innerText = key;
+            document.getElementById('res-product').innerText = product || 'N/A';
+            if (desc) document.getElementById('res-desc').innerText = desc;
+
+            // 스크롤 이동
+            resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function showError(message) {
+            const errorCard = document.getElementById('error-message');
+            const resultContainer = document.getElementById('result-container');
+
+            resultContainer.style.display = 'none';
+            errorCard.innerText = message;
+            errorCard.style.display = 'block';
+        }
+
+        function copyToClipboard(id) {
+            const text = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('클립보드에 복사되었습니다: ' + text);
+            });
+        }
+
+        // 이력 관리 로직 (성공/실패 상태 추가)
+        function saveToHistory(receipt, model, type, key, status = 'SUCCESS') {
+            let history = JSON.parse(localStorage.getItem('bios_history') || '[]');
+            const now = new Date();
+            const timeStr = `${now.getMonth() + 1}/${now.getDate()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+            history.unshift({ time: timeStr, receipt, model, type, key, status });
+            if (history.length > 100) history.pop();
+
+            localStorage.setItem('bios_history', JSON.stringify(history));
+        }
+
+        function openHistory() {
+            const pw = prompt('이력조회를 위한 비밀번호를 입력하세요.');
+            if (pw !== 'nyh') {
+                if (pw !== null) alert('비밀번호가 일치하지 않습니다.');
+                return;
+            }
+
+            const modal = document.getElementById('history-modal');
+            const list = document.getElementById('history-list');
+            const history = JSON.parse(localStorage.getItem('bios_history') || '[]');
+
+            modal.style.display = 'flex';
+            list.innerHTML = '';
+
+            if (history.length === 0) {
+                list.innerHTML = '<div class="empty-history">최근 조회 이력이 없습니다.</div>';
+                return;
+            }
+
+            history.forEach(item => {
+                const isFailed = item.status === 'FAILED';
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                div.innerHTML = `
+                    <div class="history-time">${item.time}</div>
+                    <div class="history-info">
+                        <div class="main">${item.receipt} / ${item.model}</div>
+                        <div class="sub">${item.type} ${isFailed ? '<span style="color:#EF4444; font-weight:bold;">[실패]</span>' : ''}</div>
+                    </div>
+                    <div class="history-key" style="${isFailed ? 'background:#FEF2F2; color:#EF4444;' : ''}">
+                        ${isFailed ? 'FAIL' : item.key}
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function closeHistory() {
+            document.getElementById('history-modal').style.display = 'none';
+        }
+
+        function clearHistory() {
+            if (confirm('모든 조회 이력을 삭제하시겠습니까?')) {
+                localStorage.removeItem('bios_history');
+                openHistory();
+            }
+        }
+
+        // 모달 외각 클릭 시 닫기
+        window.onclick = function (event) {
+            const modal = document.getElementById('history-modal');
+            if (event.target == modal) closeHistory();
+        }
+
+        // 접수번호 유효성 검사 함수 (10자리 영문 대문자 + 숫자)
+        function validateReceipt(receipt) {
+            const regex = /^[A-Z0-9]{10}$/;
+            if (!regex.test(receipt)) {
+                alert('접수번호를 확인해주세요');
+                return false;
+            }
+            return true;
+        }
+
+        // 인하우스 키 생성 로직
+        function generateInhouseKey() {
+            let receipt = document.getElementById('ih-receipt').value.trim().toUpperCase();
+            document.getElementById('ih-receipt').value = receipt;
+
+            if (!validateReceipt(receipt)) return;
+
+            let model = document.getElementById('ih-model').value.trim();
+            let serial = document.getElementById('ih-serial').value.trim();
+            let hintStr = document.getElementById('ih-hint').value.trim().toUpperCase();
+            const selectVal = document.getElementById('ih-key-select').value;
+
+            if (!model || !serial || !hintStr) {
+                showError('⚠️ 모든 필수 정보를 입력해 주세요.');
+                return;
+            }
+
+            if (hintStr.length !== 8) {
+                showError('⚠️ 힌트 번호는 정확히 8자리여야 합니다.');
+                return;
+            }
+
+            const keyHex = keysDB[selectVal];
+
+            try {
+                // 알고리즘 로직
+                let array3 = new Array(8).fill(4661);
+                array3[0] = parseInt(hintStr.substring(0, 4), 16);
+                array3[1] = parseInt(hintStr.substring(4, 8), 16);
+
+                let array5Hex = "";
+                for (let j = 0; j < 8; j++) {
+                    let b1 = array3[j] & 0xFF;
+                    let b2 = (array3[j] & 0xFF00) >> 8;
+                    array5Hex += b1.toString(16).padStart(2, '0') + b2.toString(16).padStart(2, '0');
+                }
+
+                let message = CryptoJS.enc.Hex.parse(array5Hex);
+                let key = CryptoJS.enc.Hex.parse(keyHex);
+
+                let encrypted = CryptoJS.AES.encrypt(message, key, {
+                    mode: CryptoJS.mode.ECB,
+                    padding: CryptoJS.pad.NoPadding
+                });
+
+                let cipherHex = encrypted.ciphertext.toString(CryptoJS.enc.Hex);
+
+                let array6 = new Uint8Array(16);
+                for (let i = 0; i < 16; i++) {
+                    array6[i] = parseInt(cipherHex.substring(i * 2, i * 2 + 2), 16);
+                }
+
+                for (let j = 0; j < 8; j++) {
+                    array3[j] = array6[j * 2] | (array6[j * 2 + 1] << 8);
+                }
+
+                let outputChars = [];
+                let num = 3840; // 0x0F00
+                let num2 = 8;
+
+                for (let j = 0; j < 8; j++) {
+                    let num3 = (array3[j] & num) >>> num2;
+                    outputChars.push(num3.toString(16).toUpperCase());
+                    num >>>= 4;
+                    num2 -= 4;
+                    if (num === 0) {
+                        num = 61440; // 0xF000
+                        num2 = 12;
+                    }
+                }
+
+                const unlockKey = outputChars.join("");
+                showResult('INHOUSE_KEY_GENERATED', hintStr, unlockKey, model, '인하우스 바이너리 키를 사용하여 생성된 공식 언락 코드입니다.');
+                saveToHistory(receipt, model, 'INHOUSE', unlockKey);
+
+            } catch (e) {
+                showError('⚠️ 처리 중 오류가 발생했습니다. 입력값을 확인해 주세요.');
+            }
+        }
+
+        // 퀀타 키 매칭 로직
+        function checkQuantaKey() {
+            let receipt = document.getElementById('qt-receipt').value.trim().toUpperCase();
+            document.getElementById('qt-receipt').value = receipt;
+
+            if (!validateReceipt(receipt)) return;
+
+            let serial = document.getElementById('qt-serial').value.trim();
+            let model = document.getElementById('qt-model').value.trim();
+
+            if (!model || !serial) {
+                showError('⚠️ 모든 필수 정보를 입력해 주세요.');
+                return;
+            }
+
+            if (!model.includes('-')) {
+                showError('⚠️ 모델명에 하이픈(-)이 포함되어야 합니다. (예: 15U50N-G.AA50K)');
+                return;
+            }
+
+            let prefix = model.split('-')[0].toUpperCase();
+            let sortedKeys = Object.keys(quantaModels).sort((a, b) => b.length - a.length);
+
+            let matchedKey = null;
+            for (let k of sortedKeys) {
+                if (prefix.endsWith(k.toUpperCase())) {
+                    matchedKey = quantaModels[k];
+                    break;
+                }
+            }
+
+            if (matchedKey) {
+                showResult('QUANTA_LOGIC_MATCHED', model, matchedKey, 'QUANTA', '해당 모델 시리즈에 등록된 퀀타(Quanta) 언락 로직이 매칭되었습니다.');
+                saveToHistory(receipt, model, 'QUANTA', matchedKey, 'SUCCESS');
+            } else {
+                showError(`⚠️ 매칭 실패: '${prefix}' 에 해당하는 퀀타 언락키가 없습니다.`);
+                saveToHistory(receipt, model, 'QUANTA', 'FAIL', 'FAILED');
+            }
+        }
+    </script>
+
+
+
+</body>
+
+</html>
