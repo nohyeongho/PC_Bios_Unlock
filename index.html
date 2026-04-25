@@ -979,15 +979,19 @@
         }
 
         async function sendToGoogleSheets(entry) {
-            // ⚠️ 발급받은 구글 웹 앱 URL을 여기에 입력하세요.
-            const G_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzoPq0G-WdOxgNSg5p2i-sBvsgB0LYQcRTx2J2j8oJH9Dlr60-c89ujaYaNHX9ORnEO4Q/exec'; 
+            const G_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxOLEqaDwsuyfaC-_-SIuZ3VzVpLXZGhnsi4vSc5BgAFqcCadqSk6mS9StPbfhJY35HdA/exec'; 
+            
+            // [통합 관리용 설정] 보안 토큰과 기록 동작 지정
+            entry.action = 'write';
+            entry.token = 'bios_secret_2026';
+            
+            const params = new URLSearchParams(entry).toString();
+            const finalUrl = `${G_SCRIPT_URL}?${params}`;
             
             try {
-                fetch(G_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(entry)
+                fetch(finalUrl, {
+                    method: 'GET',
+                    mode: 'no-cors'
                 });
             } catch (e) {
                 console.error('Google Sheets 전송 오류:', e);
