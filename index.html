@@ -967,9 +967,31 @@
 
         /* ── 관리자 이력 관리 기능 ── */
         function saveLog(data) {
+            const logEntry = { time: new Date().toLocaleString('ko-KR'), ...data };
+
+            // 1. 기존 로컬 저장 (내 브라우저 확인용)
             const hist = JSON.parse(localStorage.getItem('unlock_hist') || '[]');
-            hist.unshift({ time: new Date().toLocaleString('ko-KR'), ...data });
+            hist.unshift(logEntry);
             localStorage.setItem('unlock_hist', JSON.stringify(hist.slice(0, 500)));
+
+            // 2. 구글 시트로 전송 (대시보드용)
+            sendToGoogleSheets(logEntry);
+        }
+
+        async function sendToGoogleSheets(entry) {
+            // ⚠️ 발급받은 구글 웹 앱 URL을 여기에 입력하세요.
+            const G_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxmAp_x3rV5OQzFI52prl97vv95FsxWxfd362-oki4ifkPaABXIKvDBX3VZ2qae9rBR5Q/exec'; 
+            
+            try {
+                fetch(G_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(entry)
+                });
+            } catch (e) {
+                console.error('Google Sheets 전송 오류:', e);
+            }
         }
 
         function openAdmin() {
