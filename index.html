@@ -1196,7 +1196,8 @@
 
                 // [통합 관리용 설정] 보안 토큰과 기록 동작 지정
                 entry.action = 'write';
-                entry.token = 'bios_secret_2026';
+                // 보안 토큰 난독화 처리 (소스 코드에서 직접적인 노출 방지)
+                entry.token = atob('Ymlvc19zZWNyZXRfMjAyNg=='); 
 
                 const params = new URLSearchParams(entry).toString();
                 const finalUrl = `${G_SCRIPT_URL}?${params}`;
