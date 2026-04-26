@@ -612,37 +612,6 @@
             position: relative;
         }
 
-        .header p {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            color: #A50034;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .reset-btn {
-            position: absolute;
-            right: 0;
-            background: #f1f5f9;
-            color: #475569;
-            border: 1px solid #e2e8f0;
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-weight: normal;
-        }
-
-        .reset-btn:hover {
-            background: #e2e8f0;
-            color: #1e293b;
-        }
-
         .icard.hl {
             border-color: #f5c0cc;
             background: #fff8fa;
@@ -764,6 +733,34 @@
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
+        /* 헤더 초기화 버튼 */
+        .reset-link {
+            float: right;
+            font-size: 11px;
+            color: #94a3b8;
+            text-decoration: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            transition: all 0.2s;
+            background: #fff;
+        }
+
+        .reset-link:hover {
+            color: #ef4444;
+            border-color: #fca5a5;
+            background: #fef2f2;
+        }
+
+        .reset-link svg {
+            width: 12px;
+            height: 12px;
+        }
+
         /* 피드백 버튼 스타일 */
         .feedback-container {
             display: none; /* 초기 상태 숨김 */
@@ -831,9 +828,13 @@
                 </svg>
             </div>
             <h1>BIOS Unlocker</h1>
-            <p>📌주의 : 모든 조회이력은 자동으로 기록됩니다.
-                <button class="reset-btn" onclick="resetInputs()">🔄 입력 초기화</button>
-            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 500px; margin: 0 auto;">
+                <p style="margin: 0;">📌주의 : 모든 조회이력은 자동으로 기록됩니다.</p>
+                <a class="reset-link" onclick="resetInputs()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                    입력 초기화
+                </a>
+            </div>
         </div>
 
         <!-- 탭 및 인증 바 -->
@@ -935,18 +936,7 @@
                         <div class="stitle red">UNLOCK KEY</div>
                         <div class="igrid one">
                             <div class="icard hl">
-                                <div style="display: flex; align-items: center; margin-bottom: 5px;">
-                                    <div class="ilabel">GENERATED KEY</div>
-                                    <!-- 피드백 버튼 (인하우스) -->
-                                    <div class="feedback-container" id="ih-feedback">
-                                        <button class="feedback-btn" id="ih-btn-like" onclick="handleFeedback('ih', 'like')" title="좋아요">
-                                            <svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
-                                        </button>
-                                        <button class="feedback-btn" id="ih-btn-dislike" onclick="handleFeedback('ih', 'dislike')" title="싫어요">
-                                            <svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zM17 2h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg>
-                                        </button>
-                                    </div>
-                                </div>
+                                <div class="ilabel">GENERATED KEY</div>
                                 <div class="ival" id="ih-rkey">-</div>
                                 <button class="cpbtn" onclick="cp('ih-rkey')">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -1045,6 +1035,64 @@
         </div>
 
         <script>
+            /* 보안 설정: 우클릭, F12, 개발자 도구 단축키 차단 */
+            document.addEventListener('contextmenu', e => e.preventDefault()); // 우클릭 방지
+            document.addEventListener('keydown', function(e) {
+                // F12 차단
+                if (e.keyCode === 123) {
+                    e.preventDefault();
+                    return false;
+                }
+                // Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C 차단
+                if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+                    e.preventDefault();
+                    return false;
+                }
+                // Ctrl+U (소스 보기) 차단
+                if (e.ctrlKey && e.keyCode === 85) {
+                    e.preventDefault();
+                    return false;
+                }
+                // Ctrl+S (저장) 차단
+                if (e.ctrlKey && e.keyCode === 83) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            /* 개발자 도구 감지 시 무한 디버거 및 페이지 차단 */
+            (function() {
+                function detectDevTools() {
+                    const threshold = 160;
+                    const widthDiff = window.outerWidth - window.innerWidth > threshold;
+                    const heightDiff = window.outerHeight - window.innerHeight > threshold;
+                    
+                    if (widthDiff || heightDiff) {
+                        document.body.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height:100vh; font-family:sans-serif; color:#666; background:#f5f5f5; flex-direction:column;"><h1>Security Alert</h1><p>보안을 위해 개발자 도구 사용 시 페이지가 차단됩니다.</p><button onclick="location.reload()" style="padding:10px 20px; cursor:pointer;">새로고침</button></div>';
+                        throw new Error("DevTools detected");
+                    }
+                }
+                setInterval(detectDevTools, 1000);
+
+                // 안티 디버깅 (debugger 루프)
+                setInterval(function() {
+                    (function(i) {
+                        return (function(a) {
+                            return (function(a) {
+                                return (function(a) {
+                                    return (function(a) {
+                                        return (function(a) {
+                                            debugger;
+                                            return false;
+                                        })(a);
+                                    })(a);
+                                })(a);
+                            })(a);
+                        })(a);
+                    })(0);
+                }, 1000);
+            })();
+
             /* 내장 키 DB */
             const keysDB = {
                 "KBL Key": "A75A25C652828228C63B7ABEDE6C67C8",
@@ -1154,13 +1202,6 @@
             function hide(p) {
                 document.getElementById(p + '-err').style.display = 'none';
                 document.getElementById(p + '-res').style.display = 'none';
-                document.getElementById(p + '-feedback').style.display = 'none'; // 피드백 버튼도 숨김
-                
-                // 피드백 선택 초기화
-                const likeBtn = document.getElementById(p + '-btn-like');
-                const dislikeBtn = document.getElementById(p + '-btn-dislike');
-                likeBtn.classList.remove('active-like');
-                dislikeBtn.classList.remove('active-dislike');
             }
 
             function showErr(p, msg) {
@@ -1170,28 +1211,36 @@
                 document.getElementById(p + '-res').style.display = 'none';
             }
 
-            /* 입력창 지우기 */
-            function clr(id) {
-                document.getElementById(id).value = '';
-                document.getElementById(id).focus();
-            }
-
             /* 전체 입력 초기화 (사번, 성명 제외) */
             function resetInputs() {
                 if (!confirm('사번/성명을 제외한 모든 입력 내용을 초기화하시겠습니까?')) return;
 
-                // 인하우스 필드 초기화
-                const ihFields = ['ih-receipt', 'ih-model', 'ih-serial', 'ih-hint'];
-                ihFields.forEach(id => document.getElementById(id).value = '');
+                // 인하우스 필드
+                const ihIds = ['ih-receipt', 'ih-model', 'ih-serial', 'ih-hint'];
+                ihIds.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = '';
+                });
                 document.getElementById('ih-key').selectedIndex = 0;
-                hide('ih');
 
-                // 퀀타 필드 초기화
-                const qtFields = ['qt-receipt', 'qt-model', 'qt-serial'];
-                qtFields.forEach(id => document.getElementById(id).value = '');
+                // 퀀타 필드
+                const qtIds = ['qt-receipt', 'qt-model', 'qt-serial'];
+                qtIds.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = '';
+                });
+
+                // 결과창 숨기기
+                hide('ih');
                 hide('qt');
 
                 alert('입력 내용이 초기화되었습니다.');
+            }
+
+            /* 입력창 지우기 */
+            function clr(id) {
+                document.getElementById(id).value = '';
+                document.getElementById(id).focus();
             }
 
             /* 클립보드 복사 */
@@ -1207,14 +1256,12 @@
                 // 인증 정보 가져오기
                 const userId = document.getElementById('auth-id').value.trim();
                 const userName = document.getElementById('auth-name').value.trim();
-                const feedback = getCurrentFeedback();
 
                 const logEntry = { 
                     time: new Date().toLocaleString('ko-KR'), 
                     ...data,
                     user_id: userId,
-                    user_name: userName,
-                    feedback: feedback
+                    user_name: userName
                 };
 
                 // 1. 기존 로컬 저장 (내 브라우저 확인용)
@@ -1334,7 +1381,6 @@
                     document.getElementById('ih-rmodel').textContent = model;
                     document.getElementById('ih-rkey').textContent = finalKey;
                     document.getElementById('ih-res').style.display = 'block';
-                    document.getElementById('ih-feedback').style.display = 'flex'; // 피드백 버튼 노출
 
                     /* 이력 저장 */
                     saveLog({ type: '인하우스', model, receipt, serial, extra: hintStr, key: finalKey });
@@ -1373,7 +1419,6 @@
                     document.getElementById('qt-rmodel').textContent = model;
                     document.getElementById('qt-rkey').textContent = matched;
                     document.getElementById('qt-res').style.display = 'block';
-                    document.getElementById('qt-feedback').style.display = 'flex'; // 피드백 버튼 노출
 
                     /* 이력 저장 */
                     saveLog({ type: '퀀타', model, receipt, serial, extra: 'QC OK', key: matched });
