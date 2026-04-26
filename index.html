@@ -111,16 +111,80 @@
             letter-spacing: -0.1px;
         }
 
-        /* ── 탭: 사이즈 축소 및 중앙 정렬 ── */
+        /* ── 탭 & 인증 컨테이너 ── */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            gap: 15px;
+            padding: 0 10px;
+        }
+
         .tabs {
             display: flex;
             gap: 4px;
             padding: 4px;
             background: rgba(226, 232, 240, 0.6);
             border-radius: 12px;
-            margin: 0 auto 18px;
             width: fit-content;
             border: 1px solid rgba(226, 232, 240, 0.3);
+        }
+
+        /* 인증 영역 스타일 */
+        .auth-area {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff;
+            padding: 4px 10px;
+            border-radius: 12px;
+            border: 1.5px solid #e0e0e0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .auth-input {
+            width: 85px;
+            height: 32px;
+            border: none;
+            background: #f8fafc;
+            border-radius: 6px;
+            padding: 0 8px;
+            font-size: 12px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .auth-input:focus {
+            background: #fff;
+            box-shadow: 0 0 0 2px rgba(165, 0, 52, 0.1);
+            border: 1px solid #A50034;
+        }
+
+        .auth-btn {
+            background: #A50034;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .auth-btn:hover {
+            background: #8b002c;
+        }
+
+        /* 인증 전 숨김 처리 */
+        .auth-locked {
+            pointer-events: none;
+            transition: all 0.5s;
+        }
+
+        .auth-unlocked {
+            pointer-events: auto;
         }
 
         .tab {
@@ -289,35 +353,7 @@
             box-shadow: 0 0 0 3px rgba(165, 0, 52, 0.1);
         }
 
-        /* 가이드 */
-        .guide {
-            background: #fff8fa;
-            border-left: 3px solid #A50034;
-            border-radius: 0 8px 8px 0;
-            padding: 10px 12px;
-            font-size: 11.5px;
-            color: #7a0026;
-            line-height: 1.8;
-            margin-bottom: 10px;
-        }
 
-        .g-item {
-            cursor: pointer;
-            padding: 2px 6px;
-            border-radius: 4px;
-            display: inline-block;
-            transition: all .2s;
-        }
-
-        .g-item:hover {
-            background: rgba(165, 0, 52, 0.1);
-            color: #A50034;
-            transform: translateY(-1px);
-        }
-
-        .g-item b {
-            color: #A50034;
-        }
 
         /* 버튼: 어레이 검색기 스타일의 프리미엄 버튼 */
         .btn {
@@ -576,6 +612,37 @@
             position: relative;
         }
 
+        .header p {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #A50034;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .reset-btn {
+            position: absolute;
+            right: 0;
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: normal;
+        }
+
+        .reset-btn:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
         .icard.hl {
             border-color: #f5c0cc;
             background: #fff8fa;
@@ -642,42 +709,53 @@
             body {
                 padding: 12px 12px 40px;
             }
+
             .header {
                 padding: 24px 16px 12px;
             }
+
             .header h1 {
                 font-size: 20px;
             }
+
             .tabs {
                 width: 100%;
                 display: grid;
                 grid-template-columns: 1fr 1fr;
             }
+
             .tab {
                 min-width: unset;
                 padding: 10px 4px;
             }
+
             .inputs {
                 padding: 12px 16px;
             }
+
             .field-grid.triple,
             .field-grid.double,
             .igrid {
                 grid-template-columns: 1fr;
                 gap: 8px;
             }
+
             .modal-content {
                 width: 95%;
                 margin: 20px auto;
                 padding: 16px;
             }
+
             .m-header h2 {
                 font-size: 17px;
             }
+
             .hist-table {
                 font-size: 11px;
             }
-            .hist-table th, .hist-table td {
+
+            .hist-table th,
+            .hist-table td {
                 padding: 8px 6px;
             }
         }
@@ -685,6 +763,53 @@
         #histContent {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
+        }
+        /* 피드백 버튼 스타일 */
+        .feedback-container {
+            display: none; /* 초기 상태 숨김 */
+            gap: 8px;
+            margin-left: auto;
+        }
+
+        .feedback-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: 1px solid #eee;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #ccc;
+        }
+
+        .feedback-btn:hover {
+            background-color: #f8f9fa;
+            border-color: #ddd;
+        }
+
+        .feedback-btn.active-like {
+            background-color: #e7f3ff;
+            border-color: #007bff;
+            color: #007bff;
+        }
+
+        .feedback-btn.active-dislike {
+            background-color: #fff0f0;
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+
+        .feedback-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
     </style>
 </head>
@@ -706,432 +831,557 @@
                 </svg>
             </div>
             <h1>BIOS Unlocker</h1>
-            <p>📌주의 : 모든 조회이력은 자동으로 기록됩니다.</p>
+            <p>📌주의 : 모든 조회이력은 자동으로 기록됩니다.
+                <button class="reset-btn" onclick="resetInputs()">🔄 입력 초기화</button>
+            </p>
         </div>
 
-        <!-- 탭 -->
-        <div class="tabs">
-            <button class="tab active" id="btn-ih" onclick="sw('ih')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <rect x="2" y="3" width="20" height="14" rx="2" />
-                    <line x1="8" y1="21" x2="16" y2="21" />
-                    <line x1="12" y1="17" x2="12" y2="21" />
-                </svg>
-                인하우스
-            </button>
-            <button class="tab" id="btn-qt" onclick="sw('qt')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8" />
-                    <path d="M21 21l-4.35-4.35" />
-                </svg>
-                퀀타
-            </button>
+        <!-- 탭 및 인증 바 -->
+        <div class="top-bar">
+            <div class="tabs">
+                <button class="tab active" id="btn-ih" onclick="sw('ih')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" />
+                        <line x1="8" y1="21" x2="16" y2="21" />
+                        <line x1="12" y1="17" x2="12" y2="21" />
+                    </svg>
+                    인하우스
+                </button>
+                <button class="tab" id="btn-qt" onclick="sw('qt')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="M21 21l-4.35-4.35" />
+                    </svg>
+                    퀀타
+                </button>
+            </div>
+
+            <!-- 인증 영역 -->
+            <div class="auth-area" id="auth-box">
+                <input type="text" id="auth-id" class="auth-input" placeholder="사번 입력">
+                <input type="text" id="auth-name" class="auth-input" placeholder="성명 입력">
+                <button class="auth-btn" onclick="checkAuth()">인증</button>
+            </div>
         </div>
         <div class="sep"></div>
 
-        <!-- ══ 인하우스 패널 ══ -->
-        <div id="pan-ih">
-            <div class="inputs">
-                <!-- 접수번호 / 모델명 / 제조번호 (3열 나란히) -->
-                <div class="field-grid triple">
-                    <div class="field">
-                        <label>접수번호 *</label>
-                        <input type="text" id="ih-receipt" placeholder="필수 입력">
-                    </div>
-                    <div class="field">
-                        <label>모델명 *</label>
-                        <input type="text" id="ih-model" placeholder="필수 입력">
-                    </div>
-                    <div class="field">
-                        <label>제조번호 *</label>
-                        <input type="text" id="ih-serial" placeholder="필수 입력">
-                    </div>
-                </div>
-
-                <!-- 바이너리 키 (한 줄 전체 차지) -->
-                <div class="field" style="margin-bottom: 12px;">
-                    <label>바이너리 키 선택 *</label>
-                    <select id="ih-key">
-                        <option value="Old Key">Old (1xZ950/940, 1xU360, 15U340, 24V360/550 등)</option>
-                        <option value="WHL Key">WHL (1xZ990/995/90N)</option>
-                        <option value="KBL Key">KBL (1xZ960/970/980/95N~90T/TS/TP)</option>
-                        <option value="New Key">New (1xZ90U/95U)</option>
-                    </select>
-                </div>
-
-                <!-- 힌트 번호 (단독 행 배치) -->
-                <div class="field" style="margin-bottom: 15px;">
-                    <label>힌트 번호 (8자리) *</label>
-                    <input type="text" id="ih-hint" maxlength="8" placeholder="예: 1A2B3C4D">
-                </div>
-
-                <!-- 가이드 -->
-                <div class="guide">
-                    <span class="g-item" onclick="selK('Old Key')"><b>Old</b>=1xZ950/940·1xU360·15U340·24V360/550
-                        등</span>
-                    <span class="g-item" onclick="selK('WHL Key')"><b>WHL</b>=1xZ990/995/90N</span>
-                    <span class="g-item" onclick="selK('KBL Key')"><b>KBL</b>=1xZ960/970/980/95N~90T/TS/TP</span>
-                    <span class="g-item" onclick="selK('New Key')"><b>New</b>=1xZ90U/95U</span>
-                </div>
-
-                <button class="btn" onclick="genIH()">언락 키 생성</button>
-                <div class="err" id="ih-err"></div>
-            </div>
-            <div class="sep"></div>
-
-            <!-- 결과 -->
-            <div class="result-wrap" id="ih-res">
-                <div class="result-inner">
-                    <div class="mhead">
-                        <div class="micon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="2" y="3" width="20" height="14" rx="2" />
-                                <line x1="8" y1="21" x2="16" y2="21" />
-                                <line x1="12" y1="17" x2="12" y2="21" />
-                            </svg>
+        <!-- 메인 콘텐츠 영역 (인증 전까지 잠금) -->
+        <div id="main-content" class="auth-locked">
+            <div id="pan-ih">
+                <div class="inputs">
+                    <!-- 접수번호 / 모델명 / 제조번호 (3열 나란히) -->
+                    <div class="field-grid triple">
+                        <div class="field">
+                            <label>접수번호 *</label>
+                            <input type="text" id="ih-receipt" placeholder="필수 입력">
                         </div>
-                        <div>
-                            <div class="mname" id="ih-rmodel">-</div>
-                            <div class="msub">생성된 언락 키 정보입니다</div>
+                        <div class="field">
+                            <label>모델명 *</label>
+                            <input type="text" id="ih-model" placeholder="필수 입력">
+                        </div>
+                        <div class="field">
+                            <label>제조번호 *</label>
+                            <input type="text" id="ih-serial" placeholder="필수 입력">
                         </div>
                     </div>
-                    <span class="badge">생성 성공</span>
 
-                    <div class="stitle red">UNLOCK KEY</div>
-                    <div class="igrid one">
-                        <div class="icard hl">
-                            <div class="ilabel">GENERATED KEY</div>
-                            <div class="ival" id="ih-rkey">-</div>
-                            <button class="cpbtn" onclick="cp('ih-rkey')">
+                    <!-- 바이너리 키 (한 줄 전체 차지) -->
+                    <div class="field" style="margin-bottom: 12px;">
+                        <label>바이너리 키 선택 * <span
+                                style="color: #A50034; font-size: 11px; font-weight: normal; margin-left: 4px;">(대상 모델을
+                                정확히 선택해야 정상적인 key가 생성 됩니다.)</span></label>
+                        <select id="ih-key">
+                            <option value="Old Key">Old : 1xZ950 / 940, 1xU360, 15U340, 24V360 / 550 등</option>
+                            <option value="WHL Key">WHL : 1xZ990 / 995 / 90N</option>
+                            <option value="KBL Key">KBL : 1xZ960 / 970 / 980 / 95N~90T / TS /TP</option>
+                            <option value="New Key">New : 1xZ90U / 95U</option>
+                        </select>
+                    </div>
+
+                    <!-- 힌트 번호 (단독 행 배치) -->
+                    <div class="field" style="margin-bottom: 15px;">
+                        <label>힌트 번호 (8자리) *</label>
+                        <input type="text" id="ih-hint" maxlength="8" placeholder="예: 1A2B3C4D">
+                    </div>
+
+
+
+                    <button class="btn" onclick="genIH()">언락 키 생성</button>
+                    <div class="err" id="ih-err"></div>
+                </div>
+                <div class="sep"></div>
+
+                <!-- 결과 -->
+                <div class="result-wrap" id="ih-res">
+                    <div class="result-inner">
+                        <div class="mhead">
+                            <div class="micon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="9" y="9" width="13" height="13" rx="2" />
-                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                                    <rect x="2" y="3" width="20" height="14" rx="2" />
+                                    <line x1="8" y1="21" x2="16" y2="21" />
+                                    <line x1="12" y1="17" x2="12" y2="21" />
                                 </svg>
-                            </button>
+                            </div>
+                            <div>
+                                <div class="mname" id="ih-rmodel">-</div>
+                                <div class="msub">생성된 언락 키 정보입니다</div>
+                            </div>
+                        </div>
+                        <span class="badge">생성 성공</span>
+
+                        <div class="stitle red">UNLOCK KEY</div>
+                        <div class="igrid one">
+                            <div class="icard hl">
+                                <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                                    <div class="ilabel">GENERATED KEY</div>
+                                    <!-- 피드백 버튼 (인하우스) -->
+                                    <div class="feedback-container" id="ih-feedback">
+                                        <button class="feedback-btn" id="ih-btn-like" onclick="handleFeedback('ih', 'like')" title="좋아요">
+                                            <svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
+                                        </button>
+                                        <button class="feedback-btn" id="ih-btn-dislike" onclick="handleFeedback('ih', 'dislike')" title="싫어요">
+                                            <svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zM17 2h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="ival" id="ih-rkey">-</div>
+                                <button class="cpbtn" onclick="cp('ih-rkey')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" />
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- ══ 퀀타 패널 ══ -->
-        <div id="pan-qt" style="display:none;">
-            <div class="inputs">
-                <!-- 접수번호 / 모델명 / 제조번호 (3열 나란히) -->
-                <div class="field-grid triple">
-                    <div class="field">
-                        <label>접수번호 *</label>
-                        <input type="text" id="qt-receipt" placeholder="필수 입력">
+            <!-- ══ 퀀타 패널 ══ -->
+            <div id="pan-qt" style="display:none;">
+                <div class="inputs">
+                    <!-- 접수번호 / 모델명 / 제조번호 (3열 나란히) -->
+                    <div class="field-grid triple">
+                        <div class="field">
+                            <label>접수번호 *</label>
+                            <input type="text" id="qt-receipt" placeholder="필수 입력">
+                        </div>
+                        <div class="field">
+                            <label>모델명 *</label>
+                            <input type="text" id="qt-model" placeholder="필수 입력">
+                        </div>
+                        <div class="field">
+                            <label>제조번호 *</label>
+                            <input type="text" id="qt-serial" placeholder="필수 입력">
+                        </div>
                     </div>
-                    <div class="field">
-                        <label>모델명 *</label>
-                        <input type="text" id="qt-model" placeholder="필수 입력">
-                    </div>
-                    <div class="field">
-                        <label>제조번호 *</label>
-                        <input type="text" id="qt-serial" placeholder="필수 입력">
-                    </div>
+
+                    <button class="btn" onclick="genQT()">언락 키 확인</button>
+                    <div class="err" id="qt-err"></div>
                 </div>
+                <div class="sep"></div>
 
-                <button class="btn" onclick="genQT()">언락 키 확인</button>
-                <div class="err" id="qt-err"></div>
-            </div>
-            <div class="sep"></div>
-
-            <!-- 결과 -->
-            <div class="result-wrap" id="qt-res">
-                <div class="result-inner">
-                    <div class="mhead">
-                        <div class="micon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8" />
-                                <path d="M21 21l-4.35-4.35" />
-                            </svg>
-                        </div>
-                        <div>
-                            <div class="mname" id="qt-rmodel">-</div>
-                            <div class="msub">퀀타 매칭 결과입니다</div>
-                        </div>
-                    </div>
-                    <span class="badge">매칭 성공</span>
-
-                    <div class="stitle red">QUANTA KEY</div>
-                    <div class="igrid one">
-                        <div class="icard hl">
-                            <div class="ilabel">MATCHED KEY</div>
-                            <div class="ival" id="qt-rkey">-</div>
-                            <button class="cpbtn" onclick="cp('qt-rkey')">
+                <!-- 결과 -->
+                <div class="result-wrap" id="qt-res">
+                    <div class="result-inner">
+                        <div class="mhead">
+                            <div class="micon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="9" y="9" width="13" height="13" rx="2" />
-                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                                    <circle cx="11" cy="11" r="8" />
+                                    <path d="M21 21l-4.35-4.35" />
                                 </svg>
-                            </button>
+                            </div>
+                            <div>
+                                <div class="mname" id="qt-rmodel">-</div>
+                                <div class="msub">퀀타 매칭 결과입니다</div>
+                            </div>
+                        </div>
+                        <span class="badge">매칭 성공</span>
+
+                        <div class="stitle red">QUANTA KEY</div>
+                        <div class="igrid one">
+                            <div class="icard hl">
+                                <div class="ilabel">MATCHED KEY</div>
+                                <div class="ival" id="qt-rkey">-</div>
+                                <button class="cpbtn" onclick="cp('qt-rkey')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" />
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div> <!-- main-content end -->
+
+            <!-- 푸터 -->
+            <div class="footer">
+                <div>© 2026 Support Tool &nbsp;·&nbsp; Created by jeon.gyunam &nbsp;·&nbsp; V2.0</div>
+                <button class="admin-btn" style="margin-top: 10px;" onclick="openAdmin()">관리자 이력조회</button>
             </div>
         </div>
 
-        <!-- 푸터 -->
-        <div class="footer">
-            <div>© 2026 Support Tool &nbsp;·&nbsp; Created by jeon.gyunam &nbsp;·&nbsp; V2.0</div>
-            <button class="admin-btn" style="margin-top: 10px;" onclick="openAdmin()">관리자 이력조회</button>
-        </div>
-    </div>
-
-    <!-- 관리자 모달 -->
-    <div id="adminModal" class="modal">
-        <div class="modal-content">
-            <div class="m-header">
-                <h2>📊 언락 키 생성 이력</h2>
-                <div style="display:flex; gap:10px;">
-                    <button class="admin-btn" style="color:#e11d48;" onclick="clearHist()">이력 초기화</button>
-                    <button class="admin-btn" onclick="closeAdmin()">닫기</button>
+        <!-- 관리자 모달 -->
+        <div id="adminModal" class="modal">
+            <div class="modal-content">
+                <div class="m-header">
+                    <h2>📊 언락 키 생성 이력</h2>
+                    <div style="display:flex; gap:10px;">
+                        <button class="admin-btn" style="color:#e11d48;" onclick="clearHist()">이력 초기화</button>
+                        <button class="admin-btn" onclick="closeAdmin()">닫기</button>
+                    </div>
+                </div>
+                <div id="histContent">
+                    <!-- 이력 테이블이 여기에 렌더링됨 -->
                 </div>
             </div>
-            <div id="histContent">
-                <!-- 이력 테이블이 여기에 렌더링됨 -->
-            </div>
         </div>
-    </div>
 
-    <script>
-        /* 내장 키 DB */
-        const keysDB = {
-            "KBL Key": "A75A25C652828228C63B7ABEDE6C67C8",
-            "WHL Key": "4DFFC34E7D0CE6AF08222384C0C874C1",
-            "Old Key": "95A8EE8E89979B9EFDCBC6EB9797528D",
-            "New Key": "0A533102F86D4683A4071B30CB047E91"
-        };
+        <script>
+            /* 내장 키 DB */
+            const keysDB = {
+                "KBL Key": "A75A25C652828228C63B7ABEDE6C67C8",
+                "WHL Key": "4DFFC34E7D0CE6AF08222384C0C874C1",
+                "Old Key": "95A8EE8E89979B9EFDCBC6EB9797528D",
+                "New Key": "0A533102F86D4683A4071B30CB047E91"
+            };
 
-        /* 퀀타 DB */
-        const qtDB = {
-            "550": "QaCBcr11", "560": "QaCBcr11", "N530": "QaCBcr11",
-            "510": "QlcQciuL", "515": "QlcQciuL", "520": "QlcQciuL", "525": "Lg4QciuL",
-            "N360": "qacb2014", "N365": "qacb2015",
-            "470": "qacb2016", "480": "qacb2016", "590": "qacb2016",
-            "870": "D25a6908", "880": "D25a6908", "890": "D25a6908", "490": "D25a6908",
-            "40N": "D25a6908", "50N": "D25a6908", "70N": "D25a6908", "50Q": "D25a6908",
-            "50T": "D25a6908", "50U": "D25a6908"
-        };
+            /* 퀀타 DB */
+            const qtDB = {
+                "550": "QaCBcr11", "560": "QaCBcr11", "N530": "QaCBcr11",
+                "510": "QlcQciuL", "515": "QlcQciuL", "520": "QlcQciuL", "525": "Lg4QciuL",
+                "N360": "qacb2014", "N365": "qacb2015",
+                "470": "qacb2016", "480": "qacb2016", "590": "qacb2016",
+                "870": "D25a6908", "880": "D25a6908", "890": "D25a6908", "490": "D25a6908",
+                "40N": "D25a6908", "50N": "D25a6908", "70N": "D25a6908", "50Q": "D25a6908",
+                "50T": "D25a6908", "50U": "D25a6908"
+            };
 
-        /* 탭 전환 */
-        function sw(name) {
-            ['ih', 'qt'].forEach(n => {
-                document.getElementById('btn-' + n).classList.toggle('active', n === name);
-                document.getElementById('pan-' + n).style.display = n === name ? 'block' : 'none';
-            });
-            hide('ih'); hide('qt');
-        }
+            /* 사용자 인증 데이터 (user_no_name.xlsx) */
+            const allowedUsers = [{ "id": "36991", "name": "남상훈" }, { "id": "38508", "name": "정선락" }, { "id": "38589", "name": "박세현" }, { "id": "38984", "name": "박봉만" }, { "id": "40524", "name": "백남길" }, { "id": "40763", "name": "송강의" }, { "id": "43026", "name": "정대성" }, { "id": "105801", "name": "이종주" }, { "id": "107546", "name": "이태재" }, { "id": "109412", "name": "차상철" }, { "id": "109461", "name": "김평수" }, { "id": "113447", "name": "강성철" }, { "id": "114984", "name": "이광희" }, { "id": "115051", "name": "박승남" }, { "id": "115292", "name": "오훈석" }, { "id": "125626", "name": "정민주" }, { "id": "132494", "name": "안철진" }, { "id": "133396", "name": "성명호" }, { "id": "136251", "name": "이주창" }, { "id": "136253", "name": "도현수" }, { "id": "136887", "name": "김성표" }, { "id": "210119", "name": "박찬택" }, { "id": "210169", "name": "김세현" }, { "id": "210671", "name": "서원창" }, { "id": "211675", "name": "박명은" }, { "id": "211956", "name": "황태경" }, { "id": "211971", "name": "김대복" }, { "id": "212055", "name": "오의석" }, { "id": "212465", "name": "윤강선" }, { "id": "213240", "name": "박기덕" }, { "id": "213945", "name": "조현옥" }, { "id": "215289", "name": "신승호" }, { "id": "215342", "name": "엄종섭" }, { "id": "215399", "name": "서인석" }, { "id": "216459", "name": "손병호" }, { "id": "219011", "name": "김찬호" }, { "id": "219326", "name": "이동훈" }, { "id": "220151", "name": "이정민" }, { "id": "220152", "name": "이세원" }, { "id": "220993", "name": "박윤주" }, { "id": "222235", "name": "박진용" }, { "id": "222739", "name": "양혜란" }, { "id": "225734", "name": "김한중" }, { "id": "228010", "name": "서제성" }, { "id": "228171", "name": "하신권" }, { "id": "228617", "name": "김제민" }, { "id": "228627", "name": "고석일" }, { "id": "230485", "name": "권호철" }, { "id": "237272", "name": "서좌왕" }, { "id": "237305", "name": "김환수" }, { "id": "237306", "name": "엄지언" }, { "id": "243759", "name": "이동훈" }, { "id": "250438", "name": "박영규" }, { "id": "250440", "name": "이재진" }, { "id": "250450", "name": "정문호" }, { "id": "250452", "name": "최철영" }, { "id": "250454", "name": "박성일" }, { "id": "250460", "name": "송만근" }, { "id": "250492", "name": "이은준" }, { "id": "250494", "name": "조재영" }, { "id": "250495", "name": "이창원" }, { "id": "250496", "name": "신동오" }, { "id": "250499", "name": "송기수" }, { "id": "252064", "name": "박한수" }, { "id": "255264", "name": "김만재" }, { "id": "265007", "name": "박기태" }, { "id": "275947", "name": "이대근" }, { "id": "275950", "name": "박치원" }, { "id": "275972", "name": "유병덕" }, { "id": "287944", "name": "채판주" }, { "id": "287959", "name": "권오인" }, { "id": "288042", "name": "백희정" }, { "id": "288044", "name": "이은희" }, { "id": "288045", "name": "문철웅" }, { "id": "288046", "name": "권영수" }, { "id": "288047", "name": "오경석" }, { "id": "288049", "name": "고성삼" }, { "id": "288050", "name": "고정회" }, { "id": "288051", "name": "구도익" }, { "id": "288055", "name": "김미옥" }, { "id": "288056", "name": "김민석" }, { "id": "288059", "name": "김민정" }, { "id": "288060", "name": "김상수" }, { "id": "288061", "name": "김영민" }, { "id": "288063", "name": "김우림" }, { "id": "288064", "name": "김재열" }, { "id": "288065", "name": "김재유" }, { "id": "288066", "name": "김정수" }, { "id": "288070", "name": "김회용" }, { "id": "288071", "name": "남기호" }, { "id": "288072", "name": "노태영" }, { "id": "288073", "name": "문승우" }, { "id": "288074", "name": "박규남" }, { "id": "288075", "name": "박길춘" }, { "id": "288076", "name": "박민호" }, { "id": "288078", "name": "박성준" }, { "id": "288079", "name": "박영민" }, { "id": "288080", "name": "박준영" }, { "id": "288081", "name": "배동명" }, { "id": "288082", "name": "송종민" }, { "id": "288084", "name": "신동욱" }, { "id": "288086", "name": "심기승" }, { "id": "288087", "name": "심동진" }, { "id": "288088", "name": "엄기성" }, { "id": "288090", "name": "오민성" }, { "id": "288092", "name": "오용섭" }, { "id": "288093", "name": "우양식" }, { "id": "288094", "name": "윤규영" }, { "id": "288096", "name": "이성철" }, { "id": "288097", "name": "이송이" }, { "id": "288098", "name": "이승희" }, { "id": "288099", "name": "이예진" }, { "id": "288100", "name": "이인균" }, { "id": "288101", "name": "이정민" }, { "id": "288102", "name": "이종안" }, { "id": "288106", "name": "이효진" }, { "id": "288107", "name": "이희숙" }, { "id": "288108", "name": "장정훈" }, { "id": "288109", "name": "정준우" }, { "id": "288110", "name": "정지영" }, { "id": "288111", "name": "조병선" }, { "id": "288112", "name": "조용민" }, { "id": "288113", "name": "조지훈" }, { "id": "288114", "name": "차현규" }, { "id": "288115", "name": "최수지" }, { "id": "288116", "name": "최원종" }, { "id": "288117", "name": "한창훈" }, { "id": "288118", "name": "허우" }, { "id": "288119", "name": "강민수" }, { "id": "288120", "name": "강민승" }, { "id": "288121", "name": "강바울" }, { "id": "288123", "name": "강현용" }, { "id": "288124", "name": "고동환" }, { "id": "288125", "name": "권경민" }, { "id": "288126", "name": "권순우" }, { "id": "288127", "name": "권희식" }, { "id": "288128", "name": "금경빈" }, { "id": "288129", "name": "길연화" }, { "id": "288130", "name": "김강산" }, { "id": "288131", "name": "김규리" }, { "id": "288132", "name": "김기남" }, { "id": "288133", "name": "김기년" }, { "id": "288134", "name": "김남훈" }, { "id": "288135", "name": "김대경" }, { "id": "288136", "name": "김대영" }, { "id": "288137", "name": "김대철" }, { "id": "288138", "name": "김도균" }, { "id": "288140", "name": "김동우" }, { "id": "288141", "name": "김동훈" }, { "id": "288143", "name": "김보성" }, { "id": "288144", "name": "김상원" }, { "id": "288146", "name": "김성한" }, { "id": "288147", "name": "김성현" }, { "id": "288148", "name": "김세영" }, { "id": "288149", "name": "김수민" }, { "id": "288152", "name": "김승재" }, { "id": "288154", "name": "김용수" }, { "id": "288156", "name": "김용찬" }, { "id": "288157", "name": "김윤섭" }, { "id": "288160", "name": "김인욱" }, { "id": "288161", "name": "김정환" }, { "id": "288162", "name": "김종현" }, { "id": "288164", "name": "김주현" }, { "id": "288165", "name": "김채원" }, { "id": "288167", "name": "김현기" }, { "id": "288168", "name": "김현우" }, { "id": "288169", "name": "김현주" }, { "id": "288170", "name": "김홍길" }, { "id": "288172", "name": "나홍석" }, { "id": "288173", "name": "노원" }, { "id": "288174", "name": "라현수" }, { "id": "288175", "name": "모재현" }, { "id": "288177", "name": "박공" }, { "id": "288178", "name": "박문성" }, { "id": "288179", "name": "손민규" }, { "id": "288180", "name": "박새롬" }, { "id": "288182", "name": "박승민" }, { "id": "288183", "name": "박재영" }, { "id": "288184", "name": "박종세" }, { "id": "288185", "name": "박종우" }, { "id": "288186", "name": "박준우" }, { "id": "288189", "name": "방설빈" }, { "id": "288190", "name": "배호진" }, { "id": "288191", "name": "백두현" }, { "id": "288193", "name": "서동우" }, { "id": "288195", "name": "서현규" }, { "id": "288196", "name": "석대원" }, { "id": "288197", "name": "석종원" }, { "id": "288198", "name": "성민희" }, { "id": "288199", "name": "손호영" }, { "id": "288200", "name": "손호완" }, { "id": "288201", "name": "송경민" }, { "id": "288202", "name": "송병천" }, { "id": "288203", "name": "심기원" }, { "id": "288205", "name": "양정훈" }, { "id": "288206", "name": "여광" }, { "id": "288207", "name": "염동훈" }, { "id": "288208", "name": "오대균" }, { "id": "288212", "name": "오현우" }, { "id": "288213", "name": "우석철" }, { "id": "288215", "name": "유성원" }, { "id": "288216", "name": "유일선" }, { "id": "288217", "name": "유진현" }, { "id": "288218", "name": "유태훈" }, { "id": "288220", "name": "윤영석" }, { "id": "288221", "name": "윤지성" }, { "id": "288222", "name": "이건주" }, { "id": "288223", "name": "이경화" }, { "id": "288224", "name": "이광욱" }, { "id": "288225", "name": "이규혁" }, { "id": "288226", "name": "이기봉" }, { "id": "288227", "name": "이동우" }, { "id": "288229", "name": "이민수" }, { "id": "288230", "name": "이상섭" }, { "id": "288232", "name": "이상훈" }, { "id": "288233", "name": "이성재" }, { "id": "288234", "name": "이성현" }, { "id": "288235", "name": "이성훈" }, { "id": "288236", "name": "이세호" }, { "id": "288238", "name": "이승목" }, { "id": "288241", "name": "이우빈" }, { "id": "288243", "name": "이은경" }, { "id": "288244", "name": "이이레" }, { "id": "288245", "name": "이장원" }, { "id": "288246", "name": "이정우" }, { "id": "288247", "name": "이종석" }, { "id": "288248", "name": "이주혜" }, { "id": "288249", "name": "이준복" }, { "id": "288250", "name": "이지훈" }, { "id": "288251", "name": "이춘재" }, { "id": "288252", "name": "이태한" }, { "id": "288253", "name": "이한훈" }, { "id": "288255", "name": "이현수" }, { "id": "288257", "name": "이현영" }, { "id": "288259", "name": "임권재" }, { "id": "288261", "name": "임범희" }, { "id": "288262", "name": "임병민" }, { "id": "288263", "name": "임진한" }, { "id": "288264", "name": "임하균" }, { "id": "288265", "name": "장상호" }, { "id": "288267", "name": "장신희" }, { "id": "288268", "name": "장영식" }, { "id": "288269", "name": "전광훈" }, { "id": "288270", "name": "전대호" }, { "id": "288271", "name": "전유진" }, { "id": "288272", "name": "전종수" }, { "id": "288273", "name": "전준호" }, { "id": "288274", "name": "전진포" }, { "id": "288275", "name": "전현경" }, { "id": "288278", "name": "정우성" }, { "id": "288280", "name": "정효성" }, { "id": "288282", "name": "조영조" }, { "id": "288283", "name": "조재훈" }, { "id": "288284", "name": "주연진" }, { "id": "288285", "name": "진미경" }, { "id": "288286", "name": "진신호" }, { "id": "288287", "name": "최기성" }, { "id": "288288", "name": "최남혁" }, { "id": "288289", "name": "최성용" }, { "id": "288291", "name": "최은철" }, { "id": "288292", "name": "한동훈" }, { "id": "288293", "name": "한세희" }, { "id": "288294", "name": "한수지" }, { "id": "288295", "name": "한승민" }, { "id": "288296", "name": "한준현" }, { "id": "288297", "name": "허명호" }, { "id": "288298", "name": "이인묵" }, { "id": "288299", "name": "홍성만" }, { "id": "288301", "name": "황대훈" }, { "id": "288303", "name": "황용하" }, { "id": "288304", "name": "황인영" }, { "id": "288307", "name": "강나영" }, { "id": "288308", "name": "강산" }, { "id": "288309", "name": "강선화" }, { "id": "288310", "name": "강은우" }, { "id": "288312", "name": "강태산" }, { "id": "288313", "name": "강형욱" }, { "id": "288314", "name": "고대진" }, { "id": "288315", "name": "고제휘" }, { "id": "288316", "name": "곽동진" }, { "id": "288317", "name": "권기범" }, { "id": "288320", "name": "기도영" }, { "id": "288321", "name": "김동언" }, { "id": "288322", "name": "김동현" }, { "id": "288323", "name": "김미순" }, { "id": "288324", "name": "김민권" }, { "id": "288327", "name": "김상용" }, { "id": "288328", "name": "김상우" }, { "id": "288329", "name": "김샛별" }, { "id": "288330", "name": "김선우" }, { "id": "288331", "name": "김선현" }, { "id": "288332", "name": "김성도" }, { "id": "288333", "name": "김성엽" }, { "id": "288334", "name": "김성영" }, { "id": "288336", "name": "김소진" }, { "id": "288338", "name": "김승우" }, { "id": "293818", "name": "노영호" }, { "id": "288339", "name": "김승현" }, { "id": "288340", "name": "김승호" }, { "id": "288341", "name": "김승환" }, { "id": "288342", "name": "김영우" }, { "id": "288343", "name": "김영중" }, { "id": "288344", "name": "김옥희" }, { "id": "288347", "name": "김용성" }, { "id": "288348", "name": "김우석" }, { "id": "288349", "name": "김우형" }, { "id": "288351", "name": "김인환" }, { "id": "288355", "name": "김주용" }, { "id": "288356", "name": "김준혁" }, { "id": "288357", "name": "김지훈" }, { "id": "288358", "name": "김진용" }, { "id": "288359", "name": "김진혁" }, { "id": "288360", "name": "김창길" }, { "id": "288362", "name": "김태오" }, { "id": "288363", "name": "김태찬" }, { "id": "288365", "name": "김택" }, { "id": "288366", "name": "김학진" }, { "id": "288367", "name": "김현수" }, { "id": "288368", "name": "김회찬" }, { "id": "288369", "name": "김효진" }, { "id": "288370", "name": "김희영" }, { "id": "288373", "name": "문성주" }, { "id": "288374", "name": "문주성" }, { "id": "288375", "name": "문진" }, { "id": "288377", "name": "민홍윤" }, { "id": "288380", "name": "박성욱" }, { "id": "288381", "name": "박소연" }, { "id": "288383", "name": "박승우" }, { "id": "288384", "name": "박승우" }, { "id": "288385", "name": "박영민" }, { "id": "288386", "name": "박영민" }, { "id": "288387", "name": "박용남" }, { "id": "288388", "name": "박인규" }, { "id": "288389", "name": "박재수" }, { "id": "288390", "name": "박정빈" }, { "id": "288391", "name": "박지영" }, { "id": "288392", "name": "박지호" }, { "id": "288393", "name": "박지훈" }, { "id": "288394", "name": "박철우" }, { "id": "288396", "name": "배병우" }, { "id": "288397", "name": "백종훈" }, { "id": "288398", "name": "범성원" }, { "id": "288400", "name": "서태혁" }, { "id": "288401", "name": "손목현" }, { "id": "288402", "name": "신봉철" }, { "id": "288403", "name": "신용빈" }, { "id": "288404", "name": "안일남" }, { "id": "288405", "name": "여효중" }, { "id": "288406", "name": "오두환" }, { "id": "288407", "name": "오용근" }, { "id": "288408", "name": "유귀훈" }, { "id": "288409", "name": "유보선" }, { "id": "288410", "name": "유석현" }, { "id": "288412", "name": "유준형" }, { "id": "288413", "name": "유필선" }, { "id": "288414", "name": "윤석희" }, { "id": "288415", "name": "윤제민" }, { "id": "288416", "name": "윤주현" }, { "id": "288417", "name": "윤치운" }, { "id": "288418", "name": "윤혜영" }, { "id": "288419", "name": "이건민" }, { "id": "288420", "name": "이경준" }, { "id": "288421", "name": "이광진" }, { "id": "288422", "name": "이규호" }, { "id": "288423", "name": "이기진" }, { "id": "288424", "name": "이노현" }, { "id": "288425", "name": "이대훈" }, { "id": "288426", "name": "이민호" }, { "id": "288427", "name": "이병주" }, { "id": "288428", "name": "이상준" }, { "id": "288429", "name": "이성은" }, { "id": "288430", "name": "이승규" }, { "id": "288431", "name": "이승엽" }, { "id": "288432", "name": "이승재" }, { "id": "288433", "name": "이유학" }, { "id": "288434", "name": "이익재" }, { "id": "288436", "name": "이종우" }, { "id": "288437", "name": "이주희" }, { "id": "288438", "name": "이진혁" }, { "id": "288439", "name": "이호준" }, { "id": "288440", "name": "이호준" }, { "id": "288441", "name": "이화철" }, { "id": "288442", "name": "임도영" }, { "id": "288443", "name": "임명학" }, { "id": "288445", "name": "정다운" }, { "id": "288447", "name": "정동명" }, { "id": "288448", "name": "정두선" }, { "id": "288449", "name": "정보경" }, { "id": "288451", "name": "정훈" }, { "id": "288452", "name": "조민우" }, { "id": "288454", "name": "조아람" }, { "id": "288455", "name": "조영래" }, { "id": "288456", "name": "조형민" }, { "id": "288457", "name": "지민수" }, { "id": "288458", "name": "채준" }, { "id": "288460", "name": "최광찬" }, { "id": "288462", "name": "최삼영" }, { "id": "288463", "name": "최용" }, { "id": "288464", "name": "최재호" }, { "id": "288465", "name": "최진규" }, { "id": "288467", "name": "최찬규" }, { "id": "288468", "name": "추성언" }, { "id": "288469", "name": "표중협" }, { "id": "288472", "name": "한의진" }, { "id": "288473", "name": "한정호" }, { "id": "288474", "name": "한준섭" }, { "id": "288476", "name": "허재원" }, { "id": "288478", "name": "홍상연" }, { "id": "288481", "name": "홍성효" }, { "id": "288482", "name": "홍지은" }, { "id": "288483", "name": "황영희" }, { "id": "288484", "name": "황의현" }, { "id": "288485", "name": "황지원" }, { "id": "288486", "name": "황철" }, { "id": "288487", "name": "강동호" }, { "id": "288488", "name": "강영훈" }, { "id": "288489", "name": "강예운" }, { "id": "288490", "name": "경재현" }, { "id": "288492", "name": "김권수" }, { "id": "288493", "name": "김권영" }, { "id": "288494", "name": "김규호" }, { "id": "288495", "name": "김대웅" }, { "id": "288496", "name": "김대현" }, { "id": "288497", "name": "김덕기" }, { "id": "288498", "name": "김미주" }, { "id": "288499", "name": "김민재" }, { "id": "288500", "name": "김병기" }, { "id": "288501", "name": "김봉준" }, { "id": "288502", "name": "김상곤" }, { "id": "288503", "name": "김성아" }, { "id": "288505", "name": "김수민" }, { "id": "288507", "name": "김승연" }, { "id": "288510", "name": "김은정" }, { "id": "288511", "name": "김익경" }, { "id": "288512", "name": "김재철" }, { "id": "288513", "name": "김종대" }, { "id": "288514", "name": "김지하" }, { "id": "288515", "name": "김태임" }, { "id": "288517", "name": "김한결" }, { "id": "288518", "name": "김현웅" }, { "id": "288519", "name": "김형기" }, { "id": "288520", "name": "김혜란" }, { "id": "288521", "name": "김홍준" }, { "id": "288523", "name": "남상욱" }, { "id": "288526", "name": "민동규" }, { "id": "288529", "name": "박병욱" }, { "id": "288530", "name": "박요한" }, { "id": "288532", "name": "박정현" }, { "id": "288533", "name": "박종근" }, { "id": "288534", "name": "박종정" }, { "id": "288535", "name": "박지혜" }, { "id": "288536", "name": "박찬준" }, { "id": "288537", "name": "박태현" }, { "id": "288538", "name": "박형진" }, { "id": "288539", "name": "박혜지" }, { "id": "288540", "name": "백상우" }, { "id": "288541", "name": "백승옥" }, { "id": "288542", "name": "서경우" }, { "id": "288543", "name": "서보정" }, { "id": "288544", "name": "서종호" }, { "id": "288545", "name": "성시은" }, { "id": "288546", "name": "손영준" }, { "id": "288549", "name": "신승원" }, { "id": "288550", "name": "신승택" }, { "id": "288553", "name": "심재인" }, { "id": "288554", "name": "안명원" }, { "id": "288555", "name": "안석현" }, { "id": "288556", "name": "안수지" }, { "id": "288557", "name": "안종호" }, { "id": "288559", "name": "양보미" }, { "id": "288560", "name": "오명주" }, { "id": "288561", "name": "오원규" }, { "id": "288562", "name": "오흥철" }, { "id": "288563", "name": "우동훈" }, { "id": "288565", "name": "유재범" }, { "id": "288566", "name": "이건원" }, { "id": "288567", "name": "이규영" }, { "id": "288568", "name": "이덕우" }, { "id": "288569", "name": "이도형" }, { "id": "288573", "name": "이승미" }, { "id": "288575", "name": "이영혜" }, { "id": "288576", "name": "이용" }, { "id": "288577", "name": "이용범" }, { "id": "288578", "name": "이윤성" }, { "id": "288579", "name": "이재궁" }, { "id": "288581", "name": "이재영" }, { "id": "288582", "name": "이정선" }, { "id": "288584", "name": "이종민" }, { "id": "288585", "name": "이지훈" }, { "id": "288586", "name": "이진복" }, { "id": "288587", "name": "이태윤" }, { "id": "288588", "name": "이현우" }, { "id": "288589", "name": "이후락" }, { "id": "288590", "name": "임다인" }, { "id": "288591", "name": "임성준" }, { "id": "288592", "name": "임재경" }, { "id": "288593", "name": "임종현" }, { "id": "288594", "name": "장백순" }, { "id": "288596", "name": "전다희" }, { "id": "288598", "name": "전지훈" }, { "id": "288599", "name": "정명우" }, { "id": "288600", "name": "정상엽" }, { "id": "288601", "name": "정성윤" }, { "id": "288602", "name": "정연일" }, { "id": "288604", "name": "정윤호" }, { "id": "288605", "name": "정지훈" }, { "id": "288606", "name": "조광희" }, { "id": "288607", "name": "조이현" }, { "id": "288609", "name": "조은별" }, { "id": "288610", "name": "주형곤" }, { "id": "288613", "name": "차호정" }, { "id": "288615", "name": "최건영" }, { "id": "288616", "name": "최낙훈" }, { "id": "288617", "name": "최세인" }, { "id": "288618", "name": "최유정" }, { "id": "288619", "name": "최정길" }, { "id": "288620", "name": "최충락" }, { "id": "288621", "name": "최훈경" }, { "id": "288622", "name": "한영호" }, { "id": "288623", "name": "한이슬" }, { "id": "288624", "name": "한종철" }, { "id": "288625", "name": "허남규" }, { "id": "288627", "name": "허신영" }, { "id": "288628", "name": "허인혜" }, { "id": "288629", "name": "허지훈" }, { "id": "288631", "name": "홍상민" }, { "id": "288632", "name": "홍은지" }, { "id": "288634", "name": "황영진" }, { "id": "288635", "name": "황은선" }, { "id": "288636", "name": "황정식" }, { "id": "288638", "name": "황현정" }, { "id": "288639", "name": "강병욱" }, { "id": "288640", "name": "강정기" }, { "id": "288641", "name": "강정훈" }, { "id": "288643", "name": "고재영" }, { "id": "288644", "name": "고창진" }, { "id": "288646", "name": "권병규" }, { "id": "288647", "name": "권아람" }, { "id": "288648", "name": "권오승" }, { "id": "288649", "name": "권준호" }, { "id": "288650", "name": "김경미" }, { "id": "288653", "name": "김덕태" }, { "id": "288654", "name": "김동욱" }, { "id": "288655", "name": "김동현" }, { "id": "288656", "name": "김매화" }, { "id": "288657", "name": "김명수" }, { "id": "288658", "name": "김명진" }, { "id": "288660", "name": "김상연" }, { "id": "288661", "name": "김상욱" }, { "id": "288662", "name": "김상혁" }, { "id": "288663", "name": "김선일" }, { "id": "288664", "name": "김설원" }, { "id": "288665", "name": "김수빈" }, { "id": "288666", "name": "김수현" }, { "id": "288669", "name": "김재홍" }, { "id": "288670", "name": "김종원" }, { "id": "288671", "name": "김지연" }, { "id": "288672", "name": "김진수" }, { "id": "288673", "name": "김태현" }, { "id": "288674", "name": "김태형" }, { "id": "288675", "name": "김태환" }, { "id": "288677", "name": "김형만" }, { "id": "288678", "name": "김희철" }, { "id": "288680", "name": "노상규" }, { "id": "288682", "name": "류민선" }, { "id": "288683", "name": "류성준" }, { "id": "288684", "name": "맹철호" }, { "id": "288685", "name": "박기영" }, { "id": "288686", "name": "박배근" }, { "id": "288687", "name": "박성국" }, { "id": "288688", "name": "박성윤" }, { "id": "288689", "name": "박성호" }, { "id": "288692", "name": "박승현" }, { "id": "288693", "name": "박영수" }, { "id": "288694", "name": "박영준" }, { "id": "288695", "name": "박우리" }, { "id": "288696", "name": "박재민" }, { "id": "288697", "name": "박재훈" }, { "id": "288698", "name": "박준수" }, { "id": "288699", "name": "박철영" }, { "id": "288701", "name": "방창훈" }, { "id": "288702", "name": "배대근" }, { "id": "288703", "name": "배원진" }, { "id": "288704", "name": "백미연" }, { "id": "288705", "name": "백승만" }, { "id": "288706", "name": "백종민" }, { "id": "288707", "name": "백종훈" }, { "id": "288709", "name": "소재욱" }, { "id": "288710", "name": "손종하" }, { "id": "288711", "name": "손혁진" }, { "id": "288712", "name": "송승헌" }, { "id": "288714", "name": "송재근" }, { "id": "288715", "name": "송하진" }, { "id": "288716", "name": "신길재" }, { "id": "288717", "name": "신동화" }, { "id": "288718", "name": "신종석" }, { "id": "288719", "name": "안길태" }, { "id": "288720", "name": "안상환" }, { "id": "288721", "name": "안승인" }, { "id": "288723", "name": "양광호" }, { "id": "288724", "name": "양민석" }, { "id": "288725", "name": "양석준" }, { "id": "288726", "name": "양선홍" }, { "id": "288727", "name": "양성한" }, { "id": "288729", "name": "오병오" }, { "id": "288730", "name": "오병주" }, { "id": "288732", "name": "오승환" }, { "id": "288733", "name": "오정석" }, { "id": "288740", "name": "이대의" }, { "id": "288741", "name": "이대훈" }, { "id": "288743", "name": "이동녘" }, { "id": "288744", "name": "이동수" }, { "id": "288745", "name": "이동진" }, { "id": "288746", "name": "이미희" }, { "id": "288747", "name": "이병주" }, { "id": "288748", "name": "이봉규" }, { "id": "288749", "name": "이성철" }, { "id": "288750", "name": "이수영" }, { "id": "288751", "name": "이순호" }, { "id": "288752", "name": "이승현" }, { "id": "288753", "name": "이영석" }, { "id": "288754", "name": "이용철" }, { "id": "288756", "name": "이인철" }, { "id": "288757", "name": "이재명" }, { "id": "288758", "name": "이재훈" }, { "id": "288759", "name": "이정민" }, { "id": "288760", "name": "이준석" }, { "id": "288761", "name": "이준용" }, { "id": "288762", "name": "이충용" }, { "id": "288763", "name": "임향조" }, { "id": "288764", "name": "장승규" }, { "id": "288765", "name": "장우혁" }, { "id": "288766", "name": "장인석" }, { "id": "288767", "name": "전선화" }, { "id": "288768", "name": "전영환" }, { "id": "288769", "name": "전용진" }, { "id": "288770", "name": "정민" }, { "id": "288771", "name": "정수곤" }, { "id": "288772", "name": "정지훈" }, { "id": "288773", "name": "정진우" }, { "id": "288774", "name": "정진우" }, { "id": "288775", "name": "정찬석" }, { "id": "288776", "name": "정찬옥" }, { "id": "288777", "name": "정태영" }, { "id": "288778", "name": "정해준" }, { "id": "288779", "name": "조남미" }, { "id": "288781", "name": "조현식" }, { "id": "288782", "name": "지명숙" }, { "id": "288783", "name": "채승우" }, { "id": "288785", "name": "최병덕" }, { "id": "288786", "name": "최순봉" }, { "id": "288787", "name": "최재복" }, { "id": "288788", "name": "최준호" }, { "id": "288790", "name": "하태호" }, { "id": "288791", "name": "한경남" }, { "id": "288793", "name": "한영필" }, { "id": "288796", "name": "홍만희" }, { "id": "288798", "name": "홍봉기" }, { "id": "288799", "name": "홍성민" }, { "id": "288800", "name": "황용철" }, { "id": "288801", "name": "황주연" }, { "id": "288802", "name": "강병수" }, { "id": "288803", "name": "강수호" }, { "id": "288804", "name": "강춘서" }, { "id": "288805", "name": "강태영" }, { "id": "288806", "name": "고영현" }, { "id": "288807", "name": "고정태" }, { "id": "288808", "name": "고현석" }, { "id": "288809", "name": "고현석" }, { "id": "288810", "name": "곽동명" }, { "id": "288811", "name": "곽호섭" }, { "id": "288814", "name": "권인수" }, { "id": "288818", "name": "김기연" }, { "id": "288821", "name": "김민정" }, { "id": "288822", "name": "김민지" }, { "id": "288823", "name": "김범준" }, { "id": "288824", "name": "김병주" }, { "id": "288825", "name": "김선규" }, { "id": "288826", "name": "김성필" }, { "id": "288827", "name": "김수영" }, { "id": "288828", "name": "김수훈" }, { "id": "288830", "name": "김영길" }, { "id": "288831", "name": "김영헌" }, { "id": "288832", "name": "김용상" }, { "id": "288833", "name": "김용운" }, { "id": "288834", "name": "김원기" }, { "id": "288835", "name": "김유섭" }, { "id": "288836", "name": "김윤희" }, { "id": "288838", "name": "김익천" }, { "id": "288839", "name": "김인성" }, { "id": "288842", "name": "김재석" }, { "id": "288843", "name": "김재선" }, { "id": "288844", "name": "김재환" }, { "id": "288845", "name": "김정우" }, { "id": "288846", "name": "김종문" }, { "id": "288848", "name": "김준호" }, { "id": "288849", "name": "김진석" }, { "id": "288850", "name": "김창래" }, { "id": "288851", "name": "김태엽" }, { "id": "288852", "name": "김태원" }, { "id": "288853", "name": "김특수" }, { "id": "288854", "name": "김현민" }, { "id": "288855", "name": "김형우" }, { "id": "288856", "name": "김혜연" }, { "id": "288859", "name": "김희천" }, { "id": "288861", "name": "류승민" }, { "id": "288862", "name": "맹창호" }, { "id": "288864", "name": "문서진" }, { "id": "288865", "name": "민병욱" }, { "id": "288866", "name": "박만석" }, { "id": "288867", "name": "박상규" }, { "id": "288869", "name": "박상철" }, { "id": "288870", "name": "박선욱" }, { "id": "288871", "name": "박성은" }, { "id": "288872", "name": "박세철" }, { "id": "288874", "name": "박유환" }, { "id": "288876", "name": "박재민" }, { "id": "288877", "name": "박재준" }, { "id": "288878", "name": "박재형" }, { "id": "288879", "name": "박종석" }, { "id": "288881", "name": "박준호" }, { "id": "288882", "name": "박진성" }, { "id": "288883", "name": "박진영" }, { "id": "288884", "name": "박찬문" }, { "id": "288885", "name": "박창호" }, { "id": "288887", "name": "박호진" }, { "id": "288888", "name": "박희상" }, { "id": "288889", "name": "방종훈" }, { "id": "288891", "name": "배정규" }, { "id": "288892", "name": "백승엽" }, { "id": "288893", "name": "백종규" }, { "id": "288894", "name": "변상원" }, { "id": "288896", "name": "서춘길" }, { "id": "288897", "name": "성낙훈" }, { "id": "288898", "name": "성안일" }, { "id": "288899", "name": "손민익" }, { "id": "288901", "name": "손영준" }, { "id": "288902", "name": "손원철" }, { "id": "288903", "name": "손정남" }, { "id": "288904", "name": "송대웅" }, { "id": "288906", "name": "송민규" }, { "id": "288907", "name": "송세영" }, { "id": "288908", "name": "송창진" }, { "id": "288911", "name": "신동혁" }, { "id": "288912", "name": "신소연" }, { "id": "288913", "name": "신수찬" }, { "id": "288914", "name": "신용태" }, { "id": "288915", "name": "신일섭" }, { "id": "288916", "name": "신주철" }, { "id": "288919", "name": "심종호" }, { "id": "288920", "name": "안상우" }, { "id": "288921", "name": "안석호" }, { "id": "288922", "name": "안영준" }, { "id": "288923", "name": "양경희" }, { "id": "288924", "name": "엄대성" }, { "id": "288925", "name": "엄지호" }, { "id": "288926", "name": "오일록" }, { "id": "288927", "name": "오진석" }, { "id": "288929", "name": "서윤숙" }, { "id": "288931", "name": "유지영" }, { "id": "288932", "name": "윤성우" }, { "id": "288933", "name": "윤소웅" }, { "id": "288934", "name": "윤태홍" }, { "id": "288935", "name": "이강희" }, { "id": "288936", "name": "이규용" }, { "id": "288937", "name": "이대명" }, { "id": "288938", "name": "이동규" }, { "id": "288939", "name": "이병길" }, { "id": "288940", "name": "이상기" }, { "id": "288942", "name": "이상진" }, { "id": "288944", "name": "이선화" }, { "id": "288945", "name": "이성민" }, { "id": "288946", "name": "이성원" }, { "id": "288947", "name": "이승진" }, { "id": "288948", "name": "이신우" }, { "id": "288949", "name": "이열" }, { "id": "288950", "name": "이완주" }, { "id": "288952", "name": "이은정" }, { "id": "288953", "name": "이은주" }, { "id": "288954", "name": "이은지" }, { "id": "288956", "name": "이정현" }, { "id": "288957", "name": "이준열" }, { "id": "288959", "name": "이창호" }, { "id": "288960", "name": "이철호" }, { "id": "288961", "name": "이충호" }, { "id": "288964", "name": "이혁승" }, { "id": "288965", "name": "이현석" }, { "id": "288966", "name": "이현일" }, { "id": "288968", "name": "임민재" }, { "id": "288969", "name": "임병락" }, { "id": "288970", "name": "임성현" }, { "id": "288971", "name": "임숙화" }, { "id": "288972", "name": "임종인" }, { "id": "288973", "name": "임태호" }, { "id": "288975", "name": "장영록" }, { "id": "288976", "name": "장일남" }, { "id": "288977", "name": "장재호" }, { "id": "288978", "name": "장정훈" }, { "id": "288980", "name": "전도균" }, { "id": "288981", "name": "전민욱" }, { "id": "288982", "name": "전병준" }, { "id": "288984", "name": "전혁진" }, { "id": "288985", "name": "정관중" }, { "id": "288986", "name": "정다정" }, { "id": "288987", "name": "정대웅" }, { "id": "288988", "name": "정승환" }, { "id": "288989", "name": "정원철" }, { "id": "288990", "name": "정재교" }, { "id": "288992", "name": "정지훈" }, { "id": "288993", "name": "정창혁" }, { "id": "288994", "name": "정해성" }, { "id": "288995", "name": "정해중" }, { "id": "288996", "name": "제성균" }, { "id": "288997", "name": "조경원" }, { "id": "288998", "name": "조관호" }, { "id": "289000", "name": "조봉희" }, { "id": "289001", "name": "조영대" }, { "id": "289002", "name": "조영민" }, { "id": "289003", "name": "조정현" }, { "id": "289004", "name": "조해성" }, { "id": "289005", "name": "주민준" }, { "id": "289006", "name": "지동건" }, { "id": "289008", "name": "최민규" }, { "id": "289009", "name": "최병수" }, { "id": "289010", "name": "최영철" }, { "id": "289011", "name": "최영훈" }, { "id": "289012", "name": "최은섭" }, { "id": "289013", "name": "최종도" }, { "id": "289014", "name": "최준혁" }, { "id": "289015", "name": "최호현" }, { "id": "289016", "name": "표상욱" }, { "id": "289018", "name": "한병훈" }, { "id": "289019", "name": "한승용" }, { "id": "289020", "name": "현상호" }, { "id": "289021", "name": "홍순비" }, { "id": "289022", "name": "홍준호" }, { "id": "289025", "name": "황은애" }, { "id": "289026", "name": "황재영" }, { "id": "289027", "name": "황주현" }, { "id": "289029", "name": "강동원" }, { "id": "289033", "name": "강신호" }, { "id": "289035", "name": "강희국" }, { "id": "289036", "name": "강희진" }, { "id": "289037", "name": "경규영" }, { "id": "289038", "name": "고경훈" }, { "id": "289040", "name": "고영윤" }, { "id": "289041", "name": "고재상" }, { "id": "289042", "name": "고재영" }, { "id": "289046", "name": "권순양" }, { "id": "289047", "name": "권으뜸" }, { "id": "289049", "name": "권종헌" }, { "id": "289050", "name": "권혁민" }, { "id": "289051", "name": "금대중" }, { "id": "289052", "name": "김경덕" }, { "id": "289053", "name": "김광용" }, { "id": "289054", "name": "김근호" }, { "id": "289055", "name": "김금용" }, { "id": "289057", "name": "김기찬" }, { "id": "289058", "name": "김기훈" }, { "id": "289059", "name": "김낙균" }, { "id": "289060", "name": "김남경" }, { "id": "289061", "name": "김남규" }, { "id": "289062", "name": "김남우" }, { "id": "289063", "name": "김내현" }, { "id": "289064", "name": "김대환" }, { "id": "289065", "name": "김대희" }, { "id": "289066", "name": "김동락" }, { "id": "289068", "name": "김민섭" }, { "id": "289069", "name": "김범룡" }, { "id": "289070", "name": "김범수" }, { "id": "289071", "name": "김보성" }, { "id": "289072", "name": "김봉준" }, { "id": "289073", "name": "김상기" }, { "id": "289074", "name": "김상신" }, { "id": "289075", "name": "김성현" }, { "id": "289076", "name": "김성환" }, { "id": "289077", "name": "김세빈" }, { "id": "289078", "name": "김세진" }, { "id": "289079", "name": "김솔이" }, { "id": "289080", "name": "김수동" }, { "id": "289081", "name": "김수연" }, { "id": "289082", "name": "김수일" }, { "id": "289084", "name": "김승준" }, { "id": "289085", "name": "김시회" }, { "id": "289086", "name": "김영길" }, { "id": "289088", "name": "김영상" }, { "id": "289089", "name": "김영재" }, { "id": "289090", "name": "김영주" }, { "id": "289093", "name": "김용주" }, { "id": "289094", "name": "김우람" }, { "id": "289096", "name": "김유진" }, { "id": "289097", "name": "김윤동" }, { "id": "289098", "name": "김은영" }, { "id": "289099", "name": "김재원" }, { "id": "289100", "name": "김정덕" }, { "id": "289101", "name": "김정호" }, { "id": "289102", "name": "김정훈" }, { "id": "289103", "name": "김종선" }, { "id": "289105", "name": "김종철" }, { "id": "289107", "name": "김종후" }, { "id": "289108", "name": "김주형" }, { "id": "289109", "name": "김준규" }, { "id": "289110", "name": "김지현" }, { "id": "289111", "name": "김지환" }, { "id": "289112", "name": "김진환" }, { "id": "289113", "name": "김찬희" }, { "id": "289114", "name": "김충일" }, { "id": "289115", "name": "김태윤" }, { "id": "289116", "name": "김태현" }, { "id": "289118", "name": "김태희" }, { "id": "289119", "name": "김표성" }, { "id": "289120", "name": "김학현" }, { "id": "289121", "name": "김현숙" }, { "id": "289122", "name": "김현태" }, { "id": "289123", "name": "김형철" }, { "id": "289125", "name": "김휘성" }, { "id": "289126", "name": "김희주" }, { "id": "289127", "name": "나영민" }, { "id": "289128", "name": "남현수" }, { "id": "289129", "name": "노성민" }, { "id": "289131", "name": "노완섭" }, { "id": "289132", "name": "노유진" }, { "id": "289133", "name": "노정훈" }, { "id": "289134", "name": "노지현" }, { "id": "289135", "name": "노현미" }, { "id": "289136", "name": "노현준" }, { "id": "289137", "name": "도성준" }, { "id": "289138", "name": "류성환" }, { "id": "291702", "name": "지효선" }, { "id": "291716", "name": "신만호" }, { "id": "291724", "name": "명남식" }, { "id": "291725", "name": "모영종" }, { "id": "291726", "name": "문성민" }, { "id": "291727", "name": "문영성" }, { "id": "291729", "name": "민원식" }, { "id": "291730", "name": "박계영" }, { "id": "291732", "name": "박동원" }, { "id": "291733", "name": "박래영" }, { "id": "291734", "name": "박미영" }, { "id": "291735", "name": "박보인" }, { "id": "291736", "name": "박상선" }, { "id": "291738", "name": "박상호" }, { "id": "291739", "name": "박선민" }, { "id": "291740", "name": "박선호" }, { "id": "291741", "name": "박성용" }, { "id": "291742", "name": "박성준" }, { "id": "291743", "name": "박성현" }, { "id": "291744", "name": "박세호" }, { "id": "291745", "name": "박승수" }, { "id": "291747", "name": "박용식" }, { "id": "291748", "name": "박은주" }, { "id": "291749", "name": "박인" }, { "id": "291750", "name": "박재익" }, { "id": "291751", "name": "박재희" }, { "id": "291752", "name": "박정환" }, { "id": "291753", "name": "박종섭" }, { "id": "291754", "name": "박종훈" }, { "id": "291756", "name": "박지용" }, { "id": "291758", "name": "박진수" }, { "id": "291759", "name": "박충열" }, { "id": "291761", "name": "박현석" }, { "id": "291762", "name": "박현준" }, { "id": "291763", "name": "박희종" }, { "id": "291764", "name": "배해권" }, { "id": "291765", "name": "백동설" }, { "id": "291766", "name": "백두산" }, { "id": "291767", "name": "백상민" }, { "id": "291768", "name": "백승훈" }, { "id": "291769", "name": "백종엽" }, { "id": "291771", "name": "변용수" }, { "id": "291772", "name": "변유삼" }, { "id": "291774", "name": "사영진" }, { "id": "291776", "name": "서민례" }, { "id": "291777", "name": "석준수" }, { "id": "291778", "name": "설민환" }, { "id": "291779", "name": "소성진" }, { "id": "291780", "name": "손기응" }, { "id": "291781", "name": "손동수" }, { "id": "291782", "name": "손봉균" }, { "id": "291784", "name": "손준우" }, { "id": "291785", "name": "송민용" }, { "id": "291786", "name": "송수경" }, { "id": "291787", "name": "송유미" }, { "id": "291790", "name": "신민철" }, { "id": "291791", "name": "신상록" }, { "id": "291792", "name": "신승수" }, { "id": "291793", "name": "신완종" }, { "id": "291794", "name": "신용을" }, { "id": "291795", "name": "신종인" }, { "id": "291796", "name": "신준철" }, { "id": "291797", "name": "신현섭" }, { "id": "291798", "name": "신현호" }, { "id": "291799", "name": "신이서" }, { "id": "291800", "name": "심경훈" }, { "id": "291801", "name": "심상후" }, { "id": "291803", "name": "안덕규" }, { "id": "291804", "name": "안재영" }, { "id": "291807", "name": "양대웅" }, { "id": "291808", "name": "양승용" }, { "id": "291809", "name": "양시천" }, { "id": "291810", "name": "양준호" }, { "id": "291811", "name": "양현철" }, { "id": "291812", "name": "엄중우" }, { "id": "291813", "name": "엄희균" }, { "id": "291814", "name": "염보련" }, { "id": "291816", "name": "오승현" }, { "id": "291817", "name": "오아슬" }, { "id": "291819", "name": "오영훈" }, { "id": "291820", "name": "오우택" }, { "id": "291821", "name": "오종택" }, { "id": "291822", "name": "오현진" }, { "id": "291823", "name": "오현진" }, { "id": "291824", "name": "옥창훈" }, { "id": "291825", "name": "우종채" }, { "id": "291826", "name": "원정필" }, { "id": "291827", "name": "원준희" }, { "id": "291828", "name": "원혜진" }, { "id": "291829", "name": "유강선" }, { "id": "291830", "name": "유기현" }, { "id": "291831", "name": "유선혁" }, { "id": "291833", "name": "유승환" }, { "id": "291834", "name": "유영재" }, { "id": "291835", "name": "유영중" }, { "id": "291836", "name": "유재두" }, { "id": "291837", "name": "유지호" }, { "id": "291838", "name": "유창훈" }, { "id": "291839", "name": "유해광" }, { "id": "291841", "name": "육수진" }, { "id": "291842", "name": "윤경식" }, { "id": "291843", "name": "윤기덕" }, { "id": "291844", "name": "윤대정" }, { "id": "291845", "name": "윤상필" }, { "id": "291847", "name": "윤승하" }, { "id": "291848", "name": "윤한기" }, { "id": "291849", "name": "윤홍섭" }, { "id": "291850", "name": "윤희관" }, { "id": "291853", "name": "이기영" }, { "id": "291855", "name": "이기호" }, { "id": "291856", "name": "이남경" }, { "id": "291858", "name": "이민규" }, { "id": "291859", "name": "이병교" }, { "id": "291860", "name": "이상민" }, { "id": "291862", "name": "이상화" }, { "id": "291863", "name": "이상훈" }, { "id": "291864", "name": "이성기" }, { "id": "291865", "name": "이성영" }, { "id": "291866", "name": "이수민" }, { "id": "291867", "name": "이수환" }, { "id": "291869", "name": "이시규" }, { "id": "291870", "name": "이신애" }, { "id": "291871", "name": "이영규" }, { "id": "291872", "name": "이영인" }, { "id": "291874", "name": "이용주" }, { "id": "291875", "name": "이용헌" }, { "id": "291879", "name": "이인용" }, { "id": "291880", "name": "이재광" }, { "id": "291881", "name": "이재황" }, { "id": "291882", "name": "이재훈" }, { "id": "291883", "name": "이재훈" }, { "id": "291884", "name": "이정규" }, { "id": "291886", "name": "이정철" }, { "id": "291887", "name": "이정화" }, { "id": "291890", "name": "이주호" }, { "id": "291891", "name": "이지원" }, { "id": "291892", "name": "이진식" }, { "id": "291893", "name": "이창근" }, { "id": "291894", "name": "이창진" }, { "id": "291896", "name": "이한영" }, { "id": "291897", "name": "이헌진" }, { "id": "291898", "name": "이현수" }, { "id": "291899", "name": "이형덕" }, { "id": "291902", "name": "이훈" }, { "id": "291906", "name": "임승남" }, { "id": "291909", "name": "임종호" }, { "id": "291910", "name": "임혁" }, { "id": "291911", "name": "임호성" }, { "id": "291912", "name": "임희돈" }, { "id": "291913", "name": "장국성" }, { "id": "291914", "name": "장기복" }, { "id": "291915", "name": "장길주" }, { "id": "291919", "name": "장영근" }, { "id": "291920", "name": "장영목" }, { "id": "291922", "name": "장은호" }, { "id": "291923", "name": "장인창" }, { "id": "291924", "name": "강호성" }, { "id": "291925", "name": "장재영" }, { "id": "291926", "name": "장종모" }, { "id": "291928", "name": "장주원" }, { "id": "291929", "name": "장진석" }, { "id": "291930", "name": "장혁재" }, { "id": "291931", "name": "장현성" }, { "id": "291932", "name": "전민국" }, { "id": "291933", "name": "전성원" }, { "id": "291935", "name": "전현철" }, { "id": "291936", "name": "전형남" }, { "id": "291937", "name": "정강근" }, { "id": "291938", "name": "정규태" }, { "id": "291939", "name": "정범철" }, { "id": "291940", "name": "정병수" }, { "id": "291942", "name": "정용수" }, { "id": "291943", "name": "정은미" }, { "id": "291944", "name": "정현재" }, { "id": "291945", "name": "정재욱" }, { "id": "291946", "name": "정재일" }, { "id": "291948", "name": "정창준" }, { "id": "291949", "name": "정철승" }, { "id": "291952", "name": "정홍석" }, { "id": "291953", "name": "정화선" }, { "id": "291954", "name": "정효승" }, { "id": "291956", "name": "조은율" }, { "id": "291957", "name": "조동훈" }, { "id": "291958", "name": "조세훈" }, { "id": "291960", "name": "조용석" }, { "id": "291962", "name": "조훈래" }, { "id": "291963", "name": "지용수" }, { "id": "291965", "name": "차명준" }, { "id": "291966", "name": "차범진" }, { "id": "291967", "name": "차재경" }, { "id": "291968", "name": "차효근" }, { "id": "291969", "name": "채희찬" }, { "id": "291970", "name": "천덕화" }, { "id": "291971", "name": "최동석" }, { "id": "291973", "name": "최범석" }, { "id": "291974", "name": "최성민" }, { "id": "291976", "name": "최승환" }, { "id": "291977", "name": "최쌍용" }, { "id": "291978", "name": "최영진" }, { "id": "291979", "name": "최왕경" }, { "id": "291980", "name": "최원석" }, { "id": "291981", "name": "최유리" }, { "id": "291982", "name": "최은삼" }, { "id": "291983", "name": "최인찬" }, { "id": "291985", "name": "최재명" }, { "id": "291986", "name": "최재웅" }, { "id": "291987", "name": "최정호" }, { "id": "291988", "name": "최정화" }, { "id": "291991", "name": "최준식" }, { "id": "291993", "name": "최현경" }, { "id": "291994", "name": "최현욱" }, { "id": "291995", "name": "최현진" }, { "id": "291997", "name": "하의정" }, { "id": "291998", "name": "한광일" }, { "id": "291999", "name": "한대식" }, { "id": "292001", "name": "한양수" }, { "id": "292002", "name": "한지수" }, { "id": "292003", "name": "허은주" }, { "id": "292005", "name": "허정욱" }, { "id": "292006", "name": "허훈" }, { "id": "292008", "name": "형진우" }, { "id": "292009", "name": "홍관호" }, { "id": "292011", "name": "황병주" }, { "id": "292012", "name": "황상철" }, { "id": "292013", "name": "황성복" }, { "id": "292014", "name": "황은수" }, { "id": "292015", "name": "황진길" }, { "id": "292017", "name": "강봉규" }, { "id": "292018", "name": "강상봉" }, { "id": "292019", "name": "강성균" }, { "id": "292020", "name": "강원철" }, { "id": "292022", "name": "강창용" }, { "id": "292023", "name": "강춘호" }, { "id": "292025", "name": "고윤식" }, { "id": "292027", "name": "고형민" }, { "id": "292029", "name": "권선환" }, { "id": "292030", "name": "권수연" }, { "id": "292031", "name": "권순학" }, { "id": "292032", "name": "김경민" }, { "id": "292033", "name": "김광주" }, { "id": "292034", "name": "김금주" }, { "id": "292035", "name": "김기원" }, { "id": "292036", "name": "김기현" }, { "id": "292037", "name": "김남덕" }, { "id": "292039", "name": "김대근" }, { "id": "292041", "name": "김동건" }, { "id": "292043", "name": "김동영" }, { "id": "292045", "name": "김명섭" }, { "id": "292046", "name": "김명성" }, { "id": "292047", "name": "김민곤" }, { "id": "292048", "name": "김민석" }, { "id": "292049", "name": "김민석" }, { "id": "292050", "name": "김민우" }, { "id": "292051", "name": "김바로" }, { "id": "292052", "name": "김선남" }, { "id": "292054", "name": "김세훈" }, { "id": "292055", "name": "김영" }, { "id": "292056", "name": "김용상" }, { "id": "292057", "name": "김우현" }, { "id": "292058", "name": "김은미" }, { "id": "292059", "name": "김재현" }, { "id": "292060", "name": "김정근" }, { "id": "292062", "name": "김종석" }, { "id": "292063", "name": "김종오" }, { "id": "292064", "name": "김종훈" }, { "id": "292066", "name": "김지웅" }, { "id": "292067", "name": "김진철" }, { "id": "292068", "name": "김진표" }, { "id": "292069", "name": "김철환" }, { "id": "292070", "name": "김태훈" }, { "id": "292071", "name": "김태훈" }, { "id": "292072", "name": "김한중" }, { "id": "292073", "name": "김현실" }, { "id": "292075", "name": "김혜영" }, { "id": "292077", "name": "남궁정" }, { "id": "292078", "name": "노승용" }, { "id": "292079", "name": "노충만" }, { "id": "292080", "name": "도병곤" }, { "id": "292081", "name": "문유환" }, { "id": "292082", "name": "문준섭" }, { "id": "292083", "name": "문창호" }, { "id": "292084", "name": "민방원" }, { "id": "292085", "name": "박경목" }, { "id": "292088", "name": "박규남" }, { "id": "292089", "name": "박기범" }, { "id": "292090", "name": "박동규" }, { "id": "292091", "name": "박동현" }, { "id": "292092", "name": "박민구" }, { "id": "292094", "name": "박성수" }, { "id": "292095", "name": "박세환" }, { "id": "292097", "name": "박원영" }, { "id": "292098", "name": "박윤희" }, { "id": "292099", "name": "박정근" }, { "id": "292101", "name": "박정민" }, { "id": "292102", "name": "박종혁" }, { "id": "292104", "name": "박찬석" }, { "id": "292105", "name": "박천용" }, { "id": "292106", "name": "박철희" }, { "id": "292107", "name": "박태근" }, { "id": "292108", "name": "박태호" }, { "id": "292109", "name": "박효용" }, { "id": "292110", "name": "방재웅" }, { "id": "292111", "name": "방채진" }, { "id": "292112", "name": "배승훈" }, { "id": "292114", "name": "백상근" }, { "id": "292116", "name": "서부건" }, { "id": "292117", "name": "서정아" }, { "id": "292118", "name": "설정석" }, { "id": "292120", "name": "손범수" }, { "id": "292123", "name": "송용훈" }, { "id": "292124", "name": "송종우" }, { "id": "292125", "name": "송종태" }, { "id": "292126", "name": "신길종" }, { "id": "292127", "name": "신선희" }, { "id": "292128", "name": "신영호" }, { "id": "292129", "name": "신종환" }, { "id": "292131", "name": "안민국" }, { "id": "292132", "name": "안장수" }, { "id": "292133", "name": "안희성" }, { "id": "292134", "name": "엄종현" }, { "id": "292135", "name": "염수일" }, { "id": "292137", "name": "염인형" }, { "id": "292138", "name": "오경진" }, { "id": "292139", "name": "오광석" }, { "id": "292140", "name": "오세훈" }, { "id": "292142", "name": "오정훈" }, { "id": "292143", "name": "우기영" }, { "id": "292144", "name": "원우연" }, { "id": "292145", "name": "장민혁" }, { "id": "292146", "name": "유연제" }, { "id": "292147", "name": "유영백" }, { "id": "292148", "name": "유원석" }, { "id": "292150", "name": "육동현" }, { "id": "292151", "name": "윤경찬" }, { "id": "292152", "name": "윤명석" }, { "id": "292154", "name": "윤영진" }, { "id": "292155", "name": "윤지영" }, { "id": "292157", "name": "이경남" }, { "id": "292158", "name": "이도열" }, { "id": "292159", "name": "이기석" }, { "id": "292160", "name": "이꽃님" }, { "id": "292161", "name": "이대국" }, { "id": "292162", "name": "이동찬" }, { "id": "292163", "name": "이동철" }, { "id": "292165", "name": "이병철" }, { "id": "292166", "name": "이석영" }, { "id": "292167", "name": "이성구" }, { "id": "292169", "name": "이영준" }, { "id": "292171", "name": "이예찬" }, { "id": "292173", "name": "이용식" }, { "id": "292175", "name": "이운성" }, { "id": "292177", "name": "이정웅" }, { "id": "292178", "name": "이종민" }, { "id": "292179", "name": "이종범" }, { "id": "292180", "name": "이주용" }, { "id": "292181", "name": "이준순" }, { "id": "292182", "name": "이진모" }, { "id": "292184", "name": "이학용" }, { "id": "292185", "name": "이해원" }, { "id": "292186", "name": "이형기" }, { "id": "292188", "name": "임원균" }, { "id": "292190", "name": "임재민" }, { "id": "292191", "name": "장민제" }, { "id": "292193", "name": "장용호" }, { "id": "292194", "name": "장재혁" }, { "id": "292195", "name": "장지원" }, { "id": "292196", "name": "전동일" }, { "id": "292197", "name": "전명수" }, { "id": "292199", "name": "전종학" }, { "id": "292200", "name": "정길희" }, { "id": "292201", "name": "정동준" }, { "id": "292202", "name": "정미라" }, { "id": "292204", "name": "정승은" }, { "id": "292205", "name": "정연준" }, { "id": "292206", "name": "정영수" }, { "id": "292207", "name": "정재욱" }, { "id": "292208", "name": "정종훈" }, { "id": "292209", "name": "정주호" }, { "id": "292210", "name": "정진우" }, { "id": "292211", "name": "정진호" }, { "id": "292212", "name": "정회용" }, { "id": "292213", "name": "조대현" }, { "id": "292214", "name": "조성윤" }, { "id": "292215", "name": "조재철" }, { "id": "292216", "name": "조정완" }, { "id": "292217", "name": "지상헌" }, { "id": "292218", "name": "진호식" }, { "id": "292219", "name": "차승환" }, { "id": "292221", "name": "최낙영" }, { "id": "292222", "name": "최문창" }, { "id": "292223", "name": "최상일" }, { "id": "292224", "name": "최석환" }, { "id": "292226", "name": "최승혁" }, { "id": "292227", "name": "최영진" }, { "id": "292228", "name": "최외석" }, { "id": "292229", "name": "최원" }, { "id": "292230", "name": "최원영" }, { "id": "292231", "name": "최재훈" }, { "id": "292232", "name": "최종원" }, { "id": "292233", "name": "최진석" }, { "id": "292236", "name": "최한묵" }, { "id": "292237", "name": "편도연" }, { "id": "292239", "name": "한성수" }, { "id": "292240", "name": "한승찬" }, { "id": "292241", "name": "한정섭" }, { "id": "292242", "name": "한해용" }, { "id": "292244", "name": "허석진" }, { "id": "292245", "name": "허원주" }, { "id": "292246", "name": "현두용" }, { "id": "292248", "name": "홍건화" }, { "id": "292249", "name": "홍경근" }, { "id": "292251", "name": "홍우진" }, { "id": "292252", "name": "홍우형" }, { "id": "292253", "name": "황영삼" }, { "id": "292255", "name": "황종암" }, { "id": "292258", "name": "권기만" }, { "id": "292259", "name": "강기훈" }, { "id": "292260", "name": "강동호" }, { "id": "292262", "name": "강봉식" }, { "id": "292263", "name": "강성호" }, { "id": "292265", "name": "강수연" }, { "id": "292266", "name": "강승협" }, { "id": "292267", "name": "강태호" }, { "id": "292268", "name": "고민호" }, { "id": "292269", "name": "고병석" }, { "id": "292270", "name": "고성현" }, { "id": "292272", "name": "고현오" }, { "id": "292273", "name": "공석재" }, { "id": "292275", "name": "권민호" }, { "id": "292276", "name": "권상희" }, { "id": "292277", "name": "권성철" }, { "id": "292278", "name": "권영규" }, { "id": "292279", "name": "금의종" }, { "id": "292280", "name": "김교춘" }, { "id": "292281", "name": "김근현" }, { "id": "292282", "name": "김기동" }, { "id": "292283", "name": "김기수" }, { "id": "292285", "name": "김대우" }, { "id": "292286", "name": "김덕윤" }, { "id": "292287", "name": "김도익" }, { "id": "292288", "name": "김동우" }, { "id": "292289", "name": "김동현" }, { "id": "292291", "name": "김서영" }, { "id": "292294", "name": "김선희" }, { "id": "292295", "name": "김성정" }, { "id": "292296", "name": "김성환" }, { "id": "292297", "name": "김승환" }, { "id": "292298", "name": "김양리" }, { "id": "292299", "name": "김영덕" }, { "id": "292300", "name": "김영욱" }, { "id": "292301", "name": "김영조" }, { "id": "292302", "name": "김은기" }, { "id": "292303", "name": "김장환" }, { "id": "292304", "name": "김정동" }, { "id": "292305", "name": "김정수" }, { "id": "292306", "name": "김정유" }, { "id": "292307", "name": "김정훈" }, { "id": "292308", "name": "김정훈" }, { "id": "292310", "name": "김종성" }, { "id": "292311", "name": "김종욱" }, { "id": "292312", "name": "김태환" }, { "id": "292313", "name": "김태훈" }, { "id": "292315", "name": "김해원" }, { "id": "292316", "name": "김현곤" }, { "id": "292317", "name": "나상두" }, { "id": "292318", "name": "라상준" }, { "id": "292320", "name": "민경택" }, { "id": "292321", "name": "박경배" }, { "id": "292323", "name": "박대흥" }, { "id": "292324", "name": "박만수" }, { "id": "292325", "name": "박민호" }, { "id": "292326", "name": "박상우" }, { "id": "292327", "name": "박성배" }, { "id": "292329", "name": "박승완" }, { "id": "292330", "name": "박영진" }, { "id": "292331", "name": "박용현" }, { "id": "292332", "name": "박인영" }, { "id": "292333", "name": "박일남" }, { "id": "292334", "name": "박재석" }, { "id": "292335", "name": "박종곤" }, { "id": "292336", "name": "박지원" }, { "id": "292337", "name": "박지호" }, { "id": "292338", "name": "박한일" }, { "id": "292339", "name": "배성운" }, { "id": "292340", "name": "변홍만" }, { "id": "292341", "name": "서영찬" }, { "id": "292343", "name": "손유정" }, { "id": "292344", "name": "송명지" }, { "id": "292346", "name": "송윤정" }, { "id": "292347", "name": "송한상" }, { "id": "292348", "name": "신대희" }, { "id": "292349", "name": "신성호" }, { "id": "292350", "name": "신재호" }, { "id": "292351", "name": "신지운" }, { "id": "292352", "name": "신승호" }, { "id": "292353", "name": "안병인" }, { "id": "292354", "name": "안성찬" }, { "id": "292356", "name": "안승국" }, { "id": "292357", "name": "양원덕" }, { "id": "292358", "name": "양진호" }, { "id": "292360", "name": "오건세" }, { "id": "292361", "name": "오경환" }, { "id": "292362", "name": "오윤정" }, { "id": "292363", "name": "오정운" }, { "id": "292364", "name": "오충환" }, { "id": "292365", "name": "오학섭" }, { "id": "292366", "name": "원유라" }, { "id": "292367", "name": "원현식" }, { "id": "292368", "name": "유성훈" }, { "id": "292370", "name": "유인수" }, { "id": "292371", "name": "유현진" }, { "id": "292372", "name": "윤경현" }, { "id": "292373", "name": "윤동훈" }, { "id": "292374", "name": "윤동희" }, { "id": "292375", "name": "윤양석" }, { "id": "292376", "name": "윤영석" }, { "id": "292377", "name": "이광규" }, { "id": "292378", "name": "이귀희" }, { "id": "292379", "name": "이규상" }, { "id": "292380", "name": "이동민" }, { "id": "292381", "name": "이동수" }, { "id": "292383", "name": "이상규" }, { "id": "292384", "name": "이상연" }, { "id": "292385", "name": "이상원" }, { "id": "292386", "name": "이상현" }, { "id": "292387", "name": "이성모" }, { "id": "292388", "name": "이승원" }, { "id": "292389", "name": "이완규" }, { "id": "292390", "name": "이용식" }, { "id": "292392", "name": "이은재" }, { "id": "292393", "name": "이은희" }, { "id": "292394", "name": "이이주" }, { "id": "292395", "name": "이인혁" }, { "id": "292396", "name": "이재원" }, { "id": "292397", "name": "이정연" }, { "id": "292399", "name": "이준성" }, { "id": "292401", "name": "이진호" }, { "id": "292403", "name": "이창호" }, { "id": "292404", "name": "이형섭" }, { "id": "292405", "name": "이호주" }, { "id": "292406", "name": "이희연" }, { "id": "292407", "name": "임성민" }, { "id": "292408", "name": "임용진" }, { "id": "292410", "name": "장덕진" }, { "id": "292413", "name": "장영수" }, { "id": "292416", "name": "장해영" }, { "id": "292417", "name": "장현경" }, { "id": "292419", "name": "정란미" }, { "id": "292421", "name": "정승용" }, { "id": "292422", "name": "정원규" }, { "id": "292423", "name": "정의경" }, { "id": "292424", "name": "정의택" }, { "id": "292425", "name": "정의혁" }, { "id": "292426", "name": "정정래" }, { "id": "292427", "name": "정찬기" }, { "id": "292429", "name": "조성오" }, { "id": "292431", "name": "조영락" }, { "id": "292432", "name": "조원성" }, { "id": "292433", "name": "주성우" }, { "id": "292434", "name": "진현진" }, { "id": "292435", "name": "차동욱" }, { "id": "292436", "name": "차범석" }, { "id": "292437", "name": "최광선" }, { "id": "292438", "name": "최광영" }, { "id": "292439", "name": "최규목" }, { "id": "292440", "name": "최성식" }, { "id": "292441", "name": "최영락" }, { "id": "292443", "name": "최재희" }, { "id": "292444", "name": "최진우" }, { "id": "292445", "name": "최철민" }, { "id": "292447", "name": "탁창균" }, { "id": "292448", "name": "편광식" }, { "id": "292449", "name": "편지훈" }, { "id": "292451", "name": "한석규" }, { "id": "292453", "name": "허영일" }, { "id": "292454", "name": "허진명" }, { "id": "292455", "name": "현상진" }, { "id": "292456", "name": "홍용화" }, { "id": "292457", "name": "홍준영" }, { "id": "292458", "name": "홍지수" }, { "id": "292459", "name": "홍희택" }, { "id": "292462", "name": "강상민" }, { "id": "292463", "name": "고종수" }, { "id": "292464", "name": "권혁" }, { "id": "292465", "name": "김귀한" }, { "id": "292466", "name": "김기승" }, { "id": "292468", "name": "김만겸" }, { "id": "292469", "name": "김명귀" }, { "id": "292470", "name": "김문중" }, { "id": "292471", "name": "김민국" }, { "id": "292472", "name": "김민규" }, { "id": "292473", "name": "김민수" }, { "id": "292475", "name": "김범준" }, { "id": "292476", "name": "김범호" }, { "id": "292477", "name": "김봉수" }, { "id": "292478", "name": "김상우" }, { "id": "292479", "name": "김성용" }, { "id": "292480", "name": "김영길" }, { "id": "292481", "name": "김영민" }, { "id": "292482", "name": "김영석" }, { "id": "292483", "name": "김영임" }, { "id": "292484", "name": "김영준" }, { "id": "292485", "name": "김용호" }, { "id": "292486", "name": "김원국" }, { "id": "292487", "name": "김윤수" }, { "id": "292488", "name": "김은중" }, { "id": "292489", "name": "김정섭" }, { "id": "292490", "name": "김정섭" }, { "id": "292491", "name": "김정원" }, { "id": "292492", "name": "김정호" }, { "id": "292493", "name": "김종두" }, { "id": "292494", "name": "김종윤" }, { "id": "292495", "name": "김준용" }, { "id": "292496", "name": "김준휘" }, { "id": "292498", "name": "김창일" }, { "id": "292499", "name": "김철호" }, { "id": "292500", "name": "김태민" }, { "id": "292501", "name": "김형조" }, { "id": "292503", "name": "나민영" }, { "id": "292505", "name": "류혜경" }, { "id": "292506", "name": "박규원" }, { "id": "292507", "name": "박성기" }, { "id": "292508", "name": "박연성" }, { "id": "292509", "name": "박윤환" }, { "id": "292510", "name": "박은찬" }, { "id": "292512", "name": "박장호" }, { "id": "292513", "name": "박재홍" }, { "id": "292514", "name": "박준태" }, { "id": "292515", "name": "박태유" }, { "id": "292516", "name": "박형호" }, { "id": "292518", "name": "박회국" }, { "id": "292520", "name": "방재운" }, { "id": "292521", "name": "백상근" }, { "id": "292522", "name": "변용철" }, { "id": "292523", "name": "복두영" }, { "id": "292526", "name": "서재윤" }, { "id": "292527", "name": "서형용" }, { "id": "292528", "name": "성노섭" }, { "id": "292529", "name": "성민영" }, { "id": "292530", "name": "손영섭" }, { "id": "292531", "name": "손형주" }, { "id": "292533", "name": "시은철" }, { "id": "292536", "name": "심현성" }, { "id": "292537", "name": "안인규" }, { "id": "292538", "name": "안정윤" }, { "id": "292540", "name": "양희성" }, { "id": "292542", "name": "엄성진" }, { "id": "292543", "name": "오금택" }, { "id": "292544", "name": "오성균" }, { "id": "292545", "name": "오세열" }, { "id": "292546", "name": "오승준" }, { "id": "292547", "name": "오승현" }, { "id": "292549", "name": "우진엽" }, { "id": "292550", "name": "위성원" }, { "id": "292551", "name": "유창민" }, { "id": "292552", "name": "윤명하" }, { "id": "292553", "name": "윤성훈" }, { "id": "292554", "name": "윤종화" }, { "id": "292555", "name": "윤지영" }, { "id": "292556", "name": "이경훈" }, { "id": "292557", "name": "이기원" }, { "id": "292559", "name": "이명재" }, { "id": "292561", "name": "이병헌" }, { "id": "292562", "name": "이상협" }, { "id": "292563", "name": "이상화" }, { "id": "292564", "name": "이성문" }, { "id": "292565", "name": "이세진" }, { "id": "292566", "name": "이영국" }, { "id": "292568", "name": "이은경" }, { "id": "292570", "name": "이재훈" }, { "id": "292571", "name": "이정호" }, { "id": "292572", "name": "이종관" }, { "id": "292573", "name": "이중권" }, { "id": "292574", "name": "이창세" }, { "id": "292575", "name": "이창원" }, { "id": "292577", "name": "이철호" }, { "id": "292579", "name": "이춘훈" }, { "id": "292580", "name": "이충열" }, { "id": "292581", "name": "이호" }, { "id": "292583", "name": "임대수" }, { "id": "292584", "name": "임정수" }, { "id": "292585", "name": "임정택" }, { "id": "292586", "name": "장석민" }, { "id": "292587", "name": "장성종" }, { "id": "292588", "name": "장우성" }, { "id": "292589", "name": "장준동" }, { "id": "292591", "name": "전우민" }, { "id": "292592", "name": "전창훈" }, { "id": "292593", "name": "정경진" }, { "id": "292594", "name": "정수흠" }, { "id": "292595", "name": "정정화" }, { "id": "292596", "name": "정지명" }, { "id": "292597", "name": "정혜림" }, { "id": "292598", "name": "조경민" }, { "id": "292599", "name": "조령은" }, { "id": "292600", "name": "조준희" }, { "id": "292601", "name": "조형진" }, { "id": "292602", "name": "조혜경" }, { "id": "292603", "name": "주낙규" }, { "id": "292604", "name": "차정민" }, { "id": "292605", "name": "차진희" }, { "id": "292606", "name": "천남근" }, { "id": "292607", "name": "천성재" }, { "id": "292608", "name": "최봉진" }, { "id": "292609", "name": "최성현" }, { "id": "292610", "name": "최신용" }, { "id": "292611", "name": "최유림" }, { "id": "292612", "name": "최종근" }, { "id": "292613", "name": "최종운" }, { "id": "292614", "name": "하태민" }, { "id": "292615", "name": "한정우" }, { "id": "292616", "name": "한용철" }, { "id": "292618", "name": "한태광" }, { "id": "292619", "name": "함대균" }, { "id": "292620", "name": "허유진" }, { "id": "292621", "name": "허훈" }, { "id": "292622", "name": "홍경주" }, { "id": "292623", "name": "황재식" }, { "id": "292624", "name": "황지영" }, { "id": "292625", "name": "황형준" }, { "id": "292626", "name": "황혜미" }, { "id": "292627", "name": "윤동환" }, { "id": "292628", "name": "강명훈" }, { "id": "292629", "name": "강범종" }, { "id": "292630", "name": "강재환" }, { "id": "292631", "name": "경범수" }, { "id": "292633", "name": "고용현" }, { "id": "292634", "name": "고은규" }, { "id": "292635", "name": "구충모" }, { "id": "292636", "name": "권재열" }, { "id": "292637", "name": "권효정" }, { "id": "292638", "name": "김경수" }, { "id": "292639", "name": "김경우" }, { "id": "292640", "name": "김경환" }, { "id": "292641", "name": "김근택" }, { "id": "292644", "name": "김도균" }, { "id": "292645", "name": "김동유" }, { "id": "292646", "name": "김동진" }, { "id": "292648", "name": "김명훈" }, { "id": "292649", "name": "김민용" }, { "id": "292650", "name": "김보성" }, { "id": "292651", "name": "김성규" }, { "id": "292652", "name": "김성환" }, { "id": "292653", "name": "김영민" }, { "id": "292654", "name": "김영주" }, { "id": "292655", "name": "김완식" }, { "id": "292656", "name": "김원기" }, { "id": "292657", "name": "김은경" }, { "id": "292658", "name": "김임현" }, { "id": "292659", "name": "김재흥" }, { "id": "292660", "name": "김정민" }, { "id": "292661", "name": "김정홍" }, { "id": "292664", "name": "김지헌" }, { "id": "292665", "name": "김진범" }, { "id": "292668", "name": "김현승" }, { "id": "292670", "name": "김호량" }, { "id": "292671", "name": "김효림" }, { "id": "292672", "name": "김훈진" }, { "id": "292673", "name": "김희국" }, { "id": "292674", "name": "김희준" }, { "id": "292675", "name": "노종규" }, { "id": "292676", "name": "류광열" }, { "id": "292677", "name": "류리" }, { "id": "292678", "name": "류상진" }, { "id": "292679", "name": "류승완" }, { "id": "292680", "name": "문동재" }, { "id": "292681", "name": "문민우" }, { "id": "292682", "name": "문여성" }, { "id": "292685", "name": "박수용" }, { "id": "292686", "name": "박승록" }, { "id": "292687", "name": "박용서" }, { "id": "292688", "name": "박우선" }, { "id": "292689", "name": "박은하" }, { "id": "292690", "name": "박일순" }, { "id": "292691", "name": "박재홍" }, { "id": "292692", "name": "박정미" }, { "id": "292693", "name": "박종범" }, { "id": "292694", "name": "박중하" }, { "id": "292695", "name": "방태원" }, { "id": "292696", "name": "배종현" }, { "id": "292697", "name": "배지현" }, { "id": "292699", "name": "서연진" }, { "id": "292700", "name": "서정철" }, { "id": "292701", "name": "성명모" }, { "id": "292702", "name": "손성훈" }, { "id": "292703", "name": "송용선" }, { "id": "292704", "name": "송용운" }, { "id": "292705", "name": "송우섭" }, { "id": "292706", "name": "신상철" }, { "id": "292707", "name": "신행철" }, { "id": "292709", "name": "이재민" }, { "id": "292711", "name": "엄영섭" }, { "id": "292715", "name": "오대해" }, { "id": "292716", "name": "오인섭" }, { "id": "292717", "name": "오태용" }, { "id": "292718", "name": "위진웅" }, { "id": "292719", "name": "유병덕" }, { "id": "292720", "name": "유상종" }, { "id": "292721", "name": "유신동" }, { "id": "292723", "name": "윤민섭" }, { "id": "292724", "name": "윤태영" }, { "id": "292725", "name": "이건명" }, { "id": "292726", "name": "이경태" }, { "id": "292727", "name": "이범기" }, { "id": "292728", "name": "이봉용" }, { "id": "292729", "name": "이상길" }, { "id": "292731", "name": "이성옥" }, { "id": "292732", "name": "이성주" }, { "id": "292733", "name": "이승철" }, { "id": "292734", "name": "이승호" }, { "id": "292737", "name": "이영호" }, { "id": "292738", "name": "이유진" }, { "id": "292741", "name": "이종덕" }, { "id": "292743", "name": "이중현" }, { "id": "292745", "name": "이충효" }, { "id": "292746", "name": "이태우" }, { "id": "292747", "name": "이태현" }, { "id": "292748", "name": "이헌정" }, { "id": "292749", "name": "이형남" }, { "id": "292751", "name": "임동훈" }, { "id": "292752", "name": "임성호" }, { "id": "292754", "name": "임종문" }, { "id": "292755", "name": "장성희" }, { "id": "292756", "name": "장수경" }, { "id": "292758", "name": "장인섭" }, { "id": "292759", "name": "장인철" }, { "id": "292760", "name": "전문환" }, { "id": "292761", "name": "정명환" }, { "id": "292762", "name": "정상한" }, { "id": "292763", "name": "정성규" }, { "id": "292764", "name": "정영덕" }, { "id": "292767", "name": "정인교" }, { "id": "292768", "name": "정정훈" }, { "id": "292769", "name": "정종환" }, { "id": "292770", "name": "정진우" }, { "id": "292771", "name": "정태서" }, { "id": "292772", "name": "정한수" }, { "id": "292773", "name": "정현진" }, { "id": "292774", "name": "정호영" }, { "id": "292778", "name": "조문창" }, { "id": "292779", "name": "조선행" }, { "id": "292780", "name": "조순범" }, { "id": "292781", "name": "조정현" }, { "id": "292782", "name": "조훈희" }, { "id": "292783", "name": "주준환" }, { "id": "292784", "name": "진민용" }, { "id": "292786", "name": "차장훈" }, { "id": "292788", "name": "최덕진" }, { "id": "292790", "name": "최승근" }, { "id": "292792", "name": "최인수" }, { "id": "292793", "name": "최정우" }, { "id": "292796", "name": "최진국" }, { "id": "292798", "name": "하기철" }, { "id": "292799", "name": "하종구" }, { "id": "292801", "name": "한원상" }, { "id": "292802", "name": "허준행" }, { "id": "292803", "name": "허진석" }, { "id": "292804", "name": "현석민" }, { "id": "292806", "name": "홍순호" }, { "id": "292808", "name": "홍종기" }, { "id": "292809", "name": "홍지희" }, { "id": "292811", "name": "황인수" }, { "id": "292812", "name": "황인엽" }, { "id": "292814", "name": "박용범" }, { "id": "292815", "name": "유동균" }, { "id": "292816", "name": "조용성" }, { "id": "292818", "name": "강정훈" }, { "id": "292819", "name": "강준수" }, { "id": "292820", "name": "고성호" }, { "id": "292821", "name": "곽성환" }, { "id": "292822", "name": "권현욱" }, { "id": "292823", "name": "김덕환" }, { "id": "292826", "name": "김상래" }, { "id": "292827", "name": "김선주" }, { "id": "292829", "name": "김송학" }, { "id": "292830", "name": "김승관" }, { "id": "292831", "name": "김승훈" }, { "id": "292833", "name": "김진현" }, { "id": "292834", "name": "김진환" }, { "id": "292835", "name": "류근창" }, { "id": "292836", "name": "박상원" }, { "id": "292837", "name": "박상호" }, { "id": "292838", "name": "박재승" }, { "id": "292840", "name": "박종두" }, { "id": "292842", "name": "송정호" }, { "id": "292843", "name": "양광복" }, { "id": "292844", "name": "이강수" }, { "id": "292845", "name": "이경호" }, { "id": "292846", "name": "이기태" }, { "id": "292847", "name": "이동복" }, { "id": "292848", "name": "이민호" }, { "id": "292849", "name": "이상민" }, { "id": "292851", "name": "이영원" }, { "id": "292853", "name": "임천묵" }, { "id": "292854", "name": "장준호" }, { "id": "292856", "name": "전승우" }, { "id": "292857", "name": "정양순" }, { "id": "292858", "name": "정은지" }, { "id": "292859", "name": "정의각" }, { "id": "292860", "name": "정재혁" }, { "id": "292862", "name": "차종완" }, { "id": "292863", "name": "채규철" }, { "id": "292864", "name": "최나희" }, { "id": "292865", "name": "최우병" }, { "id": "292866", "name": "한희범" }, { "id": "292867", "name": "함은숙" }, { "id": "292869", "name": "장수미" }, { "id": "292870", "name": "윤영배" }, { "id": "292872", "name": "손허준" }, { "id": "292873", "name": "박형준" }, { "id": "292874", "name": "이상용" }, { "id": "292875", "name": "이새벽" }, { "id": "292876", "name": "강민주" }, { "id": "292877", "name": "강현수" }, { "id": "292878", "name": "권영필" }, { "id": "292879", "name": "김선화" }, { "id": "292880", "name": "김용훈" }, { "id": "292881", "name": "김정윤" }, { "id": "292882", "name": "김종규" }, { "id": "292883", "name": "김태길" }, { "id": "292884", "name": "문지환" }, { "id": "292885", "name": "박광욱" }, { "id": "292886", "name": "박정순" }, { "id": "292887", "name": "박진수" }, { "id": "292888", "name": "배기철" }, { "id": "292889", "name": "배효식" }, { "id": "292890", "name": "안정태" }, { "id": "292891", "name": "유영숙" }, { "id": "292892", "name": "윤현진" }, { "id": "292893", "name": "이동녕" }, { "id": "292894", "name": "이석훈" }, { "id": "292895", "name": "이진철" }, { "id": "292897", "name": "이희백" }, { "id": "292898", "name": "장동업" }, { "id": "292899", "name": "전재영" }, { "id": "292900", "name": "정곤채" }, { "id": "292901", "name": "정병조" }, { "id": "292902", "name": "정의경" }, { "id": "292903", "name": "정진오" }, { "id": "292904", "name": "천지현" }, { "id": "292905", "name": "최낙구" }, { "id": "292909", "name": "공희연" }, { "id": "292910", "name": "박주영" }, { "id": "292911", "name": "신임옥" }, { "id": "292912", "name": "신효민" }, { "id": "292913", "name": "유현종" }, { "id": "292914", "name": "허윤석" }, { "id": "292916", "name": "김병수" }, { "id": "292917", "name": "양우식" }, { "id": "292918", "name": "윤재원" }, { "id": "292919", "name": "이성태" }, { "id": "292920", "name": "이영우" }, { "id": "292921", "name": "이인환" }, { "id": "292923", "name": "천용한" }, { "id": "292928", "name": "김민석" }, { "id": "292932", "name": "김호중" }, { "id": "292933", "name": "박형기" }, { "id": "292934", "name": "성민혁" }, { "id": "292936", "name": "윤선웅" }, { "id": "292937", "name": "이덕만" }, { "id": "292938", "name": "이선일" }, { "id": "292939", "name": "임병천" }, { "id": "292940", "name": "최원석" }, { "id": "292941", "name": "최호영" }, { "id": "292942", "name": "한민호" }, { "id": "292943", "name": "강복진" }, { "id": "292947", "name": "김성진" }, { "id": "292949", "name": "김영배" }, { "id": "292950", "name": "김영택" }, { "id": "292951", "name": "김웅식" }, { "id": "292952", "name": "김일곤" }, { "id": "292953", "name": "김준완" }, { "id": "292954", "name": "김태한" }, { "id": "292956", "name": "라하영" }, { "id": "292957", "name": "문종민" }, { "id": "292958", "name": "박영훈" }, { "id": "292959", "name": "박재성" }, { "id": "292960", "name": "박홍식" }, { "id": "292961", "name": "소영호" }, { "id": "292962", "name": "신서열" }, { "id": "292963", "name": "안성환" }, { "id": "292964", "name": "안혜성" }, { "id": "292965", "name": "양동남" }, { "id": "292966", "name": "양준혁" }, { "id": "292968", "name": "윤장수" }, { "id": "292969", "name": "이봉현" }, { "id": "292971", "name": "이정민" }, { "id": "292973", "name": "장지호" }, { "id": "292974", "name": "전세경" }, { "id": "292975", "name": "정성공" }, { "id": "292976", "name": "정재욱" }, { "id": "292977", "name": "조재익" }, { "id": "292978", "name": "조철운" }, { "id": "292980", "name": "최경집" }, { "id": "292982", "name": "한기창" }, { "id": "292983", "name": "곽재열" }, { "id": "292984", "name": "김민" }, { "id": "292985", "name": "김병준" }, { "id": "292986", "name": "김영우" }, { "id": "292987", "name": "노승준" }, { "id": "292989", "name": "배준환" }, { "id": "292990", "name": "변정섭" }, { "id": "292991", "name": "신명호" }, { "id": "292993", "name": "여민길" }, { "id": "292994", "name": "우길훈" }, { "id": "292995", "name": "음봉진" }, { "id": "292996", "name": "이귀현" }, { "id": "292997", "name": "이기춘" }, { "id": "292999", "name": "김건두" }, { "id": "293000", "name": "김기민" }, { "id": "293002", "name": "김형준" }, { "id": "293005", "name": "박승규" }, { "id": "293006", "name": "서영식" }, { "id": "293007", "name": "이지부" }, { "id": "293008", "name": "정재만" }, { "id": "293009", "name": "최영덕" }, { "id": "293011", "name": "최정헌" }, { "id": "293012", "name": "김천홍" }, { "id": "293013", "name": "장세문" }, { "id": "293014", "name": "황준형" }, { "id": "293015", "name": "김동훈" }, { "id": "293016", "name": "김정훈" }, { "id": "293017", "name": "남건우" }, { "id": "293018", "name": "오경민" }, { "id": "293019", "name": "정태준" }, { "id": "293020", "name": "권기운" }, { "id": "293021", "name": "김건우" }, { "id": "293022", "name": "김민정" }, { "id": "293023", "name": "김영훈" }, { "id": "293024", "name": "김옥주" }, { "id": "293025", "name": "김재광" }, { "id": "293026", "name": "김형열" }, { "id": "293028", "name": "손임정" }, { "id": "293030", "name": "이종범" }, { "id": "293031", "name": "장재선" }, { "id": "293033", "name": "조태양" }, { "id": "293034", "name": "조화영" }, { "id": "293035", "name": "최현" }, { "id": "293036", "name": "한성민" }, { "id": "293037", "name": "홍보영" }, { "id": "293038", "name": "황숙향" }, { "id": "293041", "name": "김옥성" }, { "id": "293042", "name": "양태진" }, { "id": "293043", "name": "이경훈" }, { "id": "293044", "name": "정유석" }, { "id": "293045", "name": "김석호" }, { "id": "293046", "name": "김운용" }, { "id": "293049", "name": "백승묵" }, { "id": "293050", "name": "양진남" }, { "id": "293051", "name": "양희원" }, { "id": "293052", "name": "엄영민" }, { "id": "293056", "name": "김용택" }, { "id": "293057", "name": "김우민" }, { "id": "293061", "name": "박성빈" }, { "id": "293062", "name": "박양욱" }, { "id": "293064", "name": "박태열" }, { "id": "293065", "name": "안순섭" }, { "id": "293066", "name": "안영호" }, { "id": "293067", "name": "안홍기" }, { "id": "293071", "name": "정필완" }, { "id": "293072", "name": "최승범" }, { "id": "293073", "name": "최종철" }, { "id": "293076", "name": "강태중" }, { "id": "293077", "name": "고웅진" }, { "id": "293078", "name": "김경수" }, { "id": "293080", "name": "김병국" }, { "id": "293081", "name": "김병현" }, { "id": "293082", "name": "김상근" }, { "id": "293083", "name": "김선광" }, { "id": "293084", "name": "김수" }, { "id": "293085", "name": "김영광" }, { "id": "293086", "name": "김용환" }, { "id": "293089", "name": "박구석" }, { "id": "293090", "name": "박종서" }, { "id": "293091", "name": "박지호" }, { "id": "293092", "name": "박찬영" }, { "id": "293095", "name": "송영호" }, { "id": "293096", "name": "안세환" }, { "id": "293097", "name": "안현성" }, { "id": "293098", "name": "안희승" }, { "id": "293099", "name": "염성민" }, { "id": "293100", "name": "오영민" }, { "id": "293101", "name": "오영수" }, { "id": "293103", "name": "유경철" }, { "id": "293104", "name": "유상수" }, { "id": "293107", "name": "이진우" }, { "id": "293111", "name": "정창일" }, { "id": "293112", "name": "정현호" }, { "id": "293114", "name": "최병규" }, { "id": "293117", "name": "홍동우" }, { "id": "293121", "name": "김맹엽" }, { "id": "293122", "name": "김세원" }, { "id": "293123", "name": "김완식" }, { "id": "293124", "name": "민경민" }, { "id": "293125", "name": "박성동" }, { "id": "293126", "name": "서동기" }, { "id": "293127", "name": "서동빈" }, { "id": "293128", "name": "서인선" }, { "id": "293129", "name": "신재욱" }, { "id": "293130", "name": "안준현" }, { "id": "293132", "name": "윤세영" }, { "id": "293133", "name": "윤정현" }, { "id": "293135", "name": "이윤봉" }, { "id": "293136", "name": "이정훈" }, { "id": "293137", "name": "진태영" }, { "id": "293138", "name": "채재득" }, { "id": "293139", "name": "천용준" }, { "id": "293140", "name": "최덕천" }, { "id": "293142", "name": "황도연" }, { "id": "293148", "name": "황상희" }, { "id": "293149", "name": "김병진" }, { "id": "293151", "name": "김영재" }, { "id": "293152", "name": "김재현" }, { "id": "293154", "name": "윤영욱" }, { "id": "293157", "name": "강임묵" }, { "id": "293159", "name": "김원호" }, { "id": "293160", "name": "양석철" }, { "id": "293162", "name": "최락정" }, { "id": "293163", "name": "김계수" }, { "id": "293164", "name": "이동희" }, { "id": "293165", "name": "장경율" }, { "id": "293166", "name": "한국남" }, { "id": "293167", "name": "공지훈" }, { "id": "293168", "name": "김경한" }, { "id": "293170", "name": "김민주" }, { "id": "293171", "name": "김양원" }, { "id": "293172", "name": "김지영" }, { "id": "293174", "name": "김태훈" }, { "id": "293175", "name": "노재철" }, { "id": "293177", "name": "신동영" }, { "id": "293178", "name": "양재혁" }, { "id": "293179", "name": "오용탁" }, { "id": "293180", "name": "오치남" }, { "id": "293181", "name": "윤혜수" }, { "id": "293182", "name": "이병호" }, { "id": "293183", "name": "이은춘" }, { "id": "293184", "name": "임성란" }, { "id": "293185", "name": "임용래" }, { "id": "293186", "name": "최병철" }, { "id": "293187", "name": "한태희" }, { "id": "293188", "name": "함우식" }, { "id": "293189", "name": "허승" }, { "id": "293190", "name": "홍석춘" }, { "id": "293191", "name": "황슬아" }, { "id": "293192", "name": "방승미" }, { "id": "293193", "name": "견대호" }, { "id": "293194", "name": "김은영" }, { "id": "293195", "name": "이창훈" }, { "id": "293196", "name": "이호준" }, { "id": "293197", "name": "홍성범" }, { "id": "293198", "name": "김경민" }, { "id": "293199", "name": "김선호" }, { "id": "293200", "name": "김정철" }, { "id": "293202", "name": "김지수" }, { "id": "293203", "name": "김태식" }, { "id": "293204", "name": "김태현" }, { "id": "293205", "name": "박창배" }, { "id": "293206", "name": "신혁" }, { "id": "293207", "name": "이기곤" }, { "id": "293208", "name": "이정행" }, { "id": "293210", "name": "강신성" }, { "id": "293212", "name": "김봉규" }, { "id": "293213", "name": "김승수" }, { "id": "293216", "name": "김정수" }, { "id": "293217", "name": "김종훈" }, { "id": "293220", "name": "박건욱" }, { "id": "293221", "name": "박성훈" }, { "id": "293222", "name": "서정호" }, { "id": "293223", "name": "오염준" }, { "id": "293224", "name": "유병인" }, { "id": "293229", "name": "정세영" }, { "id": "293230", "name": "조원호" }, { "id": "293231", "name": "최우영" }, { "id": "293232", "name": "홍종운" }, { "id": "293233", "name": "고재경" }, { "id": "293234", "name": "고진현" }, { "id": "293235", "name": "권문고" }, { "id": "293236", "name": "김광진" }, { "id": "293237", "name": "김기필" }, { "id": "293238", "name": "김동성" }, { "id": "293239", "name": "김동식" }, { "id": "293240", "name": "김상호" }, { "id": "293241", "name": "김순천" }, { "id": "293244", "name": "김준겸" }, { "id": "293245", "name": "박종삼" }, { "id": "293246", "name": "박한별" }, { "id": "293247", "name": "백재욱" }, { "id": "293248", "name": "백현준" }, { "id": "293250", "name": "서정민" }, { "id": "293251", "name": "송혜근" }, { "id": "293252", "name": "신현부" }, { "id": "293253", "name": "염광성" }, { "id": "293254", "name": "윤경문" }, { "id": "293255", "name": "이상철" }, { "id": "293257", "name": "이승규" }, { "id": "293258", "name": "이철승" }, { "id": "293260", "name": "장헌제" }, { "id": "293261", "name": "정경모" }, { "id": "293262", "name": "정지성" }, { "id": "293264", "name": "조성림" }, { "id": "293266", "name": "한관수" }, { "id": "293267", "name": "한필수" }, { "id": "293268", "name": "황기환" }, { "id": "293271", "name": "김상훈" }, { "id": "293273", "name": "김영일" }, { "id": "293274", "name": "김용태" }, { "id": "293277", "name": "김혁" }, { "id": "293278", "name": "박상수" }, { "id": "293280", "name": "박홍록" }, { "id": "293281", "name": "배재기" }, { "id": "293282", "name": "서우경" }, { "id": "293284", "name": "안기철" }, { "id": "293285", "name": "이용선" }, { "id": "293286", "name": "이재헌" }, { "id": "293287", "name": "정진우" }, { "id": "293290", "name": "최광호" }, { "id": "293291", "name": "최동일" }, { "id": "293292", "name": "최일봉" }, { "id": "293293", "name": "최진석" }, { "id": "293295", "name": "김승진" }, { "id": "293299", "name": "손문선" }, { "id": "293302", "name": "이동한" }, { "id": "293304", "name": "이정순" }, { "id": "293305", "name": "차정식" }, { "id": "293306", "name": "차준택" }, { "id": "293307", "name": "최민우" }, { "id": "293308", "name": "최영효" }, { "id": "293311", "name": "이태환" }, { "id": "293312", "name": "정승일" }, { "id": "293313", "name": "정철주" }, { "id": "293314", "name": "조상욱" }, { "id": "293316", "name": "고용필" }, { "id": "293317", "name": "강명국" }, { "id": "293318", "name": "구희진" }, { "id": "293319", "name": "권영복" }, { "id": "293321", "name": "김수현" }, { "id": "293322", "name": "김재현" }, { "id": "293323", "name": "김창배" }, { "id": "293324", "name": "나승우" }, { "id": "293326", "name": "박민철" }, { "id": "293327", "name": "박은태" }, { "id": "293328", "name": "백광호" }, { "id": "293330", "name": "서동교" }, { "id": "293331", "name": "서동순" }, { "id": "293332", "name": "서우진" }, { "id": "293333", "name": "서형만" }, { "id": "293334", "name": "오충희" }, { "id": "293336", "name": "이세희" }, { "id": "293337", "name": "이수임" }, { "id": "293338", "name": "이순옥" }, { "id": "293340", "name": "임기조" }, { "id": "293341", "name": "임철민" }, { "id": "293342", "name": "장영숙" }, { "id": "293343", "name": "장종근" }, { "id": "293344", "name": "전은주" }, { "id": "293345", "name": "정동화" }, { "id": "293346", "name": "정승태" }, { "id": "293347", "name": "정해일" }, { "id": "293348", "name": "조용욱" }, { "id": "293349", "name": "채수영" }, { "id": "293351", "name": "김영균" }, { "id": "293352", "name": "김정현" }, { "id": "293353", "name": "김태수" }, { "id": "293355", "name": "서선옥" }, { "id": "293356", "name": "이인묵" }, { "id": "293357", "name": "이재환" }, { "id": "293359", "name": "정종식" }, { "id": "293361", "name": "강장식" }, { "id": "293362", "name": "고상덕" }, { "id": "293363", "name": "김기원" }, { "id": "293364", "name": "김대곤" }, { "id": "293365", "name": "김동욱" }, { "id": "293366", "name": "김명렬" }, { "id": "293368", "name": "김성욱" }, { "id": "293369", "name": "나홍식" }, { "id": "293370", "name": "송석상" }, { "id": "293371", "name": "윤정원" }, { "id": "293372", "name": "이상열" }, { "id": "293373", "name": "이상우" }, { "id": "293375", "name": "김도형" }, { "id": "293377", "name": "김승용" }, { "id": "293381", "name": "유성" }, { "id": "293383", "name": "이명구" }, { "id": "293385", "name": "이진만" }, { "id": "293388", "name": "정승운" }, { "id": "293389", "name": "차경윤" }, { "id": "293390", "name": "하태욱" }, { "id": "293391", "name": "홍희진" }, { "id": "293392", "name": "황도원" }, { "id": "293393", "name": "강주일" }, { "id": "293394", "name": "권순일" }, { "id": "293395", "name": "김성택" }, { "id": "293396", "name": "김우용" }, { "id": "293397", "name": "김우일" }, { "id": "293398", "name": "김인석" }, { "id": "293399", "name": "김인태" }, { "id": "293401", "name": "김칠성" }, { "id": "293402", "name": "김태원" }, { "id": "293405", "name": "노영태" }, { "id": "293406", "name": "문병석" }, { "id": "293409", "name": "박성홍" }, { "id": "293410", "name": "박영삼" }, { "id": "293414", "name": "신경길" }, { "id": "293415", "name": "신상인" }, { "id": "293417", "name": "신진선" }, { "id": "293418", "name": "오창현" }, { "id": "293419", "name": "유택" }, { "id": "293421", "name": "윤성민" }, { "id": "293422", "name": "이명재" }, { "id": "293424", "name": "이상목" }, { "id": "293425", "name": "이종영" }, { "id": "293429", "name": "정영준" }, { "id": "293430", "name": "조축환" }, { "id": "293431", "name": "조현문" }, { "id": "293432", "name": "조홍제" }, { "id": "293433", "name": "최광민" }, { "id": "293434", "name": "최병환" }, { "id": "293438", "name": "최해봉" }, { "id": "293439", "name": "한광연" }, { "id": "293440", "name": "한병화" }, { "id": "293441", "name": "허종걸" }, { "id": "293442", "name": "허주영" }, { "id": "293443", "name": "황길수" }, { "id": "293445", "name": "김민수" }, { "id": "293448", "name": "김응석" }, { "id": "293450", "name": "김호영" }, { "id": "293451", "name": "김호용" }, { "id": "293452", "name": "박성길" }, { "id": "293453", "name": "변지환" }, { "id": "293454", "name": "안중선" }, { "id": "293455", "name": "안현" }, { "id": "293456", "name": "오시은" }, { "id": "293457", "name": "이정석" }, { "id": "293458", "name": "이한성" }, { "id": "293459", "name": "장일규" }, { "id": "293460", "name": "장준오" }, { "id": "293461", "name": "장희덕" }, { "id": "293463", "name": "정현철" }, { "id": "293464", "name": "조성준" }, { "id": "293465", "name": "최정락" }, { "id": "293466", "name": "허준회" }, { "id": "293469", "name": "강원호" }, { "id": "293470", "name": "김규한" }, { "id": "293471", "name": "김운중" }, { "id": "293472", "name": "김재경" }, { "id": "293473", "name": "김준회" }, { "id": "293474", "name": "박상우" }, { "id": "293476", "name": "손욱재" }, { "id": "293480", "name": "이기탁" }, { "id": "293482", "name": "전영상" }, { "id": "293483", "name": "최용석" }, { "id": "293484", "name": "황의춘" }, { "id": "293485", "name": "가평현" }, { "id": "293486", "name": "문병선" }, { "id": "293488", "name": "이동수" }, { "id": "293491", "name": "강맹기" }, { "id": "293492", "name": "강명오" }, { "id": "293493", "name": "강병동" }, { "id": "293495", "name": "김병일" }, { "id": "293496", "name": "김현철" }, { "id": "293497", "name": "김휘철" }, { "id": "293498", "name": "민번기" }, { "id": "293499", "name": "박경원" }, { "id": "293500", "name": "박정훈" }, { "id": "293501", "name": "백석현" }, { "id": "293503", "name": "오용환" }, { "id": "293504", "name": "우태형" }, { "id": "293505", "name": "유상덕" }, { "id": "293506", "name": "이구학" }, { "id": "293507", "name": "이상열" }, { "id": "293508", "name": "임경민" }, { "id": "293509", "name": "장숙영" }, { "id": "293510", "name": "장효원" }, { "id": "293511", "name": "정승환" }, { "id": "293512", "name": "정철균" }, { "id": "293513", "name": "최현준" }, { "id": "293514", "name": "홍규철" }, { "id": "293515", "name": "황준선" }, { "id": "293517", "name": "장해청" }, { "id": "293524", "name": "이찬세" }, { "id": "293525", "name": "전은정" }, { "id": "293527", "name": "길준원" }, { "id": "293528", "name": "김대중" }, { "id": "293529", "name": "김상진" }, { "id": "293530", "name": "김영상" }, { "id": "293531", "name": "문현" }, { "id": "293532", "name": "박길재" }, { "id": "293533", "name": "박석래" }, { "id": "293536", "name": "손태현" }, { "id": "293537", "name": "윤우일" }, { "id": "293540", "name": "이재명" }, { "id": "293541", "name": "이학주" }, { "id": "293542", "name": "정광원" }, { "id": "293543", "name": "정규훈" }, { "id": "293544", "name": "조동배" }, { "id": "293545", "name": "최이영" }, { "id": "293546", "name": "구제휘" }, { "id": "293547", "name": "김동현" }, { "id": "293549", "name": "김치국" }, { "id": "293552", "name": "박경규" }, { "id": "293555", "name": "박태영" }, { "id": "293556", "name": "박태준" }, { "id": "293560", "name": "서요신" }, { "id": "293561", "name": "송승완" }, { "id": "293563", "name": "유동민" }, { "id": "293565", "name": "이상억" }, { "id": "293566", "name": "이용욱" }, { "id": "293568", "name": "이재한" }, { "id": "293569", "name": "장형선" }, { "id": "293573", "name": "조성진" }, { "id": "293575", "name": "강삼선" }, { "id": "293577", "name": "공성용" }, { "id": "293578", "name": "구자춘" }, { "id": "293579", "name": "김경원" }, { "id": "293580", "name": "김남우" }, { "id": "293583", "name": "김만덕" }, { "id": "293584", "name": "김만중" }, { "id": "293585", "name": "김복연" }, { "id": "293586", "name": "김상훈" }, { "id": "293587", "name": "김선관" }, { "id": "293588", "name": "김성균" }, { "id": "293592", "name": "김종규" }, { "id": "293594", "name": "김종하" }, { "id": "293595", "name": "김준봉" }, { "id": "293598", "name": "김현진" }, { "id": "293601", "name": "박상석" }, { "id": "293602", "name": "박영수" }, { "id": "293603", "name": "박용진" }, { "id": "293604", "name": "박재철" }, { "id": "293605", "name": "박종철" }, { "id": "293606", "name": "박해준" }, { "id": "293610", "name": "백상일" }, { "id": "293611", "name": "서병구" }, { "id": "293613", "name": "송민규" }, { "id": "293614", "name": "송현호" }, { "id": "293615", "name": "신동수" }, { "id": "293617", "name": "엄익준" }, { "id": "293618", "name": "오세명" }, { "id": "293620", "name": "우승주" }, { "id": "293622", "name": "이강원" }, { "id": "293625", "name": "이동찬" }, { "id": "293626", "name": "이삼범" }, { "id": "293627", "name": "이상일" }, { "id": "293628", "name": "이영화" }, { "id": "293629", "name": "이우제" }, { "id": "293634", "name": "이철우" }, { "id": "293636", "name": "임영환" }, { "id": "293639", "name": "정경민" }, { "id": "293645", "name": "정승모" }, { "id": "293647", "name": "정지홍" }, { "id": "293648", "name": "정진규" }, { "id": "293650", "name": "조광추" }, { "id": "293652", "name": "조완희" }, { "id": "293655", "name": "진춘식" }, { "id": "293656", "name": "최병문" }, { "id": "293658", "name": "최정국" }, { "id": "293662", "name": "허현수" }, { "id": "293663", "name": "홍동현" }, { "id": "293665", "name": "홍태기" }, { "id": "293666", "name": "경우진" }, { "id": "293668", "name": "공석종" }, { "id": "293670", "name": "김경수" }, { "id": "293671", "name": "김광순" }, { "id": "293672", "name": "김남훈" }, { "id": "293674", "name": "김성수" }, { "id": "293677", "name": "김영준" }, { "id": "293680", "name": "김천환" }, { "id": "293681", "name": "김철회" }, { "id": "293682", "name": "김태헌" }, { "id": "293683", "name": "김현기" }, { "id": "293684", "name": "김형조" }, { "id": "293685", "name": "김효진" }, { "id": "293688", "name": "민경현" }, { "id": "293689", "name": "민복기" }, { "id": "293690", "name": "박기원" }, { "id": "293692", "name": "박세득" }, { "id": "293694", "name": "박진우" }, { "id": "293696", "name": "박현" }, { "id": "293697", "name": "박희선" }, { "id": "293698", "name": "방성용" }, { "id": "293703", "name": "신동규" }, { "id": "293706", "name": "안정남" }, { "id": "293707", "name": "양본규" }, { "id": "293710", "name": "이기안" }, { "id": "293711", "name": "이기원" }, { "id": "293712", "name": "이동건" }, { "id": "293713", "name": "이보우" }, { "id": "293716", "name": "이승곤" }, { "id": "293718", "name": "이종규" }, { "id": "293719", "name": "이형재" }, { "id": "293723", "name": "조성덕" }, { "id": "293724", "name": "조영종" }, { "id": "293725", "name": "채청재" }, { "id": "293726", "name": "최규대" }, { "id": "293727", "name": "최진록" }, { "id": "293729", "name": "황영록" }, { "id": "293731", "name": "조은예" }, { "id": "293732", "name": "김주필" }, { "id": "293733", "name": "김진철" }, { "id": "293736", "name": "장광석" }, { "id": "293737", "name": "변성규" }, { "id": "293738", "name": "유준길" }, { "id": "293740", "name": "김동경" }, { "id": "293741", "name": "손호익" }, { "id": "293742", "name": "김영필" }, { "id": "293743", "name": "박성철" }, { "id": "293744", "name": "윤태용" }, { "id": "293746", "name": "이준우" }, { "id": "293747", "name": "정성필" }, { "id": "293748", "name": "채민규" }, { "id": "293750", "name": "황수식" }, { "id": "293751", "name": "황태묵" }, { "id": "293753", "name": "송경섭" }, { "id": "293755", "name": "김동현" }, { "id": "293758", "name": "김정수" }, { "id": "293759", "name": "김진화" }, { "id": "293761", "name": "심현철" }, { "id": "293762", "name": "오영민" }, { "id": "293765", "name": "조두연" }, { "id": "293766", "name": "하현광" }, { "id": "293768", "name": "권병삼" }, { "id": "293770", "name": "류병규" }, { "id": "293774", "name": "서현호" }, { "id": "293779", "name": "강남용" }, { "id": "293783", "name": "김근식" }, { "id": "293785", "name": "김성민" }, { "id": "293786", "name": "김주일" }, { "id": "293787", "name": "김치형" }, { "id": "293788", "name": "김태희" }, { "id": "293791", "name": "마현" }, { "id": "293792", "name": "박해운" }, { "id": "293793", "name": "서상혁" }, { "id": "293794", "name": "선일현" }, { "id": "293795", "name": "송재철" }, { "id": "293796", "name": "안영길" }, { "id": "293798", "name": "여승현" }, { "id": "293799", "name": "우승조" }, { "id": "293803", "name": "이동우" }, { "id": "293804", "name": "이승억" }, { "id": "293807", "name": "전보현" }, { "id": "293810", "name": "황규진" }, { "id": "293815", "name": "김상선" }, { "id": "293819", "name": "류상현" }, { "id": "293820", "name": "문두연" }, { "id": "293821", "name": "박동원" }, { "id": "293822", "name": "박영배" }, { "id": "293823", "name": "박재훈" }, { "id": "293826", "name": "서봉원" }, { "id": "293828", "name": "송충범" }, { "id": "293830", "name": "오길웅" }, { "id": "293831", "name": "오정석" }, { "id": "293833", "name": "유성열" }, { "id": "293837", "name": "이재은" }, { "id": "293838", "name": "이재철" }, { "id": "293839", "name": "이창국" }, { "id": "293843", "name": "임성수" }, { "id": "293844", "name": "정정교" }, { "id": "293845", "name": "진영준" }, { "id": "293846", "name": "최문일" }, { "id": "293850", "name": "이성화" }, { "id": "293851", "name": "김학진" }, { "id": "293852", "name": "서철민" }, { "id": "293856", "name": "윤경재" }, { "id": "293857", "name": "최병익" }, { "id": "293860", "name": "문성일" }, { "id": "293861", "name": "박병순" }, { "id": "293863", "name": "이성훈" }, { "id": "293864", "name": "홍석인" }, { "id": "293865", "name": "이승신" }, { "id": "293867", "name": "노태만" }, { "id": "293868", "name": "손맹숙" }, { "id": "293869", "name": "송호원" }, { "id": "293872", "name": "김동춘" }, { "id": "293877", "name": "김태형" }, { "id": "293878", "name": "송충호" }, { "id": "293879", "name": "장영수" }, { "id": "293880", "name": "정순오" }, { "id": "293883", "name": "권동우" }, { "id": "293884", "name": "권우일" }, { "id": "293885", "name": "김기표" }, { "id": "293892", "name": "김용호" }, { "id": "293894", "name": "노형용" }, { "id": "293895", "name": "문두영" }, { "id": "293899", "name": "신영우" }, { "id": "293901", "name": "이대웅" }, { "id": "293907", "name": "장원호" }, { "id": "293908", "name": "정남원" }, { "id": "293909", "name": "정진규" }, { "id": "293910", "name": "조정호" }, { "id": "293912", "name": "한우철" }, { "id": "293913", "name": "한정훈" }, { "id": "293915", "name": "홍정권" }, { "id": "293916", "name": "황윤재" }, { "id": "293918", "name": "김기호" }, { "id": "293921", "name": "김양도" }, { "id": "293924", "name": "안병우" }, { "id": "293925", "name": "문정호" }, { "id": "293926", "name": "이현식" }, { "id": "293928", "name": "김현경" }, { "id": "293929", "name": "이주원" }, { "id": "293930", "name": "정봉훈" }, { "id": "293931", "name": "박경덕" }, { "id": "293932", "name": "박영웅" }, { "id": "293933", "name": "김용희" }, { "id": "293934", "name": "박광필" }, { "id": "293935", "name": "이규선" }, { "id": "293936", "name": "최낙규" }, { "id": "293940", "name": "박정동" }, { "id": "293941", "name": "유진곤" }, { "id": "293942", "name": "이상혁" }, { "id": "293943", "name": "나승채" }, { "id": "293944", "name": "김명성" }, { "id": "293946", "name": "박경민" }, { "id": "293947", "name": "이정현" }, { "id": "293951", "name": "정용환" }, { "id": "293952", "name": "송진근" }, { "id": "293953", "name": "이준우" }, { "id": "293954", "name": "이해영" }, { "id": "293955", "name": "주진영" }, { "id": "293956", "name": "김대호" }, { "id": "293958", "name": "박경수" }, { "id": "293960", "name": "유한철" }, { "id": "293961", "name": "육원진" }, { "id": "293962", "name": "한승배" }, { "id": "293964", "name": "강성규" }, { "id": "293966", "name": "김진범" }, { "id": "293968", "name": "김판남" }, { "id": "293969", "name": "남궁열" }, { "id": "293970", "name": "이동윤" }, { "id": "293975", "name": "김병호" }, { "id": "293976", "name": "김세현" }, { "id": "293978", "name": "박정환" }, { "id": "293979", "name": "서영익" }, { "id": "293981", "name": "이세훈" }, { "id": "293982", "name": "정호준" }, { "id": "293983", "name": "하현일" }, { "id": "293984", "name": "홍성원" }, { "id": "293987", "name": "신덕용" }, { "id": "293989", "name": "고남석" }, { "id": "293990", "name": "손명성" }, { "id": "293993", "name": "정남기" }, { "id": "293994", "name": "조계형" }, { "id": "293998", "name": "류종필" }, { "id": "293999", "name": "배민규" }, { "id": "294001", "name": "김영재" }, { "id": "294002", "name": "정승관" }, { "id": "294003", "name": "최재곤" }, { "id": "294004", "name": "고철현" }, { "id": "294005", "name": "김동석" }, { "id": "294006", "name": "김명철" }, { "id": "294008", "name": "명노석" }, { "id": "294010", "name": "손대영" }, { "id": "294011", "name": "송석열" }, { "id": "294014", "name": "이창호" }, { "id": "294015", "name": "조용헌" }, { "id": "294018", "name": "김성수" }, { "id": "294019", "name": "이호섭" }, { "id": "294021", "name": "임용덕" }, { "id": "294037", "name": "강승봉" }, { "id": "294039", "name": "강태령" }, { "id": "294041", "name": "권기영" }, { "id": "294042", "name": "권상수" }, { "id": "294043", "name": "권순오" }, { "id": "294044", "name": "권은택" }, { "id": "294045", "name": "금덕민" }, { "id": "294046", "name": "김강진" }, { "id": "294047", "name": "김남중" }, { "id": "294052", "name": "김동주" }, { "id": "294053", "name": "김명호" }, { "id": "294054", "name": "김문수" }, { "id": "294056", "name": "김민태" }, { "id": "294057", "name": "김배만" }, { "id": "294059", "name": "김성우" }, { "id": "294060", "name": "김성현" }, { "id": "294063", "name": "김영권" }, { "id": "294065", "name": "김재원" }, { "id": "294066", "name": "김정현" }, { "id": "294067", "name": "김정훈" }, { "id": "294068", "name": "김주원" }, { "id": "294070", "name": "김지운" }, { "id": "294071", "name": "김지원" }, { "id": "294072", "name": "김태겸" }, { "id": "294073", "name": "김형중" }, { "id": "294075", "name": "노승남" }, { "id": "294076", "name": "노영민" }, { "id": "294077", "name": "류정우" }, { "id": "294078", "name": "문성현" }, { "id": "294080", "name": "박규현" }, { "id": "294082", "name": "박만규" }, { "id": "294083", "name": "박민용" }, { "id": "294084", "name": "박수민" }, { "id": "294085", "name": "박재민" }, { "id": "294086", "name": "박준용" }, { "id": "294088", "name": "박한일" }, { "id": "294089", "name": "방진우" }, { "id": "294090", "name": "서석준" }, { "id": "294092", "name": "서창우" }, { "id": "294093", "name": "선장한" }, { "id": "294095", "name": "소보준" }, { "id": "294097", "name": "송호진" }, { "id": "294100", "name": "안석준" }, { "id": "294101", "name": "안정열" }, { "id": "294102", "name": "안정훈" }, { "id": "294103", "name": "안종욱" }, { "id": "294104", "name": "양서원" }, { "id": "294105", "name": "양선우" }, { "id": "294106", "name": "양해창" }, { "id": "294107", "name": "여동현" }, { "id": "294108", "name": "오경민" }, { "id": "294109", "name": "오영진" }, { "id": "294110", "name": "오용진" }, { "id": "294116", "name": "윤지환" }, { "id": "294117", "name": "윤호영" }, { "id": "294118", "name": "이강희" }, { "id": "294122", "name": "이기모" }, { "id": "294125", "name": "이성호" }, { "id": "294126", "name": "이수복" }, { "id": "294128", "name": "이은배" }, { "id": "294129", "name": "이재석" }, { "id": "294130", "name": "이재선" }, { "id": "294131", "name": "이준석" }, { "id": "294132", "name": "이준희" }, { "id": "294133", "name": "이진성" }, { "id": "294134", "name": "이창규" }, { "id": "294135", "name": "이창수" }, { "id": "294137", "name": "이태훈" }, { "id": "294138", "name": "이하민" }, { "id": "294139", "name": "이혁제" }, { "id": "294140", "name": "이현구" }, { "id": "294141", "name": "이황규" }, { "id": "294142", "name": "임성현" }, { "id": "294143", "name": "임창진" }, { "id": "294144", "name": "임태웅" }, { "id": "294145", "name": "임호현" }, { "id": "294146", "name": "장영진" }, { "id": "294147", "name": "장준경" }, { "id": "294149", "name": "전근우" }, { "id": "294150", "name": "전재민" }, { "id": "294151", "name": "정강호" }, { "id": "294154", "name": "정봉규" }, { "id": "294156", "name": "정재철" }, { "id": "294158", "name": "정채원" }, { "id": "294159", "name": "정철욱" }, { "id": "294160", "name": "조국래" }, { "id": "294164", "name": "차건휘" }, { "id": "294166", "name": "채정규" }, { "id": "294167", "name": "최규억" }, { "id": "294168", "name": "최상민" }, { "id": "294169", "name": "최승연" }, { "id": "294170", "name": "최영준" }, { "id": "294173", "name": "한상오" }, { "id": "294174", "name": "한승석" }, { "id": "294178", "name": "황상호" }, { "id": "294180", "name": "황현태" }, { "id": "294186", "name": "황재구" }, { "id": "294187", "name": "강영희" }, { "id": "294188", "name": "김건록" }, { "id": "294189", "name": "김명수" }, { "id": "294192", "name": "이인호" }, { "id": "294193", "name": "강성범" }, { "id": "294196", "name": "최영소" }, { "id": "294197", "name": "김병주" }, { "id": "294198", "name": "이학준" }, { "id": "294201", "name": "김정" }, { "id": "294202", "name": "안성훈" }, { "id": "294207", "name": "나인영" }, { "id": "294208", "name": "남호선" }, { "id": "294209", "name": "민병원" }, { "id": "294212", "name": "박성주" }, { "id": "294214", "name": "성상엽" }, { "id": "294215", "name": "손화섭" }, { "id": "294216", "name": "유종완" }, { "id": "294217", "name": "이상운" }, { "id": "294219", "name": "장무훈" }, { "id": "294220", "name": "정유호" }, { "id": "294223", "name": "허성진" }, { "id": "294224", "name": "홍기식" }, { "id": "294225", "name": "김석규" }, { "id": "294226", "name": "김성곤" }, { "id": "294228", "name": "김영재" }, { "id": "294233", "name": "손병식" }, { "id": "294236", "name": "임광훈" }, { "id": "294237", "name": "한기윤" }, { "id": "294240", "name": "이성숙" }, { "id": "294243", "name": "최현수" }, { "id": "294244", "name": "김정연" }, { "id": "294245", "name": "문영민" }, { "id": "294246", "name": "박준영" }, { "id": "294247", "name": "방재철" }, { "id": "294248", "name": "양간일" }, { "id": "294249", "name": "이호목" }, { "id": "294250", "name": "이화섭" }, { "id": "294251", "name": "임대호" }, { "id": "294252", "name": "장준식" }, { "id": "294254", "name": "최중혁" }, { "id": "294255", "name": "황민정" }, { "id": "294263", "name": "노환상" }, { "id": "294267", "name": "윤시득" }, { "id": "294268", "name": "최영옥" }, { "id": "294270", "name": "박경진" }, { "id": "294271", "name": "서정훈" }, { "id": "294272", "name": "송정근" }, { "id": "294278", "name": "김조환" }, { "id": "294281", "name": "최원경" }, { "id": "294282", "name": "김기영" }, { "id": "294285", "name": "송병재" }, { "id": "294286", "name": "우지호" }, { "id": "294287", "name": "윤순철" }, { "id": "294288", "name": "임태식" }, { "id": "294289", "name": "박재숙" }, { "id": "294291", "name": "장동현" }, { "id": "294292", "name": "장종홍" }, { "id": "294293", "name": "심현석" }, { "id": "294294", "name": "김상인" }, { "id": "294296", "name": "윤상모" }, { "id": "294297", "name": "한상태" }, { "id": "294301", "name": "이한철" }, { "id": "294303", "name": "조춘식" }, { "id": "294306", "name": "우순식" }, { "id": "294307", "name": "윤복수" }, { "id": "294308", "name": "윤태일" }, { "id": "294310", "name": "이성하" }, { "id": "294313", "name": "정부진" }, { "id": "294315", "name": "김보원" }, { "id": "294316", "name": "김이수" }, { "id": "294317", "name": "김진남" }, { "id": "294318", "name": "이경규" }, { "id": "294319", "name": "임광현" }, { "id": "294320", "name": "최병복" }, { "id": "294322", "name": "최장환" }, { "id": "294323", "name": "정의수" }, { "id": "294324", "name": "김옥수" }, { "id": "294327", "name": "김대진" }, { "id": "294329", "name": "김환중" }, { "id": "294330", "name": "박상현" }, { "id": "294333", "name": "양준영" }, { "id": "294334", "name": "이한철" }, { "id": "294335", "name": "정석명" }, { "id": "294343", "name": "최희동" }, { "id": "294345", "name": "고경종" }, { "id": "294348", "name": "박정내" }, { "id": "294354", "name": "이창헌" }, { "id": "294358", "name": "여현열" }, { "id": "294360", "name": "이동문" }, { "id": "294361", "name": "이지만" }, { "id": "294363", "name": "임명중" }, { "id": "294364", "name": "홍성진" }, { "id": "294366", "name": "박정만" }, { "id": "294368", "name": "제만갑" }, { "id": "294369", "name": "권진한" }, { "id": "294370", "name": "김동일" }, { "id": "294371", "name": "김영필" }, { "id": "294373", "name": "염준철" }, { "id": "294374", "name": "유상철" }, { "id": "294375", "name": "이종관" }, { "id": "294379", "name": "고호영" }, { "id": "294380", "name": "권동규" }, { "id": "294383", "name": "박병현" }, { "id": "294384", "name": "박용재" }, { "id": "294385", "name": "박창순" }, { "id": "294386", "name": "손성군" }, { "id": "294387", "name": "손화림" }, { "id": "294389", "name": "조형복" }, { "id": "294392", "name": "김창관" }, { "id": "294394", "name": "구진욱" }, { "id": "294397", "name": "최혁훈" }, { "id": "294398", "name": "강원명" }, { "id": "294404", "name": "정기원" }, { "id": "294407", "name": "김철중" }, { "id": "294409", "name": "손기성" }, { "id": "294412", "name": "김종익" }, { "id": "294414", "name": "박종혁" }, { "id": "294418", "name": "박재형" }, { "id": "294419", "name": "정문식" }, { "id": "294421", "name": "나범웅" }, { "id": "294423", "name": "박정훈" }, { "id": "294425", "name": "김종수" }, { "id": "294429", "name": "이용범" }, { "id": "294430", "name": "정청순" }, { "id": "294436", "name": "김광시" }, { "id": "294440", "name": "김은현" }, { "id": "294444", "name": "최형철" }, { "id": "294446", "name": "조용현" }, { "id": "294447", "name": "이강혁" }, { "id": "294451", "name": "오정교" }, { "id": "294457", "name": "심재우" }, { "id": "294465", "name": "이석천" }, { "id": "294475", "name": "성철현" }, { "id": "294478", "name": "임남열" }, { "id": "296160", "name": "윤헌기" }, { "id": "304429", "name": "김정광" }, { "id": "310146", "name": "조병훈" }, { "id": "310154", "name": "김병희" }, { "id": "310157", "name": "김민수" }, { "id": "310158", "name": "이재빈" }, { "id": "310159", "name": "김남윤" }, { "id": "310161", "name": "김기만" }, { "id": "310163", "name": "이창현" }, { "id": "310164", "name": "손상범" }, { "id": "310165", "name": "김정욱" }, { "id": "310167", "name": "김현우" }, { "id": "310168", "name": "유영훈" }, { "id": "310169", "name": "강지웅" }, { "id": "310170", "name": "김형균" }, { "id": "310171", "name": "황용언" }, { "id": "310172", "name": "신준호" }, { "id": "310173", "name": "정래윤" }, { "id": "310177", "name": "문상훈" }, { "id": "310178", "name": "이성빈" }, { "id": "310179", "name": "변광섭" }, { "id": "310180", "name": "조성진" }, { "id": "310181", "name": "정규현" }, { "id": "310182", "name": "한빛찬" }, { "id": "310183", "name": "김재한" }, { "id": "310184", "name": "이상진" }, { "id": "310187", "name": "김기찬" }, { "id": "310188", "name": "장재훈" }, { "id": "310190", "name": "정승호" }, { "id": "310191", "name": "김상현" }, { "id": "310193", "name": "최영철" }, { "id": "310194", "name": "이명호" }, { "id": "310195", "name": "황종현" }, { "id": "310196", "name": "김형섭" }, { "id": "310197", "name": "백승우" }, { "id": "310198", "name": "박동현" }, { "id": "310201", "name": "금현호" }, { "id": "310203", "name": "신동준" }, { "id": "310204", "name": "길준서" }, { "id": "310206", "name": "김지석" }, { "id": "310207", "name": "배규영" }, { "id": "310208", "name": "신성호" }, { "id": "310209", "name": "권혁준" }, { "id": "311529", "name": "고민성" }, { "id": "311532", "name": "유재진" }, { "id": "311533", "name": "이용성" }, { "id": "311534", "name": "이원호" }, { "id": "311536", "name": "최영호" }, { "id": "311537", "name": "홍은표" }, { "id": "311538", "name": "황재엽" }, { "id": "314763", "name": "전진" }, { "id": "315659", "name": "금동훈" }, { "id": "315660", "name": "김가완" }, { "id": "315661", "name": "김강현" }, { "id": "315662", "name": "김다현" }, { "id": "315663", "name": "김대훈" }, { "id": "315664", "name": "김주섭" }, { "id": "315666", "name": "김형철" }, { "id": "315667", "name": "배희열" }, { "id": "315668", "name": "성도현" }, { "id": "315669", "name": "양태환" }, { "id": "315670", "name": "오석주" }, { "id": "315671", "name": "윤승재" }, { "id": "315672", "name": "임종민" }, { "id": "315673", "name": "최병연" }, { "id": "315674", "name": "최진훈" }, { "id": "318489", "name": "김태진" }, { "id": "318490", "name": "김태현" }, { "id": "318491", "name": "홍건화" }, { "id": "320764", "name": "권제범" }, { "id": "320765", "name": "김세룡" }, { "id": "320766", "name": "김재혁" }, { "id": "320767", "name": "김한영" }, { "id": "320768", "name": "장재성" }, { "id": "320769", "name": "주현성" }, { "id": "320770", "name": "강태경" }, { "id": "320771", "name": "김명동" }, { "id": "320772", "name": "박재승" }, { "id": "320773", "name": "유경수" }, { "id": "320774", "name": "임장혁" }, { "id": "320775", "name": "구민관" }, { "id": "320776", "name": "김민재" }, { "id": "320777", "name": "김민재" }, { "id": "320778", "name": "조성현" }, { "id": "320779", "name": "강승덕" }, { "id": "320780", "name": "박범" }, { "id": "320781", "name": "박재우" }, { "id": "320782", "name": "임향원" }, { "id": "320783", "name": "전종민" }, { "id": "320785", "name": "이정윤" }, { "id": "321286", "name": "고기원" }, { "id": "321287", "name": "고성석" }, { "id": "321288", "name": "고준석" }, { "id": "321289", "name": "김우성" }, { "id": "321292", "name": "김태우" }, { "id": "321293", "name": "남태우" }, { "id": "321295", "name": "박상혁" }, { "id": "321296", "name": "박준후" }, { "id": "321297", "name": "신명철" }, { "id": "321298", "name": "오상훈" }, { "id": "321299", "name": "윤대협" }, { "id": "321300", "name": "이원석" }, { "id": "321301", "name": "허신욱" }, { "id": "334379", "name": "김건" }, { "id": "334381", "name": "김승준" }, { "id": "334384", "name": "김영광" }, { "id": "334386", "name": "김영석" }, { "id": "334388", "name": "김우현" }, { "id": "334390", "name": "김태형" }, { "id": "334392", "name": "나성빈" }, { "id": "334394", "name": "노정현" }, { "id": "334396", "name": "류승현" }, { "id": "334398", "name": "배형찬" }, { "id": "334400", "name": "백지훈" }, { "id": "334402", "name": "손은재" }, { "id": "334404", "name": "신석주" }, { "id": "334406", "name": "안명노" }, { "id": "334408", "name": "이재환" }, { "id": "334410", "name": "이재훈" }, { "id": "334412", "name": "이준영" }, { "id": "334414", "name": "이태욱" }, { "id": "334416", "name": "정규빈" }, { "id": "334418", "name": "정대욱" }, { "id": "334420", "name": "조운학" }, { "id": "334422", "name": "지유찬" }, { "id": "334424", "name": "진영진" }, { "id": "334426", "name": "최범규" }, { "id": "334428", "name": "함준혁" }, { "id": "334430", "name": "허세훈" }, { "id": "334432", "name": "황승현" }, { "id": "GJ6713", "name": "강진권" }, { "id": "GJ8752", "name": "구진모" }, { "id": "PS2027", "name": "이대용" }, { "id": "336588", "name": "김경태" }, { "id": "336589", "name": "김남형" }, { "id": "336590", "name": "김동은" }, { "id": "336591", "name": "김민찬" }, { "id": "336592", "name": "김수민" }, { "id": "336593", "name": "김수민" }, { "id": "336594", "name": "김수빈" }, { "id": "336595", "name": "김영찬" }, { "id": "336596", "name": "김재영" }, { "id": "336597", "name": "김정웅" }, { "id": "336598", "name": "김정원" }, { "id": "336599", "name": "김진서" }, { "id": "336600", "name": "김현우" }, { "id": "336601", "name": "박기정" }, { "id": "336602", "name": "박민수" }, { "id": "336603", "name": "박정현" }, { "id": "336604", "name": "손동근" }, { "id": "336605", "name": "손재구" }, { "id": "336606", "name": "안덕원" }, { "id": "336607", "name": "안정호" }, { "id": "336608", "name": "안호균" }, { "id": "336609", "name": "오준수" }, { "id": "336610", "name": "오희곤" }, { "id": "336611", "name": "유민욱" }, { "id": "336612", "name": "이상현" }, { "id": "336613", "name": "이성진" }, { "id": "336614", "name": "이세현" }, { "id": "336615", "name": "이승환" }, { "id": "336616", "name": "이요섭" }, { "id": "336617", "name": "이재섭" }, { "id": "336618", "name": "이창민" }, { "id": "336619", "name": "이현우" }, { "id": "336620", "name": "이현호" }, { "id": "336621", "name": "이효균" }, { "id": "336622", "name": "전진호" }, { "id": "336623", "name": "정두영" }, { "id": "336624", "name": "정상우" }, { "id": "336625", "name": "정창현" }, { "id": "336626", "name": "지성민" }, { "id": "336627", "name": "최민호" }, { "id": "336628", "name": "최승호" }, { "id": "336629", "name": "한현준" }, { "id": "336630", "name": "홍지민" }, { "id": "336631", "name": "황정원" }, { "id": "336640", "name": "고구려" }, { "id": "336641", "name": "문채원" }, { "id": "336642", "name": "윤승현" }, { "id": "336643", "name": "황태현" }, { "id": "336644", "name": "김준유" }, { "id": "336645", "name": "김호근" }, { "id": "336646", "name": "최준호" }, { "id": "336647", "name": "양민재" }, { "id": "336648", "name": "김재민" }, { "id": "336649", "name": "이화섭" }, { "id": "336650", "name": "강민성" }, { "id": "336651", "name": "이재용" }, { "id": "336652", "name": "여동민" }, { "id": "336653", "name": "김제민" }, { "id": "336654", "name": "박관모" }, { "id": "336655", "name": "임수민" }, { "id": "336658", "name": "김동재" }, { "id": "336659", "name": "김주성" }, { "id": "336660", "name": "장원효" }, { "id": "336661", "name": "최재찬" }, { "id": "336662", "name": "박준형" }, { "id": "336669", "name": "김석준" }, { "id": "336670", "name": "하관호" }, { "id": "336672", "name": "조정현" }, { "id": "336675", "name": "김요엘" }, { "id": "336676", "name": "김세환" }, { "id": "336677", "name": "정호영" }, { "id": "336678", "name": "최해원" }];
 
-        /* 바이너리 키 선택 연동 */
-        function selK(val) {
-            const sel = document.getElementById('ih-key');
-            sel.value = val;
-            // 시각적 피드백을 위해 포커스 효과 부여 후 해제
-            sel.focus();
-            setTimeout(() => sel.blur(), 300);
-        }
+            let isAuthenticated = false;
 
-        function hide(p) {
-            document.getElementById(p + '-err').style.display = 'none';
-            document.getElementById(p + '-res').style.display = 'none';
-        }
+            function checkAuth() {
+                const id = document.getElementById('auth-id').value.trim();
+                const name = document.getElementById('auth-name').value.trim();
 
-        function showErr(p, msg) {
-            const el = document.getElementById(p + '-err');
-            el.textContent = '⚠️ ' + msg;
-            el.style.display = 'block';
-            document.getElementById(p + '-res').style.display = 'none';
-        }
+                if (!id || !name) {
+                    alert('사번과 성명을 모두 입력해주세요.');
+                    return;
+                }
 
-        /* 입력창 지우기 */
-        function clr(id) {
-            document.getElementById(id).value = '';
-            document.getElementById(id).focus();
-        }
+                const found = allowedUsers.find(u => u.id === id && u.name === name);
 
-        /* 클립보드 복사 */
-        function cp(id) {
-            const txt = document.getElementById(id).textContent;
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(txt).then(() => alert('복사됨: ' + txt));
+                if (found) {
+                    isAuthenticated = true;
+                    document.getElementById('main-content').classList.remove('auth-locked');
+                    document.getElementById('main-content').classList.add('auth-unlocked');
+
+                    // 입력란은 계속 보여주되 수정 불가하게 처리
+                    document.getElementById('auth-id').disabled = true;
+                    document.getElementById('auth-name').disabled = true;
+                    const authBtn = document.querySelector('.auth-btn');
+                    authBtn.textContent = '인증완료';
+                    authBtn.style.background = '#00875a';
+                    authBtn.disabled = true;
+
+                    alert(name + '님, 인증되었습니다. 환영합니다!');
+                } else {
+                    alert('사용가능한 권한이 없습니다. 수리자문에 문의바랍니다.');
+                }
             }
-        }
 
-        /* ── 관리자 이력 관리 기능 ── */
-        function saveLog(data) {
-            const logEntry = { time: new Date().toLocaleString('ko-KR'), ...data };
+            // 미인증 상태에서 클릭 시 안내 팝업
+            document.addEventListener('mousedown', function (e) {
+                if (!isAuthenticated) {
+                    const mainContent = document.getElementById('main-content');
+                    if (mainContent.contains(e.target) && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'BUTTON')) {
+                        // 관리자 이력조회 버튼 등 제외
+                        if (!e.target.classList.contains('admin-btn')) {
+                            alert('먼저 사번과 성명 인증을 완료해 주세요.');
+                            document.getElementById('auth-id').focus();
+                        }
+                    }
+                }
+            }, true);
 
-            // 1. 기존 로컬 저장 (내 브라우저 확인용)
-            const hist = JSON.parse(localStorage.getItem('unlock_hist') || '[]');
-            hist.unshift(logEntry);
-            localStorage.setItem('unlock_hist', JSON.stringify(hist.slice(0, 500)));
+            /* 피드백 처리 */
+            function handleFeedback(panel, type) {
+                if (!isAuthenticated) {
+                    alert('인증 후에 피드백을 남길 수 있습니다.');
+                    return;
+                }
+                
+                const likeBtn = document.getElementById(panel + '-btn-like');
+                const dislikeBtn = document.getElementById(panel + '-btn-dislike');
 
-            // 2. 구글 시트로 전송 (대시보드용)
-            sendToGoogleSheets(logEntry);
-        }
+                if (type === 'like') {
+                    likeBtn.classList.toggle('active-like');
+                    dislikeBtn.classList.remove('active-dislike');
+                } else {
+                    dislikeBtn.classList.toggle('active-dislike');
+                    likeBtn.classList.remove('active-like');
+                }
+            }
 
-        async function sendToGoogleSheets(entry) {
-            const G_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxOLEqaDwsuyfaC-_-SIuZ3VzVpLXZGhnsi4vSc5BgAFqcCadqSk6mS9StPbfhJY35HdA/exec'; 
-            
-            // [통합 관리용 설정] 보안 토큰과 기록 동작 지정
-            entry.action = 'write';
-            entry.token = 'bios_secret_2026';
-            
-            const params = new URLSearchParams(entry).toString();
-            const finalUrl = `${G_SCRIPT_URL}?${params}`;
-            
-            try {
-                fetch(finalUrl, {
-                    method: 'GET',
-                    mode: 'no-cors'
+            // 현재 선택된 피드백 상태 가져오기
+            function getCurrentFeedback() {
+                const activePanel = document.getElementById('btn-ih').classList.contains('active') ? 'ih' : 'qt';
+                if (document.getElementById(activePanel + '-btn-like').classList.contains('active-like')) return '좋아요';
+                if (document.getElementById(activePanel + '-btn-dislike').classList.contains('active-dislike')) return '싫어요';
+                return '없음';
+            }
+
+            /* 탭 전환 */
+            function sw(name) {
+                ['ih', 'qt'].forEach(n => {
+                    document.getElementById('btn-' + n).classList.toggle('active', n === name);
+                    document.getElementById('pan-' + n).style.display = n === name ? 'block' : 'none';
                 });
-            } catch (e) {
-                console.error('Google Sheets 전송 오류:', e);
+                hide('ih'); hide('qt');
             }
-        }
 
-        function openAdmin() {
-            const pw = prompt('관리자 비밀번호를 입력하세요.');
-            if (pw === 'nyh') { renderHist(); document.getElementById('adminModal').style.display = 'block'; }
-            else if (pw !== null) { alert('비밀번호가 올바르지 않습니다.'); }
-        }
 
-        function closeAdmin() { document.getElementById('adminModal').style.display = 'none'; }
 
-        function clearHist() {
-            if (confirm('모든 생성 이력을 삭제하시겠습니까?')) {
-                localStorage.removeItem('unlock_hist');
-                renderHist();
-                alert('초기화되었습니다.');
+            function hide(p) {
+                document.getElementById(p + '-err').style.display = 'none';
+                document.getElementById(p + '-res').style.display = 'none';
+                document.getElementById(p + '-feedback').style.display = 'none'; // 피드백 버튼도 숨김
+                
+                // 피드백 선택 초기화
+                const likeBtn = document.getElementById(p + '-btn-like');
+                const dislikeBtn = document.getElementById(p + '-btn-dislike');
+                likeBtn.classList.remove('active-like');
+                dislikeBtn.classList.remove('active-dislike');
             }
-        }
 
-        function renderHist() {
-            const hist = JSON.parse(localStorage.getItem('unlock_hist') || '[]');
-            const container = document.getElementById('histContent');
-            if (hist.length === 0) {
-                container.innerHTML = '<p style="text-align:center; padding:40px; color:#94a3b8;">저장된 이력이 없습니다.</p>';
-                return;
+            function showErr(p, msg) {
+                const el = document.getElementById(p + '-err');
+                el.textContent = '⚠️ ' + msg;
+                el.style.display = 'block';
+                document.getElementById(p + '-res').style.display = 'none';
             }
-            let html = `<table class="hist-table">
+
+            /* 입력창 지우기 */
+            function clr(id) {
+                document.getElementById(id).value = '';
+                document.getElementById(id).focus();
+            }
+
+            /* 전체 입력 초기화 (사번, 성명 제외) */
+            function resetInputs() {
+                if (!confirm('사번/성명을 제외한 모든 입력 내용을 초기화하시겠습니까?')) return;
+
+                // 인하우스 필드 초기화
+                const ihFields = ['ih-receipt', 'ih-model', 'ih-serial', 'ih-hint'];
+                ihFields.forEach(id => document.getElementById(id).value = '');
+                document.getElementById('ih-key').selectedIndex = 0;
+                hide('ih');
+
+                // 퀀타 필드 초기화
+                const qtFields = ['qt-receipt', 'qt-model', 'qt-serial'];
+                qtFields.forEach(id => document.getElementById(id).value = '');
+                hide('qt');
+
+                alert('입력 내용이 초기화되었습니다.');
+            }
+
+            /* 클립보드 복사 */
+            function cp(id) {
+                const txt = document.getElementById(id).textContent;
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(txt).then(() => alert('복사됨: ' + txt));
+                }
+            }
+
+            /* ── 관리자 이력 관리 기능 ── */
+            function saveLog(data) {
+                // 인증 정보 가져오기
+                const userId = document.getElementById('auth-id').value.trim();
+                const userName = document.getElementById('auth-name').value.trim();
+                const feedback = getCurrentFeedback();
+
+                const logEntry = { 
+                    time: new Date().toLocaleString('ko-KR'), 
+                    ...data,
+                    user_id: userId,
+                    user_name: userName,
+                    feedback: feedback
+                };
+
+                // 1. 기존 로컬 저장 (내 브라우저 확인용)
+                const hist = JSON.parse(localStorage.getItem('unlock_hist') || '[]');
+                hist.unshift(logEntry);
+                localStorage.setItem('unlock_hist', JSON.stringify(hist.slice(0, 500)));
+
+                // 2. 구글 시트로 전송 (대시보드용)
+                sendToGoogleSheets(logEntry);
+            }
+
+            async function sendToGoogleSheets(entry) {
+                const G_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzIXfN5U1WSqQPExuqtrDBp9QRCFyzbzBsTgxtz_iS7AozD5HsxK5LaDh6Nxb6t31QOBg/exec';
+
+                // [통합 관리용 설정] 보안 토큰과 기록 동작 지정
+                entry.action = 'write';
+                entry.token = 'bios_secret_2026';
+
+                const params = new URLSearchParams(entry).toString();
+                const finalUrl = `${G_SCRIPT_URL}?${params}`;
+
+                try {
+                    fetch(finalUrl, {
+                        method: 'GET',
+                        mode: 'no-cors'
+                    });
+                } catch (e) {
+                    console.error('Google Sheets 전송 오류:', e);
+                }
+            }
+
+            function openAdmin() {
+                const pw = prompt('관리자 비밀번호를 입력하세요.');
+                if (pw === 'nyh') { renderHist(); document.getElementById('adminModal').style.display = 'block'; }
+                else if (pw !== null) { alert('비밀번호가 올바르지 않습니다.'); }
+            }
+
+            function closeAdmin() { document.getElementById('adminModal').style.display = 'none'; }
+
+            function clearHist() {
+                if (confirm('모든 생성 이력을 삭제하시겠습니까?')) {
+                    localStorage.removeItem('unlock_hist');
+                    renderHist();
+                    alert('초기화되었습니다.');
+                }
+            }
+
+            function renderHist() {
+                const hist = JSON.parse(localStorage.getItem('unlock_hist') || '[]');
+                const container = document.getElementById('histContent');
+                if (hist.length === 0) {
+                    container.innerHTML = '<p style="text-align:center; padding:40px; color:#94a3b8;">저장된 이력이 없습니다.</p>';
+                    return;
+                }
+                let html = `<table class="hist-table">
                 <thead><tr><th>생성시간</th><th>타입</th><th>모델명</th><th>접수번호</th><th>제조번호</th><th>힌트/기타</th><th>생성키</th></tr></thead>
                 <tbody>`;
-            hist.forEach(h => {
-                html += `<tr><td>${h.time}</td><td>${h.type}</td><td><b>${h.model}</b></td><td>${h.receipt}</td><td>${h.serial}</td><td>${h.extra}</td><td style="font-weight:700; color:#A50034;">${h.key}</td></tr>`;
-            });
-            container.innerHTML = html + '</tbody></table>';
-        }
-
-        /* 인하우스 키 생성 */
-        function genIH() {
-            hide('ih');
-            const receipt = document.getElementById('ih-receipt').value.trim();
-            const model = document.getElementById('ih-model').value.trim();
-            const serial = document.getElementById('ih-serial').value.trim();
-
-            if (!receipt || !model || !serial) {
-                showErr('ih', '접수번호, 모델명, 제조번호를 모두 입력해주세요.');
-                return;
+                hist.forEach(h => {
+                    html += `<tr><td>${h.time}</td><td>${h.type}</td><td><b>${h.model}</b></td><td>${h.receipt}</td><td>${h.serial}</td><td>${h.extra}</td><td style="font-weight:700; color:#A50034;">${h.key}</td></tr>`;
+                });
+                container.innerHTML = html + '</tbody></table>';
             }
 
-            const keyType = document.getElementById('ih-key').value;
-            const keyHex = keysDB[keyType];
-            const hintStr = document.getElementById('ih-hint').value.trim().toUpperCase();
+            /* 인하우스 키 생성 */
+            function genIH() {
+                hide('ih');
+                const receipt = document.getElementById('ih-receipt').value.trim();
+                const model = document.getElementById('ih-model').value.trim();
+                const serial = document.getElementById('ih-serial').value.trim();
 
-            if (hintStr.length !== 8) {
-                showErr('ih', '힌트 번호는 정확히 8자리여야 합니다.');
-                return;
-            }
-
-            try {
-                /* 파이썬 로직을 JS로 변환한 AES-ECB 암호화 */
-                let a3 = new Array(8).fill(4661);
-                a3[0] = parseInt(hintStr.substring(0, 4), 16);
-                a3[1] = parseInt(hintStr.substring(4, 8), 16);
-
-                let hex5 = '';
-                for (let j = 0; j < 8; j++) {
-                    hex5 += (a3[j] & 0xFF).toString(16).padStart(2, '0');
-                    hex5 += ((a3[j] & 0xFF00) >> 8).toString(16).padStart(2, '0');
+                if (!receipt || !model || !serial) {
+                    showErr('ih', '접수번호, 모델명, 제조번호를 모두 입력해주세요.');
+                    return;
                 }
 
-                const enc = CryptoJS.AES.encrypt(
-                    CryptoJS.enc.Hex.parse(hex5),
-                    CryptoJS.enc.Hex.parse(keyHex),
-                    { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding }
-                );
-                const ch = enc.ciphertext.toString(CryptoJS.enc.Hex);
+                const keyType = document.getElementById('ih-key').value;
+                const keyHex = keysDB[keyType];
+                const hintStr = document.getElementById('ih-hint').value.trim().toUpperCase();
 
-                const a6 = new Uint8Array(16);
-                for (let i = 0; i < 16; i++) a6[i] = parseInt(ch.substring(i * 2, i * 2 + 2), 16);
-                for (let j = 0; j < 8; j++) a3[j] = a6[j * 2] | (a6[j * 2 + 1] << 8);
-
-                let out = [], num = 3840, num2 = 8;
-                for (let j = 0; j < 8; j++) {
-                    out.push(((a3[j] & num) >>> num2).toString(16).toUpperCase());
-                    num >>>= 4; num2 -= 4;
-                    if (num === 0) { num = 61440; num2 = 12; }
+                if (hintStr.length !== 8) {
+                    showErr('ih', '힌트 번호는 정확히 8자리여야 합니다.');
+                    return;
                 }
 
-                /* 결과 카드 채우기 */
-                const finalKey = out.join('');
-                document.getElementById('ih-rmodel').textContent = model;
-                document.getElementById('ih-rkey').textContent = finalKey;
-                document.getElementById('ih-res').style.display = 'block';
+                try {
+                    /* 파이썬 로직을 JS로 변환한 AES-ECB 암호화 */
+                    let a3 = new Array(8).fill(4661);
+                    a3[0] = parseInt(hintStr.substring(0, 4), 16);
+                    a3[1] = parseInt(hintStr.substring(4, 8), 16);
 
-                /* 이력 저장 */
-                saveLog({ type: '인하우스', model, receipt, serial, extra: hintStr, key: finalKey });
+                    let hex5 = '';
+                    for (let j = 0; j < 8; j++) {
+                        hex5 += (a3[j] & 0xFF).toString(16).padStart(2, '0');
+                        hex5 += ((a3[j] & 0xFF00) >> 8).toString(16).padStart(2, '0');
+                    }
 
-            } catch (e) {
-                showErr('ih', '처리 중 오류가 발생했습니다. 입력값을 확인해 주세요.');
+                    const enc = CryptoJS.AES.encrypt(
+                        CryptoJS.enc.Hex.parse(hex5),
+                        CryptoJS.enc.Hex.parse(keyHex),
+                        { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding }
+                    );
+                    const ch = enc.ciphertext.toString(CryptoJS.enc.Hex);
+
+                    const a6 = new Uint8Array(16);
+                    for (let i = 0; i < 16; i++) a6[i] = parseInt(ch.substring(i * 2, i * 2 + 2), 16);
+                    for (let j = 0; j < 8; j++) a3[j] = a6[j * 2] | (a6[j * 2 + 1] << 8);
+
+                    let out = [], num = 3840, num2 = 8;
+                    for (let j = 0; j < 8; j++) {
+                        out.push(((a3[j] & num) >>> num2).toString(16).toUpperCase());
+                        num >>>= 4; num2 -= 4;
+                        if (num === 0) { num = 61440; num2 = 12; }
+                    }
+
+                    /* 결과 카드 채우기 */
+                    const finalKey = out.join('');
+                    document.getElementById('ih-rmodel').textContent = model;
+                    document.getElementById('ih-rkey').textContent = finalKey;
+                    document.getElementById('ih-res').style.display = 'block';
+                    document.getElementById('ih-feedback').style.display = 'flex'; // 피드백 버튼 노출
+
+                    /* 이력 저장 */
+                    saveLog({ type: '인하우스', model, receipt, serial, extra: hintStr, key: finalKey });
+
+                } catch (e) {
+                    showErr('ih', '처리 중 오류가 발생했습니다. 입력값을 확인해 주세요.');
+                }
             }
-        }
 
-        /* 퀀타 키 확인 */
-        function genQT() {
-            hide('qt');
-            const receipt = document.getElementById('qt-receipt').value.trim();
-            const model = document.getElementById('qt-model').value.trim();
-            const serial = document.getElementById('qt-serial').value.trim();
+            /* 퀀타 키 확인 */
+            function genQT() {
+                hide('qt');
+                const receipt = document.getElementById('qt-receipt').value.trim();
+                const model = document.getElementById('qt-model').value.trim();
+                const serial = document.getElementById('qt-serial').value.trim();
 
-            if (!receipt || !model || !serial) {
-                showErr('qt', '접수번호, 모델명, 제조번호를 모두 입력해주세요.');
-                return;
+                if (!receipt || !model || !serial) {
+                    showErr('qt', '접수번호, 모델명, 제조번호를 모두 입력해주세요.');
+                    return;
+                }
+                if (!model.includes('-')) {
+                    showErr('qt', '모델명에 하이픈(-)이 포함되어 있지 않습니다. 예: 15U50N-G.AA50K');
+                    return;
+                }
+
+                const prefix = model.split('-')[0].toUpperCase();
+                /* 가장 긴 키부터 매칭 (N360 vs 360 우선순위 처리) */
+                const sorted = Object.keys(qtDB).sort((a, b) => b.length - a.length);
+
+                let matched = null;
+                for (const k of sorted) {
+                    if (prefix.endsWith(k.toUpperCase())) { matched = qtDB[k]; break; }
+                }
+
+                if (matched) {
+                    document.getElementById('qt-rmodel').textContent = model;
+                    document.getElementById('qt-rkey').textContent = matched;
+                    document.getElementById('qt-res').style.display = 'block';
+                    document.getElementById('qt-feedback').style.display = 'flex'; // 피드백 버튼 노출
+
+                    /* 이력 저장 */
+                    saveLog({ type: '퀀타', model, receipt, serial, extra: 'QC OK', key: matched });
+                } else {
+                    showErr('qt', `매칭 실패: '${prefix}'에 해당하는 퀀타 언락키가 등록되어 있지 않습니다.`);
+                }
             }
-            if (!model.includes('-')) {
-                showErr('qt', '모델명에 하이픈(-)이 포함되어 있지 않습니다. 예: 15U50N-G.AA50K');
-                return;
-            }
-
-            const prefix = model.split('-')[0].toUpperCase();
-            /* 가장 긴 키부터 매칭 (N360 vs 360 우선순위 처리) */
-            const sorted = Object.keys(qtDB).sort((a, b) => b.length - a.length);
-
-            let matched = null;
-            for (const k of sorted) {
-                if (prefix.endsWith(k.toUpperCase())) { matched = qtDB[k]; break; }
-            }
-
-            if (matched) {
-                document.getElementById('qt-rmodel').textContent = model;
-                document.getElementById('qt-rkey').textContent = matched;
-                document.getElementById('qt-res').style.display = 'block';
-
-                /* 이력 저장 */
-                saveLog({ type: '퀀타', model, receipt, serial, extra: 'QC OK', key: matched });
-            } else {
-                showErr('qt', `매칭 실패: '${prefix}'에 해당하는 퀀타 언락키가 등록되어 있지 않습니다.`);
-            }
-        }
-    </script>
+        </script>
 </body>
 
 </html>
